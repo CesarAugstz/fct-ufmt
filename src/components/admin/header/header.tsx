@@ -3,7 +3,7 @@
 import { Bell, Search, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { ThemeToggle } from '@/components/common/theme-toggle'
 import UserDropdown from './user-dropdown/user-dropdown'
 
 export default function Header() {

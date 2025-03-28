@@ -1,7 +1,7 @@
-import Sidebar from "@/components/dashboard/sidebar";
-import Header from "@/components/dashboard/header/header";
+import Sidebar from "@/components/admin/sidebar";
+import Header from "@/components/admin/header/header";
 
-export default function DashboardLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;

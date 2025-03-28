@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
-import LoadingSpinner from '@/components/loading-spinner'
+import LoadingSpinner from '@/components/common/loading-spinner'
 import { useCreateUser, useFindUniqueUser, useUpdateUser } from '@/lib/zenstack-hooks'
 import {
   Select,

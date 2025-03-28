@@ -13,6 +13,7 @@ import {
   Library,
   Tablet,
   MapPin,
+  House,
 } from 'lucide-react'
 
 interface Route {
@@ -27,18 +28,18 @@ export default function Sidebar() {
 
   const routes: Route[] = [
     {
-      name: 'Dashboard',
-      path: '/dashboard',
-      icon: <LayoutDashboard className="mr-2 h-5 w-5" />,
+      name: 'Tela Inicial',
+      path: '/admin',
+      icon: <House className="mr-2 h-5 w-5" />,
     },
     {
       name: 'Usuários',
-      path: '/dashboard/users',
+      path: '/admin/users',
       icon: <Users className="mr-2 h-5 w-5" />,
     },
     {
       name: 'Configurações',
-      path: '/dashboard/settings',
+      path: '/admin/settings',
       icon: <Settings className="mr-2 h-5 w-5" />,
       disabled: true,
     },

@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { PlusCircle, RefreshCw } from 'lucide-react'
 import { useFindManyUser } from '@/lib/zenstack-hooks'
-import UserTable from '@/components/users/user-table'
-import UserForm from '@/components/users/user-form'
-import LoadingSpinner from '@/components/loading-spinner'
+import UserTable from '@/components/admin/users/user-table'
+import UserForm from '@/components/admin/users/user-form'
+import LoadingSpinner from '@/components/common/loading-spinner'
 import {
   Card,
   CardContent,
