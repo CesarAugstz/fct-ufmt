@@ -33,6 +33,11 @@ export default function Sidebar() {
       icon: <House className="mr-2 h-5 w-5" />,
     },
     {
+      name: 'Seções',
+      path: '/admin/sections',
+      icon: <LayoutDashboard className="mr-2 h-5 w-5" />,
+    },
+    {
       name: 'Usuários',
       path: '/admin/users',
       icon: <Users className="mr-2 h-5 w-5" />,
