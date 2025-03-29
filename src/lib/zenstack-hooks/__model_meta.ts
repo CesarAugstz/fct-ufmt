@@ -50,6 +50,65 @@ const metadata = {
             ,
         }
         ,
+        section: {
+            name: 'Section', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, slug: {
+                    name: "slug",
+                    type: "String",
+                }, parentId: {
+                    name: "parentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parent',
+                }, isVisible: {
+                    name: "isVisible",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, children: {
+                    name: "children",
+                    type: "Section",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'parent',
+                }, parent: {
+                    name: "parent",
+                    type: "Section",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'children',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "parentId" },
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
     }
     ,
     deleteCascade: {

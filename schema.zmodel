@@ -34,3 +34,16 @@ enum Role {
   ADMIN
   USER
 }
+
+
+model Section extends BaseModel {
+  name      String
+  slug      String
+  parentId  String?
+  isVisible Boolean   @default(true)
+  order     Int
+  children  Section[] @relation("SectionToSection")
+  parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id])
+
+  @@allow('all', auth().role == 'ADMIN')
+}

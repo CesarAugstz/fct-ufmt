@@ -8,82 +8,112 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { TextField } from "@/components/ui/form-fields/text-field"
-import { SelectField } from "@/components/ui/form-fields/select-field"
-import { SelectItem } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Section, sectionFormSchema, SectionFormValues } from "@/types/admin/section.types"
-import { 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormControl, 
-  FormMessage 
-} from "@/components/ui/form"
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { FormText } from '@/components/ui/form-fields/form-text'
+import { FormSelect } from '@/components/ui/form-fields/form-select'
+import { Switch } from '@/components/ui/switch'
+import {
+  Section,
+  sectionFormSchema,
+  SectionFormValues,
+} from '@/types/admin/section.types'
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@/components/ui/form'
+import {
+  useCreateSection,
+  useFindUniqueSection,
+  useUpdateSection,
+} from '@/lib/zenstack-hooks'
+import { useToast } from '@/lib/hooks/toast'
 
 interface SectionDialogProps {
   type: 'add' | 'edit'
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
-  onSubmit: (formData: SectionFormValues & { id?: string }) => void
-  section?: Section | null
+  sectionId?: string | null
   parentId?: string | null
 }
 
-export function SectionDialog({ 
-  type, 
-  isOpen, 
-  onOpenChange, 
-  onSubmit, 
-  section,
-  parentId
+export function SectionDialog({
+  type,
+  isOpen,
+  onOpenChange,
+  sectionId,
 }: SectionDialogProps) {
-  
+  const toast = useToast()
+  const editMutation = useUpdateSection()
+  const createMutation = useCreateSection()
+
+  const { data: section } = useFindUniqueSection(
+    {
+      where: {
+        id: sectionId!,
+      },
+    },
+    { enabled: !!sectionId },
+  )
+
   const form = useForm<SectionFormValues>({
     resolver: zodResolver(sectionFormSchema),
-    defaultValues: {
-      name: '',
-      slug: '',
-      parentId: parentId || null,
-      isVisible: true,
-      order: 0
-    }
+    values: {
+      name: section?.name || '',
+      slug: section?.slug || '',
+      parentId: section?.parentId || null,
+      isVisible: section?.isVisible || true,
+      order: section?.order || 0,
+    },
   })
 
-  useEffect(() => {
-    if (isOpen) {
-      if (type === 'edit' && section) {
-        form.reset({
-          name: section.name,
-          slug: section.slug,
-          parentId: section.parentId,
-          isVisible: section.isVisible,
-          order: section.order
-        })
-      } else if (type === 'add') {
-        form.reset({
-          name: '',
-          slug: '',
-          parentId: parentId || null,
-          isVisible: true,
-          order: 0
-        })
+  const handleFormSubmit = async (data: SectionFormValues) => {
+    try {
+      const sectionFormatted = {
+        name: data.name,
+        slug: data.slug,
+        parentId: data.parentId,
+        isVisible: data.isVisible,
+        order: data.order,
       }
-    }
-  }, [isOpen, type, section, parentId, form])
 
-  const handleFormSubmit = (data: SectionFormValues) => {
-    if (type === 'edit' && section) {
-      onSubmit({ ...data, id: section.id })
-    } else {
-      onSubmit(data)
+      if (type === 'edit' && sectionId) {
+        await editMutation.mutateAsync({
+          where: {
+            id: sectionId!,
+          },
+          data: sectionFormatted,
+        })
+        toast.success('Section updated successfully')
+        return
+      }
+
+      await createMutation.mutateAsync({
+        data: sectionFormatted,
+      })
+      toast.success('Section created successfully')
+    } catch (e) {
+      console.error('Error creating section:', e)
+      toast.exception(e)
     }
-    onOpenChange(false)
   }
+
+  const nameValue = form.watch('name')
+  useEffect(
+    function updateSlug() {
+      const currentSlug = form.getValues('slug')
+
+      const generatedSlug = generateSlug(nameValue)
+      if (currentSlug === generatedSlug) return
+
+      form.setValue('slug', generatedSlug)
+    },
+    [nameValue, form],
+  )
 
   const generateSlug = (name: string) => {
     return name
@@ -92,15 +122,6 @@ export function SectionDialog({
       .replace(/\s+/g, '-')
   }
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.value
-    form.setValue('name', name)
-    
-    const currentSlug = form.getValues('slug')
-    if (!currentSlug || currentSlug === generateSlug(form.getValues('name'))) {
-      form.setValue('slug', generateSlug(name))
-    }
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -110,47 +131,36 @@ export function SectionDialog({
             {type === 'add' ? 'Add New Section' : 'Edit Section'}
           </DialogTitle>
         </DialogHeader>
-        
+
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Section Name</Label>
-              <TextField
-                placeholder="e.g., About Us"
-                {...form.register('name')}
-                onChange={handleNameChange}
-              />
-              {form.formState.errors.name && (
-                <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
-              )}
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="slug">Slug</Label>
-              <TextField
-                placeholder="e.g., about-us"
-                {...form.register('slug')}
-              />
-              {form.formState.errors.slug && (
-                <p className="text-sm text-destructive">{form.formState.errors.slug.message}</p>
-              )}
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="order">Display Order</Label>
-              <TextField
-                type="number"
-                placeholder="0"
-                {...form.register('order', {
-                  valueAsNumber: true
-                })}
-              />
-              {form.formState.errors.order && (
-                <p className="text-sm text-destructive">{form.formState.errors.order.message}</p>
-              )}
-              <p className="text-sm text-muted-foreground">Lower numbers will be displayed first</p>
-            </div>
-            
+          <form
+            onSubmit={form.handleSubmit(handleFormSubmit)}
+            className="space-y-4 py-4"
+          >
+            <FormText
+              name="name"
+              label="Section Name"
+              placeholder="e.g., About Us"
+              required
+              description="Enter the name of the section"
+            />
+
+            <FormText
+              name="slug"
+              label="Slug"
+              placeholder="e.g., about-us"
+              description="URL-friendly identifier for the section"
+              required
+            />
+
+            <FormText
+              name="order"
+              label="Display Order"
+              placeholder="0"
+              description="Lower numbers will be displayed first"
+              required
+            />
+
             <FormField
               control={form.control}
               name="isVisible"
@@ -170,9 +180,13 @@ export function SectionDialog({
                 </FormItem>
               )}
             />
-            
+
             <DialogFooter className="pt-4">
-              <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
               <Button type="submit">
