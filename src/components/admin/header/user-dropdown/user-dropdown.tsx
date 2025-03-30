@@ -22,7 +22,7 @@ export default function UserDropdown() {
   }
 
   const userInitials = session?.user?.name 
-    ? session.user.name.split(' ').map(n => n[0]).join('').toUpperCase() 
+    ? session.user.name.split(' ').map(n => n[0]).slice(0, 3).join('').toUpperCase() 
     : 'U'
 
   return (

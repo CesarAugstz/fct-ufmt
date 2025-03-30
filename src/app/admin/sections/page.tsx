@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { BaseCard } from '@/components/ui/base-card'
 import { SectionDialog } from '@/components/admin/sections/section-dialog'
-import { Section } from '@/types/admin/section.types'
 import { useToast } from '@/lib/hooks/toast'
 import { SectionAccordion } from '@/components/admin/sections/section-accordion'
 import {
@@ -11,11 +10,17 @@ import {
   useFindManySection,
   useFindUniqueSection,
 } from '@/lib/zenstack-hooks'
+import { Section } from '@prisma/client'
+
+export type SectionWithChildren = Section & {
+  children?: Section[]
+}
 
 export default function SectionsPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [currentSection, setCurrentSection] = useState<Section | null>(null)
+  const [currentSection, setCurrentSection] =
+    useState<SectionWithChildren | null>(null)
   const [parentForNewSection, setParentForNewSection] = useState<string | null>(
     null,
   )
@@ -26,29 +31,11 @@ export default function SectionsPage() {
     data: sections,
     isLoading,
     refetch: refetchSections,
-  } = useFindManySection()
-
-  const organizeIntoHierarchy = (flatSections: Section[]): Section[] => {
-    const sectionMap = new Map<string, Section>()
-    const rootSections: Section[] = []
-
-    flatSections.forEach(section => {
-      sectionMap.set(section.id, { ...section, children: [] })
-    })
-
-    flatSections.forEach(section => {
-      const sectionWithChildren = sectionMap.get(section.id)!
-
-      if (section.parentId && sectionMap.has(section.parentId)) {
-        const parent = sectionMap.get(section.parentId)!
-        parent.children = [...(parent.children || []), sectionWithChildren]
-      } else {
-        rootSections.push(sectionWithChildren)
-      }
-    })
-
-    return rootSections.sort((a, b) => a.order - b.order)
-  }
+  } = useFindManySection({
+    include: {
+      children: { include: { children: { include: { children: true } } } },
+    },
+  })
 
   const handleDeleteSection = async (id: string) => {
     if (
@@ -100,15 +87,17 @@ export default function SectionsPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {sections?.map(section => (
-              <SectionAccordion
-                key={section.id}
-                section={section}
-                onAddSubsection={handleAddSubsection}
-                onEdit={handleEditClick}
-                onDelete={handleDeleteSection}
-              />
-            ))}
+            {sections
+              ?.filter(s => !s.parentId)
+              .map(section => (
+                <SectionAccordion
+                  key={section.id}
+                  section={section}
+                  onAddSubsection={handleAddSubsection}
+                  onEdit={handleEditClick}
+                  onDelete={handleDeleteSection}
+                />
+              ))}
           </div>
         )}
       </BaseCard>

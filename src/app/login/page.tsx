@@ -55,7 +55,7 @@ export default function LoginPage() {
         authStore.setRememberData({ remember: false, email: "" });
       }
 
-      router.push("/dashboard");
+      router.push("/admin");
     } catch (error) {
       console.error("Login failed:", error);
       setLoginError("An unexpected error occurred. Please try again.");

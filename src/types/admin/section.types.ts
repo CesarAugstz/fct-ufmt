@@ -9,13 +9,3 @@ export const sectionFormSchema = z.object({
 });
 
 export type SectionFormValues = z.infer<typeof sectionFormSchema>;
-
-export interface Section {
-  id: string;
-  name: string;
-  slug: string;
-  parentId: string | null;
-  isVisible: boolean;
-  order: number;
-  children?: Section[];
-}

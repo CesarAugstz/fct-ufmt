@@ -3,7 +3,7 @@ import { db } from "@/server/db";
 import { enhance } from "@zenstackhq/runtime";
 import { NextRequestHandler } from "@zenstackhq/server/next";
 
-async function getPrisma() {
+export async function getPrisma() {
   const user = await getCurrentUser()
   console.log('user', user);
   return enhance(db, { user: user ?? undefined });

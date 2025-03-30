@@ -1,6 +1,16 @@
-import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ChevronDown, ChevronRight, ExternalLink } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  useFindManySection,
+  useInfiniteFindManySection,
+} from '@/lib/zenstack-hooks'
+import { getPrisma } from '@/app/api/model/[...path]/route'
 
 export interface Section {
   id: string
@@ -14,56 +24,129 @@ export interface Section {
 
 const navigationSections: Section[] = [
   {
-    id: "instituto",
-    name: "O INSTITUTO",
-    slug: "instituto",
+    id: 'instituto',
+    name: 'O INSTITUTO',
+    slug: 'instituto',
     parentId: null,
     isVisible: true,
     order: 1,
     children: [
-      { id: "sobre", name: "Sobre o Instituto", slug: "sobre", parentId: "instituto", isVisible: true, order: 1 },
-      { 
-        id: "estrutura", 
-        name: "Estrutura Organizacional", 
-        slug: "estrutura", 
-        parentId: "instituto", 
-        isVisible: true, 
+      {
+        id: 'sobre',
+        name: 'Sobre o Instituto',
+        slug: 'sobre',
+        parentId: 'instituto',
+        isVisible: true,
+        order: 1,
+      },
+      {
+        id: 'estrutura',
+        name: 'Estrutura Organizacional',
+        slug: 'estrutura',
+        parentId: 'instituto',
+        isVisible: true,
         order: 2,
         children: [
-          { id: "diretoria", name: "Diretoria", slug: "diretoria", parentId: "estrutura", isVisible: true, order: 1 },
-          { id: "conselhos", name: "Conselhos", slug: "conselhos", parentId: "estrutura", isVisible: true, order: 2 }
-        ]
+          {
+            id: 'diretoria',
+            name: 'Diretoria',
+            slug: 'diretoria',
+            parentId: 'estrutura',
+            isVisible: true,
+            order: 1,
+          },
+          {
+            id: 'conselhos',
+            name: 'Conselhos',
+            slug: 'conselhos',
+            parentId: 'estrutura',
+            isVisible: true,
+            order: 2,
+          },
+        ],
       },
-      { id: "historico", name: "Histórico", slug: "historico", parentId: "instituto", isVisible: true, order: 3 },
-      { id: "localizacao", name: "Localização", slug: "localizacao", parentId: "instituto", isVisible: true, order: 4 }
-    ]
+      {
+        id: 'historico',
+        name: 'Histórico',
+        slug: 'historico',
+        parentId: 'instituto',
+        isVisible: true,
+        order: 3,
+      },
+      {
+        id: 'localizacao',
+        name: 'Localização',
+        slug: 'localizacao',
+        parentId: 'instituto',
+        isVisible: true,
+        order: 4,
+      },
+    ],
   },
   {
-    id: "estudante",
-    name: "ESTUDANTE",
-    slug: "estudante",
+    id: 'estudante',
+    name: 'ESTUDANTE',
+    slug: 'estudante',
     parentId: null,
     isVisible: true,
     order: 2,
     children: [
-      { id: "graduacao", name: "Graduação", slug: "graduacao", parentId: "estudante", isVisible: true, order: 1 },
-      { id: "pos-graduacao", name: "Pós-Graduação", slug: "pos-graduacao", parentId: "estudante", isVisible: true, order: 2 },
-      { id: "calendario", name: "Calendário Acadêmico", slug: "calendario", parentId: "estudante", isVisible: true, order: 3 },
-      { id: "estagios", name: "Estágios", slug: "estagios", parentId: "estudante", isVisible: true, order: 4 }
-    ]
+      {
+        id: 'graduacao',
+        name: 'Graduação',
+        slug: 'graduacao',
+        parentId: 'estudante',
+        isVisible: true,
+        order: 1,
+      },
+      {
+        id: 'pos-graduacao',
+        name: 'Pós-Graduação',
+        slug: 'pos-graduacao',
+        parentId: 'estudante',
+        isVisible: true,
+        order: 2,
+      },
+      {
+        id: 'calendario',
+        name: 'Calendário Acadêmico',
+        slug: 'calendario',
+        parentId: 'estudante',
+        isVisible: true,
+        order: 3,
+      },
+      {
+        id: 'estagios',
+        name: 'Estágios',
+        slug: 'estagios',
+        parentId: 'estudante',
+        isVisible: true,
+        order: 4,
+      },
+    ],
   },
   {
-    id: "nuti",
-    name: "NUTI",
-    slug: "nuti",
+    id: 'nuti',
+    name: 'NUTI',
+    slug: 'nuti',
     parentId: null,
     isVisible: true,
-    order: 6
+    order: 6,
   },
 ]
 
-export function NavItems() {
-  const sortedSections = [...navigationSections]
+export async function NavItems() {
+  const prisma = await getPrisma()
+  const sections = await prisma.section.findMany({
+    where: { isVisible: true },
+    include: {
+      children: { include: { children: { include: { children: true } } } },
+    },
+  })
+
+  const rootSections = sections.filter(section => section.parentId === null)
+
+  const sortedSections = [...rootSections]
     .filter(section => section.isVisible)
     .sort((a, b) => a.order - b.order)
 
@@ -97,7 +180,7 @@ interface NavDropdownProps {
 
 function NavDropdown({ section }: NavDropdownProps) {
   const hasChildren = section.children && section.children.length > 0
-  
+
   if (!hasChildren) {
     return (
       <Button
@@ -120,10 +203,11 @@ function NavDropdown({ section }: NavDropdownProps) {
           variant="ghost"
           className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto flex items-center transition-all duration-200 rounded-md text-sm relative after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-0.5 after:bg-blue-300 after:transform after:-translate-x-1/2 group-hover:after:w-2/3 after:transition-all after:duration-300"
         >
-          {section.name} <ChevronDown className="ml-1.5 h-3.5 w-3.5 opacity-70 group-hover:opacity-100 transition-all" />
+          {section.name}{' '}
+          <ChevronDown className="ml-1.5 h-3.5 w-3.5 opacity-70 group-hover:opacity-100 transition-all" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent 
+      <DropdownMenuContent
         className="w-64 rounded-lg border border-blue-100/30 bg-white/98 backdrop-blur-md shadow-[0_10px_40px_-15px_rgba(0,30,80,0.3)] animate-in fade-in-50 zoom-in-95 data-[side=top]:slide-in-from-bottom-2 p-1.5 mt-1"
         sideOffset={8}
       >
@@ -141,7 +225,7 @@ interface NavMenuItemProps {
 
 function NavMenuItem({ item }: NavMenuItemProps) {
   const hasChildren = item.children && item.children.length > 0
-  
+
   if (!hasChildren) {
     return (
       <DropdownMenuItem className="cursor-pointer group/item flex items-center px-4 py-2.5 my-0.5 text-[#00335e] hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100/50 hover:text-blue-700 rounded-md transition-all duration-200 focus:bg-blue-50 focus:text-blue-700 text-sm font-medium relative overflow-hidden">
@@ -155,7 +239,7 @@ function NavMenuItem({ item }: NavMenuItemProps) {
     )
   }
 
-  const sortedChildren = [...item.children]
+  const sortedChildren = [...(item.children ?? [])]
     .filter(child => child.isVisible)
     .sort((a, b) => a.order - b.order)
 
@@ -171,8 +255,8 @@ function NavMenuItem({ item }: NavMenuItemProps) {
           <span className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent opacity-0 group-hover/nested:opacity-100 transition-all duration-300"></span>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        side="right" 
+      <DropdownMenuContent
+        side="right"
         sideOffset={-5}
         className="w-64 rounded-lg border border-blue-100/30 bg-white/98 backdrop-blur-md shadow-[0_10px_40px_-15px_rgba(0,30,80,0.3)] animate-in slide-in-from-left-2 fade-in-50 zoom-in-95 p-1.5"
       >

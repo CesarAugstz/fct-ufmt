@@ -45,5 +45,6 @@ model Section extends BaseModel {
   children  Section[] @relation("SectionToSection")
   parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id])
 
+  @@allow('read', true)
   @@allow('all', auth().role == 'ADMIN')
 }

@@ -32,6 +32,7 @@ import {
   useUpdateSection,
 } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
+import { ActionButton } from '@/components/ui/action-button'
 
 interface SectionDialogProps {
   type: 'add' | 'edit'
@@ -46,6 +47,7 @@ export function SectionDialog({
   isOpen,
   onOpenChange,
   sectionId,
+  parentId,
 }: SectionDialogProps) {
   const toast = useToast()
   const editMutation = useUpdateSection()
@@ -71,12 +73,21 @@ export function SectionDialog({
     },
   })
 
+  useEffect(
+    function resetValues() {
+      if (isOpen) {
+        form.reset()
+      }
+    },
+    [isOpen, form],
+  )
+
   const handleFormSubmit = async (data: SectionFormValues) => {
     try {
       const sectionFormatted = {
         name: data.name,
         slug: data.slug,
-        parentId: data.parentId,
+        parentId: parentId || data.parentId,
         isVisible: data.isVisible,
         order: data.order,
       }
@@ -89,6 +100,7 @@ export function SectionDialog({
           data: sectionFormatted,
         })
         toast.success('Section updated successfully')
+        onOpenChange(false)
         return
       }
 
@@ -96,6 +108,7 @@ export function SectionDialog({
         data: sectionFormatted,
       })
       toast.success('Section created successfully')
+      onOpenChange(false)
     } catch (e) {
       console.error('Error creating section:', e)
       toast.exception(e)
@@ -121,7 +134,6 @@ export function SectionDialog({
       .replace(/[^\w\s]/gi, '')
       .replace(/\s+/g, '-')
   }
-
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -189,9 +201,12 @@ export function SectionDialog({
               >
                 Cancel
               </Button>
-              <Button type="submit">
+              <ActionButton
+                mutations={[editMutation, createMutation]}
+                type="submit"
+              >
                 {type === 'add' ? 'Create Section' : 'Update Section'}
-              </Button>
+              </ActionButton>
             </DialogFooter>
           </form>
         </FormProvider>

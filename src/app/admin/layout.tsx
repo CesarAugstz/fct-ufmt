@@ -1,11 +1,17 @@
-import Sidebar from "@/components/admin/sidebar";
-import Header from "@/components/admin/header/header";
+import Sidebar from '@/components/admin/sidebar'
+import Header from '@/components/admin/header/header'
+import { redirect, RedirectType } from 'next/navigation'
+import { getServerAuthSession } from '@/server/auth'
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
+  const session = await getServerAuthSession()
+
+  if (!session?.user?.id) redirect('/login', RedirectType.replace)
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
@@ -16,5 +22,5 @@ export default function AdminLayout({
         </main>
       </div>
     </div>
-  );
+  )
 }
