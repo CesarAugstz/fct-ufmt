@@ -28,7 +28,7 @@ export function SiteFooter() {
         <Separator className="bg-white/20 my-6" />
 
         <div className="text-center text-sm text-white/70">
-          <p>© 2025 Instituto de Computação - UFMT. Todos os direitos reservados.</p>
+          <p>© 2025 FCT - UFMT. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
@@ -56,7 +56,7 @@ function FooterAbout() {
         </div>
       </div>
       <p className="text-sm text-white/80 mb-4">
-        O Instituto de Computação da UFMT é referência em ensino, pesquisa e extensão na área de Tecnologia da
+        A FCT da UFMT é referência em ensino, pesquisa e extensão na área de Tecnologia da
         Informação.
       </p>
       <div className="flex space-x-3">

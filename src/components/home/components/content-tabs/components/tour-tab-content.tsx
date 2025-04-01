@@ -9,7 +9,7 @@ export function TourTabContent() {
         <div className="p-6 md:p-8">
           <h3 className="text-2xl font-bold text-[#003366] mb-4">Tour Virtual 360°</h3>
           <p className="text-gray-600 mb-6">
-            Explore as instalações do Instituto de Computação através do nosso tour virtual interativo.
+            Explore as instalações da FCT através do nosso tour virtual interativo.
           </p>
 
           <div className="aspect-video w-full max-w-4xl mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-8">

@@ -3,7 +3,7 @@ export function StatsSection() {
     <div className="bg-[#003366] text-white py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Instituto de Computação em Números</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">FCT em Números</h2>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
             Conheça alguns números que representam nossa excelência em ensino, pesquisa e extensão.
           </p>

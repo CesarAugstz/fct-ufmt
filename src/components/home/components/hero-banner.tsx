@@ -18,7 +18,7 @@ export function HeroBanner() {
             Formando profissionais e pesquisadores em Computação
           </h1>
           <p className="text-lg md:text-xl opacity-90 mb-8 leading-relaxed">
-            O Instituto de Computação da UFMT é referência em ensino, pesquisa e extensão na área de Tecnologia da
+            A FCT da UFMT é referência em ensino, pesquisa e extensão na área de Tecnologia da
             Informação.
           </p>
           <div className="flex flex-wrap gap-4">

@@ -8,7 +8,7 @@ export function PhotosTabContent() {
       <div className="mb-6">
         <h3 className="text-xl font-bold text-[#003366] mb-4">Galeria de Fotos</h3>
         <p className="text-gray-600 mb-6">
-          Confira os registros fotográficos dos eventos e atividades do Instituto de Computação.
+          Confira os registros fotográficos dos eventos e atividades da FCT.
         </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

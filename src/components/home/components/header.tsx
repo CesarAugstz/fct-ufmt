@@ -12,7 +12,7 @@ export function Header() {
             <div className="bg-white p-2 rounded-lg shadow-lg">
               <Image
                 src="/placeholder.svg?height=60&width=60"
-                alt="Logo IC"
+                alt="Logo FCT"
                 width={60}
                 height={60}
                 className="rounded"
@@ -20,8 +20,8 @@ export function Header() {
             </div>
           </div>
           <div className="text-lg font-bold">
-            <div>INSTITUTO DE</div>
-            <div>COMPUTAÇÃO</div>
+            <div>FACULDADE DE</div>
+            <div>CIÊNCIAS E TECNOLOGIA</div>
           </div>
         </div>
 
@@ -30,7 +30,7 @@ export function Header() {
             <Input
               type="text"
               placeholder="O que você procura?"
-              className="w-full py-2 px-4 pr-10 rounded-full text-black border-none focus:ring-2 focus:ring-blue-300 transition-all"
+              className="w-full py-2 px-4 pr-10 rounded-full text-black border-accent focus:ring-2 focus:ring-blue-300 transition-all"
             />
             <Button
               variant="ghost"
