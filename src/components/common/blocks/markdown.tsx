@@ -59,7 +59,5 @@ export default function Markdown({ content }: { content: string }) {
     return <div>Loading...</div>
   }
 
-  return (
-    <div className="prose prose-slate dark:prose-invert">{markdownContent}</div>
-  )
+  return <div className="prose prose-slate max-w-none">{markdownContent}</div>
 }

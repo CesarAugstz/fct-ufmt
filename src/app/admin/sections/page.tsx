@@ -11,6 +11,7 @@ import {
   useFindUniqueSection,
 } from '@/lib/zenstack-hooks'
 import { Section } from '@prisma/client'
+import { invalidateSectionsCache } from './actions'
 
 export type SectionWithChildren = Section & {
   children?: Section[]
@@ -36,6 +37,9 @@ export default function SectionsPage() {
       children: { include: { children: { include: { children: true } } } },
     },
   })
+  const { mutateAsync: deleteSection } = useDeleteSection({
+    onSettled: invalidateSectionsCache,
+  })
 
   const handleDeleteSection = async (id: string) => {
     if (
@@ -47,8 +51,6 @@ export default function SectionsPage() {
     }
 
     try {
-      const { mutateAsync: deleteSection } = useDeleteSection()
-
       await deleteSection({ where: { id } })
 
       toast.success('Section deleted successfully')

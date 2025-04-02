@@ -15,7 +15,6 @@ import { FormText } from '@/components/ui/form-fields/form-text'
 import { FormSelect } from '@/components/ui/form-fields/form-select'
 import { Switch } from '@/components/ui/switch'
 import {
-  Section,
   sectionFormSchema,
   SectionFormValues,
 } from '@/types/admin/section.types'
@@ -33,6 +32,7 @@ import {
 } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
 import { ActionButton } from '@/components/ui/action-button'
+import { invalidateSectionsCache } from '../../../app/admin/sections/actions'
 
 interface SectionDialogProps {
   type: 'add' | 'edit'
@@ -50,8 +50,12 @@ export function SectionDialog({
   parentId,
 }: SectionDialogProps) {
   const toast = useToast()
-  const editMutation = useUpdateSection()
-  const createMutation = useCreateSection()
+  const editMutation = useUpdateSection({
+    onSettled: invalidateSectionsCache,
+  })
+  const createMutation = useCreateSection({
+    onSettled: invalidateSectionsCache,
+  })
 
   const { data: section } = useFindUniqueSection(
     {

@@ -11,6 +11,8 @@ import {
   useInfiniteFindManySection,
 } from '@/lib/zenstack-hooks'
 import { getPrisma } from '@/app/api/model/[...path]/route'
+import { unstable_cache } from 'next/cache'
+import { db } from '@/server/db'
 
 export interface Section {
   id: string
@@ -135,14 +137,21 @@ const navigationSections: Section[] = [
   },
 ]
 
-export async function NavItems() {
-  const prisma = await getPrisma()
-  const sections = await prisma.section.findMany({
-    where: { isVisible: true },
-    include: {
-      children: { include: { children: { include: { children: true } } } },
-    },
-  })
+const getSections = unstable_cache(
+  async () => {
+    return await db.section.findMany({
+      where: { isVisible: true },
+      include: {
+        children: { include: { children: { include: { children: true } } } },
+      },
+    })
+  },
+  ['sections'],
+  { revalidate: 3600, tags: ['sections'] },
+)
+
+export default async function NavItems() {
+  const sections = await getSections()
 
   const rootSections = sections.filter(section => section.parentId === null)
 
