@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/form'
 import {
   useCreateSection,
+  useFindManyPage,
   useFindUniqueSection,
   useUpdateSection,
 } from '@/lib/zenstack-hooks'
@@ -66,11 +67,13 @@ export function SectionDialog({
     { enabled: !!sectionId },
   )
 
+  const { data: pages } = useFindManyPage({})
+
   const form = useForm<SectionFormValues>({
     resolver: zodResolver(sectionFormSchema),
     values: {
       name: section?.name || '',
-      slug: section?.slug || '',
+      pageId: section?.pageId || null,
       parentId: section?.parentId || null,
       isVisible: section?.isVisible || true,
       order: section?.order || 0,
@@ -90,7 +93,7 @@ export function SectionDialog({
     try {
       const sectionFormatted = {
         name: data.name,
-        slug: data.slug,
+        pageId: data.pageId,
         parentId: parentId || data.parentId,
         isVisible: data.isVisible,
         order: data.order,
@@ -119,26 +122,6 @@ export function SectionDialog({
     }
   }
 
-  const nameValue = form.watch('name')
-  useEffect(
-    function updateSlug() {
-      const currentSlug = form.getValues('slug')
-
-      const generatedSlug = generateSlug(nameValue)
-      if (currentSlug === generatedSlug) return
-
-      form.setValue('slug', generatedSlug)
-    },
-    [nameValue, form],
-  )
-
-  const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^\w\s]/gi, '')
-      .replace(/\s+/g, '-')
-  }
-
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -161,12 +144,13 @@ export function SectionDialog({
               description="Enter the name of the section"
             />
 
-            <FormText
-              name="slug"
-              label="Slug"
-              placeholder="e.g., about-us"
-              description="URL-friendly identifier for the section"
-              required
+            <FormSelect
+              name="pageId"
+              label="Page"
+              placeholder="Select a page"
+              options={
+                pages?.map(page => ({ value: page.id, label: page.name })) ?? []
+              }
             />
 
             <FormText

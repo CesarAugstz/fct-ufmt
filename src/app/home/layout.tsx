@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/home/components/navbar'
 import { Header } from '@/components/home/components/header'
-import  NavItems  from '@/components/home/components/nav-items'
+import  NavItems  from '@/components/home/components/nav-items/nav-items'
 import { SiteFooter } from '@/components/home/components/site-footer'
 
 export default function Layout({ children }: { children: React.ReactNode }) {

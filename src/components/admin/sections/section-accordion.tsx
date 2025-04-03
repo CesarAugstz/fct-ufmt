@@ -87,9 +87,6 @@ export function SectionAccordion({
         <AccordionContent className="pb-2 pt-0">
           <div className="px-4 py-2 space-y-1">
             <div className="text-sm text-muted-foreground">
-              <span className="font-medium">Slug:</span> {section.slug}
-            </div>
-            <div className="text-sm text-muted-foreground">
               <span className="font-medium">Order:</span> {section.order}
             </div>
           </div>

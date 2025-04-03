@@ -7,6 +7,7 @@
 
 export * from './user';
 export * from './section';
+export * from './page';
 export { getQueryKey } from '@zenstackhq/tanstack-query/runtime-v5';
 export { Provider } from '@zenstackhq/tanstack-query/runtime-v5/react';
 export { default as metadata } from './__model_meta';

@@ -21,6 +21,7 @@ interface BaseCardProps {
   children: ReactNode
   emptyStateMessage?: string
   showEmptyState?: boolean
+  loading?: boolean
 
   // Action buttons
   onAdd?: () => void
@@ -47,6 +48,7 @@ export function BaseCard({
   children,
   emptyStateMessage = "Nenhum item adicionado. Clique em 'Adicionar' para começar.",
   showEmptyState = false,
+  loading = false,
 
   onAdd,
   onUpdate,
@@ -75,18 +77,21 @@ export function BaseCard({
               </Button>
             )}
             {onAdd && (
-              <Button onClick={onAdd} >
+              <Button onClick={onAdd}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 {addButtonText}
               </Button>
             )}
-
           </div>
         </CardHeader>
       )}
 
       <CardContent>
-        {showEmptyState ? (
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <p>Loading...</p>
+          </div>
+        ) : showEmptyState ? (
           <div className="text-center py-8 text-gray-500">
             {emptyStateMessage}
           </div>
@@ -95,11 +100,7 @@ export function BaseCard({
         )}
       </CardContent>
 
-      {!hideFooter && (
-        <CardFooter className="justify-between">
-
-        </CardFooter>
-      )}
+      {!hideFooter && <CardFooter className="justify-between"></CardFooter>}
     </Card>
   )
 }

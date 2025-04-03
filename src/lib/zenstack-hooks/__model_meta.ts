@@ -68,9 +68,6 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, slug: {
-                    name: "slug",
-                    type: "String",
                 }, parentId: {
                     name: "parentId",
                     type: "String",
@@ -98,12 +95,67 @@ const metadata = {
                     backLink: 'children',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "parentId" },
+                }, page: {
+                    name: "page",
+                    type: "Page",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'sections',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "pageId" },
+                }, pageId: {
+                    name: "pageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'page',
                 },
             }
             , uniqueConstraints: {
                 id: {
                     name: "id",
                     fields: ["id"]
+                },
+            }
+            ,
+        }
+        ,
+        page: {
+            name: 'Page', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, slug: {
+                    name: "slug",
+                    type: "String",
+                }, sections: {
+                    name: "sections",
+                    type: "Section",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'page',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, slug: {
+                    name: "slug",
+                    fields: ["slug"]
                 },
             }
             ,

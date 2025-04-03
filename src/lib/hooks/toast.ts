@@ -18,6 +18,13 @@ export function useToast() {
       case error?.info?.rejectedByPolicy:
         return toast.error('You do not have permission to perform this action.')
 
+      case error?.info?.message?.includes('Unique constraint failed'): {
+        const keyName = error.info.message.match(/\(`(.*)`\)/)?.[1]
+        if (!keyName) return toast.error('An error occurred. Please try again.')
+        return toast.error(
+          `This ${keyName} already exists. Please choose another one.`,
+        )
+      }
       case error?.info?.message:
         return toast.error(error.info.message)
 

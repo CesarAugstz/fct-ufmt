@@ -3,7 +3,7 @@ import {
   Select,
   SelectContent,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select'
 
 interface SelectFieldProps {
@@ -19,7 +19,7 @@ export function SelectField({
   children,
   value,
   onValueChange,
-  defaultValue
+  defaultValue,
 }: SelectFieldProps) {
   return (
     <Select
@@ -27,12 +27,10 @@ export function SelectField({
       defaultValue={defaultValue}
       value={value}
     >
-      <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+      <SelectTrigger className="w-full">
+        <SelectValue className="w-full" placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent>
-        {children}
-      </SelectContent>
+      <SelectContent>{children}</SelectContent>
     </Select>
   )
 }

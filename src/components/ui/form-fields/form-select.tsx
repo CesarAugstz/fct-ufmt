@@ -5,7 +5,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription
+  FormDescription,
 } from '@/components/ui/form'
 import { SelectField } from './select-field'
 import { SelectItem } from '@/components/ui/select'
@@ -36,29 +36,36 @@ export function FormSelect({
   required = false,
   onValueChange,
   includeEmpty = false,
-  emptyLabel = "None"
+  emptyLabel = 'None',
 }: FormSelectProps) {
   const { control } = useFormContext()
-  
+
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}{required && <span className="text-red-500 ml-1">*</span>}</FormLabel>
+          <FormLabel>
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </FormLabel>
           <FormControl>
             <SelectField
               placeholder={placeholder}
               value={field.value}
               defaultValue={field.value}
-              onValueChange={(value) => {
+              onValueChange={value => {
                 field.onChange(value)
                 if (onValueChange) onValueChange(value)
               }}
             >
-              {includeEmpty && <SelectItem value={null as unknown as string}>{emptyLabel}</SelectItem>}
-              {options.map((option) => (
+              {includeEmpty && (
+                <SelectItem value={null as unknown as string}>
+                  {emptyLabel}
+                </SelectItem>
+              )}
+              {options.map(option => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

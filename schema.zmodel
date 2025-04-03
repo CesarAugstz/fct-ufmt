@@ -38,12 +38,23 @@ enum Role {
 
 model Section extends BaseModel {
   name      String
-  slug      String
   parentId  String?
   isVisible Boolean   @default(true)
   order     Int
   children  Section[] @relation("SectionToSection")
   parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id])
+  page Page? @relation(fields: [pageId], references: [id])
+  pageId String? 
+
+  @@allow('read', true)
+  @@allow('all', auth().role == 'ADMIN')
+}
+
+model Page extends BaseModel {
+  name  String
+  slug String @unique
+
+  sections Section[]
 
   @@allow('read', true)
   @@allow('all', auth().role == 'ADMIN')

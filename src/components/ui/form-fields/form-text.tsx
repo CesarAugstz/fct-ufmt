@@ -5,7 +5,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription
+  FormDescription,
 } from '@/components/ui/form'
 import { TextField } from './text-field'
 
@@ -16,6 +16,9 @@ interface FormTextProps {
   description?: string
   required?: boolean
   type?: 'text' | 'password'
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  formatter?: (value: string) => string
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 export function FormText({
@@ -23,22 +26,38 @@ export function FormText({
   label,
   placeholder,
   description,
-  required = false
+  onChange,
+  formatter,
+  onBlur,
+  required = false,
 }: FormTextProps) {
   const { control } = useFormContext()
 
   // TODO: implement type password field
 
-  
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}{required && <span className="text-red-500 ml-1">*</span>}</FormLabel>
+          <FormLabel>
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </FormLabel>
           <FormControl>
-            <TextField placeholder={placeholder} {...field} />
+            <TextField
+              placeholder={placeholder}
+              {...field}
+              onBlur={onBlur}
+              onChange={e => {
+                const value = e.target.value
+                const formattedValue = formatter ? formatter(value) : value
+                e.target.value = formattedValue
+                field.onChange(e)
+                onChange?.(e)
+              }}
+            />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

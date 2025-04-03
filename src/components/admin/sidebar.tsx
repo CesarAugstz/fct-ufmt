@@ -38,6 +38,11 @@ export default function Sidebar() {
       icon: <LayoutDashboard className="mr-2 h-5 w-5" />,
     },
     {
+      name: 'Páginas',
+      path: '/admin/pages',
+      icon: <Library className="mr-2 h-5 w-5" />,
+    },
+    {
       name: 'Usuários',
       path: '/admin/users',
       icon: <Users className="mr-2 h-5 w-5" />,

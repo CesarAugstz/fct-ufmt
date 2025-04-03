@@ -32,10 +32,20 @@ model Section {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
   name      String
-  slug      String
   parentId  String?
   isVisible Boolean   @default(true)
   order     Int
   children  Section[] @relation("SectionToSection")
   parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id])
+  page      Page?     @relation(fields: [pageId], references: [id])
+  pageId    String?
+}
+
+model Page {
+  id        String    @id() @default(ulid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  name      String
+  slug      String    @unique()
+  sections  Section[]
 }
