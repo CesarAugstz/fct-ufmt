@@ -8,29 +8,18 @@ import { MarkdownBlockEditor } from './markdown-block-editor'
 interface BlockComponentEditorProps<T extends BlockType> {
   type: T
   content: BlockContentType<T>
-  onChange: (content: BlockContentType<T>) => void
 }
 
 export function BlockComponentEditor<T extends BlockType>({
   type,
   content,
-  onChange,
 }: BlockComponentEditorProps<T>) {
+  console.log('BlockComponentEditor', type, content)
   switch (type) {
     case BlockType.TITLE:
-      return (
-        <TitleBlockEditor
-          content={content as BlockContentType<'TITLE'>}
-          onChange={onChange as any}
-        />
-      )
+      return <TitleBlockEditor />
     case BlockType.MARKDOWN:
-      return (
-        <MarkdownBlockEditor
-          content={content as BlockContentType<'MARKDOWN'>}
-          onChange={onChange as any}
-        />
-      )
+      return <MarkdownBlockEditor />
     default:
       throw new Error(`Unsupported block type: ${type}`)
   }

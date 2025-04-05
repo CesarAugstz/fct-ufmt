@@ -220,6 +220,7 @@ const metadata = {
     }
     ,
     deleteCascade: {
+        page: ['Section'],
     }
     ,
     authModel: 'User'

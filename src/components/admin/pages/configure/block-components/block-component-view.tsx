@@ -14,6 +14,7 @@ export function BlockComponentView<T extends BlockType>({
   type,
   content,
 }: BlockComponentViewProps<T>) {
+  //console.log('BlockComponentView', type, content)
   switch (type) {
     case BlockType.TITLE:
       const titleContent = content as BlockContentType<'TITLE'>

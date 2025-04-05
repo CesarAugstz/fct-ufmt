@@ -1,5 +1,4 @@
 'use client'
-import { PagesDialog } from '@/components/admin/pages/PagesDialog'
 import { TableMadrid } from '@/components/common/table/table-madrid'
 import { BaseCard } from '@/components/ui/base-card'
 import { Button } from '@/components/ui/button'
@@ -9,6 +8,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { Edit, Trash2, Settings } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { PagesDialog } from '@/components/admin/pages/components/PagesDialog'
 
 export default function Page() {
   const router = useRouter()

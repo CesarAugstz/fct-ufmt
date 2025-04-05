@@ -1,7 +1,8 @@
-import Image from "next/image"
-import { Search, Facebook, Instagram, Youtube, Linkedin } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import Image from 'next/image'
+import { Search, Facebook, Instagram, Youtube, Linkedin } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { ThemeToggle } from '@/components/common/theme-toggle'
 
 export function Header() {
   return (
@@ -72,6 +73,7 @@ export function Header() {
             <Linkedin className="h-5 w-5" />
           </Button>
         </div>
+        <ThemeToggle className="ml-4" buttonProps={{ variant: 'ghost' }} />
       </div>
     </header>
   )

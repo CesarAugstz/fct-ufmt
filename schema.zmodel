@@ -42,8 +42,8 @@ model Section extends BaseModel {
   isVisible Boolean   @default(true)
   order     Int
   children  Section[] @relation("SectionToSection")
-  parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id])
-  page Page? @relation(fields: [pageId], references: [id])
+  parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id], onDelete: Cascade)
+  page Page? @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId String? 
 
   @@allow('read', true)

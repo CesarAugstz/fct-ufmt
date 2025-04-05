@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ChevronRight, ChevronDown, Edit, Trash2 } from 'lucide-react'
 import { Section } from '@/types/admin/section.types'
+import { atom, useRecoilState } from 'recoil'
 
 interface SectionsTableProps {
   sections: Section[]

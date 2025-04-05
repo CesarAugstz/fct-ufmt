@@ -1,26 +1,45 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormText } from '@/components/ui/form-fields/form-text'
 import { FormSelect } from '@/components/ui/form-fields/form-select'
 import Title from '@/components/common/blocks/title'
-import { TitleBlockContent, titleBlockSchema } from '@/types/admin/block-components.types'
+import {
+  BlockComponentType,
+  TitleBlockContent,
+  titleBlockSchema,
+} from '@/types/admin/block-components.types'
+import { useBlocksContext } from '../../context/BlocksContext'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import {
+  blockEditContentAtom,
+  blockEditingAtom,
+  formGetValuesAtom,
+} from '../state/blocks.state'
+import { useOnMount } from '@/lib/hooks/on-mount'
+import React from 'react'
 
-interface TitleBlockEditorProps {
-  content: TitleBlockContent
-  onChange: (content: TitleBlockContent) => void
-}
+export const TitleBlockEditor = React.memo(function TitleBlockEditor() {
+  const setFormGetValues = useSetAtom(formGetValuesAtom)
+  const content = useAtomValue(blockEditContentAtom)
 
-export function TitleBlockEditor({ content, onChange }: TitleBlockEditorProps) {
+  console.log('TitleBlockEditor', content)
+
   const form = useForm<TitleBlockContent>({
     resolver: zodResolver(titleBlockSchema),
     defaultValues: {
       title: content.title || '',
       subtitle: content.subtitle || '',
       backgroundImage: content.backgroundImage || '',
-      height: content.height || 'sm'
-    }
+      height: content.height || 'sm',
+    },
+  })
+
+  const formValues = form.watch()
+
+  useOnMount(() => {
+    setFormGetValues(() => form.getValues)
   })
 
   const heightOptions = [
@@ -29,15 +48,19 @@ export function TitleBlockEditor({ content, onChange }: TitleBlockEditorProps) {
     { value: 'lg', label: 'Large' },
     { value: 'xl', label: 'Extra Large' },
   ]
-  
-  useEffect(() => {
-    const subscription = form.watch((value) => {
-      onChange(value as TitleBlockContent)
-    })
-    return () => subscription.unsubscribe()
-  }, [form, onChange])
 
-  const formValues = form.watch()
+  const TitlePreview = React.memo(function TitlePreview() {
+    const { title, subtitle, backgroundImage, height } = formValues
+
+    return (
+      <Title
+        title={title}
+        subtitle={subtitle}
+        backgroundImage={backgroundImage}
+        height={height as 'sm' | 'md' | 'lg' | 'xl'}
+      />
+    )
+  })
 
   return (
     <div className="space-y-4">
@@ -49,36 +72,27 @@ export function TitleBlockEditor({ content, onChange }: TitleBlockEditorProps) {
             placeholder="Enter title"
             required
           />
-          
+
           <FormText
             name="subtitle"
             label="Subtitle"
             placeholder="Enter subtitle (optional)"
           />
-          
+
           <FormText
             name="backgroundImage"
             label="Background Image URL"
             placeholder="Enter image URL (optional)"
           />
-          
-          <FormSelect
-            name="height"
-            label="Height"
-            options={heightOptions}
-          />
+
+          <FormSelect name="height" label="Height" options={heightOptions} />
         </div>
       </FormProvider>
 
       <div className="border-t pt-4">
         <h3 className="text-sm font-medium mb-2">Preview:</h3>
-        <Title 
-          title={formValues.title}
-          subtitle={formValues.subtitle}
-          backgroundImage={formValues.backgroundImage}
-          height={formValues.height as 'sm' | 'md' | 'lg' | 'xl'}
-        />
+        <TitlePreview />
       </div>
     </div>
   )
-}
+})

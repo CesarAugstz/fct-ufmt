@@ -6,7 +6,7 @@ import { NextRequestHandler } from "@zenstackhq/server/next";
 export async function getPrisma() {
   const user = await getCurrentUser()
   console.log('user', user);
-  return enhance(db, { user: user ?? undefined });
+  return enhance(db, { user: user ?? undefined }, { logPrismaQuery: true })
 }
 
 const handler = NextRequestHandler({ getPrisma, useAppDir: true });
