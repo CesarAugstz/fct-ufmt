@@ -147,6 +147,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'page',
+                }, blockComponents: {
+                    name: "blockComponents",
+                    type: "BlockComponent",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'page',
                 },
             }
             , uniqueConstraints: {
@@ -156,6 +162,56 @@ const metadata = {
                 }, slug: {
                     name: "slug",
                     fields: ["slug"]
+                },
+            }
+            ,
+        }
+        ,
+        blockComponent: {
+            name: 'BlockComponent', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, blockType: {
+                    name: "blockType",
+                    type: "BlockType",
+                }, content: {
+                    name: "content",
+                    type: "Json",
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, page: {
+                    name: "page",
+                    type: "Page",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'blockComponents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "pageId" },
+                }, pageId: {
+                    name: "pageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'page',
+                },
+            }
+            , uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
                 },
             }
             ,

@@ -55,6 +55,23 @@ model Page extends BaseModel {
   slug String @unique
 
   sections Section[]
+	blockComponents BlockComponent[]
+
+  @@allow('read', true)
+  @@allow('all', auth().role == 'ADMIN')
+}
+
+enum BlockType {
+  TITLE
+  MARKDOWN
+}
+
+model BlockComponent extends BaseModel {
+  blockType BlockType
+  content Json
+  order Int @default(0)
+  page Page? @relation(fields: [pageId], references: [id])
+  pageId String?
 
   @@allow('read', true)
   @@allow('all', auth().role == 'ADMIN')

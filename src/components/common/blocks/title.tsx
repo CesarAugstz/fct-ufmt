@@ -1,5 +1,7 @@
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import { useMemo } from 'react'
+import { z } from 'zod'
 
 interface TitleProps {
   title: string
@@ -23,6 +25,10 @@ export default function Title({
     xl: 'h-96',
   }
 
+  const isValidSrcBackgroundImage = useMemo(() => {
+    return backgroundImage && z.string().url().safeParse(backgroundImage).success
+  }, [backgroundImage])
+
   return (
     <div
       className={cn(
@@ -32,9 +38,9 @@ export default function Title({
       )}
     >
       <div className="absolute inset-0 w-full h-full">
-        {backgroundImage && (
+        {isValidSrcBackgroundImage && (
           <Image
-            src={backgroundImage}
+            src={backgroundImage!}
             alt="Background"
             fill
             priority

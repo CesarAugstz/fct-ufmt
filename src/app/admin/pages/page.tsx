@@ -3,22 +3,15 @@ import { PagesDialog } from '@/components/admin/pages/PagesDialog'
 import { TableMadrid } from '@/components/common/table/table-madrid'
 import { BaseCard } from '@/components/ui/base-card'
 import { Button } from '@/components/ui/button'
-import {
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  Table,
-} from '@/components/ui/table'
 import { useDeletePage, useFindManyPage } from '@/lib/zenstack-hooks'
 import { Page as PageType } from '@prisma/client'
-import { AlertDialog } from '@radix-ui/react-alert-dialog'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, Trash2, Settings } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
+  const router = useRouter()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editPageId, setEditPageId] = useState<string | null>(null)
   const deleteMutation = useDeletePage()
@@ -73,6 +66,14 @@ export default function Page() {
           >
             <Edit className="h-4 w-4 mr-1" />
             Edit
+          </Button>
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => router.push(`/admin/pages/${info.row.original.id}/configure`)}
+          >
+            <Settings className="h-4 w-4 mr-1" />
+            Configure
           </Button>
           <Button
             onClick={() => onDeletePage(info.row.original.id)}

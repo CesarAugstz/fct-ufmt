@@ -17,6 +17,11 @@ enum Role {
   USER
 }
 
+enum BlockType {
+  TITLE
+  MARKDOWN
+}
+
 model User {
   id        String   @id() @default(ulid())
   createdAt DateTime @default(now())
@@ -42,10 +47,22 @@ model Section {
 }
 
 model Page {
+  id              String           @id() @default(ulid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt()
+  name            String
+  slug            String           @unique()
+  sections        Section[]
+  blockComponents BlockComponent[]
+}
+
+model BlockComponent {
   id        String    @id() @default(ulid())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
-  name      String
-  slug      String    @unique()
-  sections  Section[]
+  blockType BlockType
+  content   Json
+  order     Int       @default(0)
+  page      Page?     @relation(fields: [pageId], references: [id])
+  pageId    String?
 }
