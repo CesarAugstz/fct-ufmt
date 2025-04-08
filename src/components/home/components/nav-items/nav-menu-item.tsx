@@ -25,6 +25,7 @@ export function NavMenuItem({ item }: NavMenuItemProps) {
           item?.page?.slug ? router.push(`/home/pages/${item.page.slug}`) : null
         }
         className="cursor-pointer group/item flex items-center px-4 py-2.5 my-0.5 text-[#00335e] hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100/50 hover:text-blue-700 rounded-md transition-all duration-200 focus:bg-blue-50 focus:text-blue-700 text-sm font-medium relative overflow-hidden"
+        disabled={!item.page?.slug}
       >
         <span className="relative z-10 flex items-center">
           <span className="mr-2 h-1.5 w-1.5 rounded-full bg-blue-300 opacity-0 group-hover/item:opacity-100 transition-all duration-200 group-hover/item:scale-110"></span>

@@ -75,6 +75,7 @@ export default async function NavItems() {
                   <Button
                     variant="ghost"
                     className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto transition-all duration-200 rounded-md text-sm relative after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-0.5 after:bg-blue-300 after:transform after:-translate-x-1/2 hover:after:w-2/3 after:transition-all after:duration-300"
+                    disabled={!section.page?.slug}
                   >
                     {section.name}
                   </Button>
@@ -100,6 +101,7 @@ function NavDropdown({ section }: NavDropdownProps) {
       <Button
         variant="ghost"
         className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto transition-all duration-200 rounded-md text-sm"
+        disabled={!section.page?.slug}
       >
         {section.name}
       </Button>

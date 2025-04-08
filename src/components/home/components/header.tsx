@@ -1,14 +1,15 @@
 import Image from 'next/image'
-import { Search, Facebook, Instagram, Youtube, Linkedin } from 'lucide-react'
+import { Search, Facebook, Instagram, Youtube, Linkedin, } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/common/theme-toggle'
+import Link from 'next/link'
 
 export function Header() {
   return (
     <header className="bg-gradient-to-r from-[#002347] to-[#003366] text-white py-4 shadow-md">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
-        <div className="flex items-center mb-4 md:mb-0">
+        <Link href="/home" className="flex items-center mb-4 md:mb-0">
           <div className="mr-3">
             <div className="bg-white p-2 rounded-lg shadow-lg">
               <Image
@@ -20,11 +21,11 @@ export function Header() {
               />
             </div>
           </div>
-          <div className="text-lg font-bold">
+          <div  className="text-lg font-bold">
             <div>FACULDADE DE</div>
             <div>CIÊNCIAS E TECNOLOGIA</div>
           </div>
-        </div>
+        </Link>
 
         <div className="w-full md:w-1/2 lg:w-2/5 relative">
           <div className="relative">

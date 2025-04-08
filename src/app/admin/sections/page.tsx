@@ -72,7 +72,7 @@ export default function SectionsPage() {
   return (
     <>
       <BaseCard
-        title="Sections Management"
+        title="Gerenciamento de Seções"
         onAdd={() => {
           setParentForNewSection(null)
           setIsAddDialogOpen(true)
