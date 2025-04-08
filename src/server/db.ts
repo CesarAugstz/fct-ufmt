@@ -18,9 +18,4 @@ export const db = globalForPrisma.prisma ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
 
-export async function getPrisma() {
-  const user = await getCurrentUser()
-  console.log('user', user);
-  return enhance(db, { user: user ?? undefined }, { logPrismaQuery: true })
-}
 
