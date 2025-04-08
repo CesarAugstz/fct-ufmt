@@ -17,6 +17,7 @@ import { ulid } from 'ulidx'
 import { SortableBlockItem } from './block-components/sortable-block-item'
 import { blocksAtom } from './state/blocks.state'
 import { useAtom } from 'jotai'
+import { isEqualJson } from '@/lib/utils'
 
 export function Configure({ id }: { id: string }) {
   console.log('COMPONENT', 'Configure', id)
@@ -31,21 +32,26 @@ export function Configure({ id }: { id: string }) {
     include: { blockComponents: true },
   })
 
+  console.log('page', page?.blockComponents)
   const [blocks, setBlocks] = useAtom(blocksAtom)
 
   const updatePageMutation = useUpdatePage({
     onSettled: () => invalidatePagesCache(),
   })
 
-  const { DndContextComponent } = useDragDrop([], () => {})
+  const { DndContextComponent } = useDragDrop(blocks, setBlocks)
 
   useEffect(() => {
     console.log('useEffect page', page?.blockComponents)
     if (!page?.blockComponents) return
-    const orderedBlocks = page.blockComponents.sort((a, b) => a.order - b.order)
+    const clonePage = structuredClone(page)
+
+    const orderedBlocks = clonePage.blockComponents.sort(
+      (a, b) => a.order - b.order,
+    )
 
     setBlocks(_ => [...orderedBlocks])
-  }, [page?.blockComponents, isSuccess, setBlocks])
+  }, [page?.blockComponents, setBlocks])
 
   const handleAddBlock = useCallback(
     (blockType: BlockType) => {
@@ -71,11 +77,17 @@ export function Configure({ id }: { id: string }) {
         order: index,
       }))
 
+      console.log('orderedBlocks', orderedBlocks, page?.blockComponents)
+
       const blocksToUpdate = orderedBlocks.filter(block =>
         page?.blockComponents?.some(
-          initialBlock => initialBlock.id === block.id,
+          initialBlock =>
+            initialBlock.id === block.id &&
+            (!isEqualJson(block.content, initialBlock.content) ||
+              !isEqualJson(block.order, initialBlock.order)),
         ),
       )
+
       const blocksToCreate = orderedBlocks.filter(
         block =>
           !page?.blockComponents?.some(
@@ -128,19 +140,26 @@ export function Configure({ id }: { id: string }) {
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Pages
         </Button>
 
-        <ActionButton mutations={[updatePageMutation]} onClick={saveChanges}>
+        <ActionButton
+          variant="default"
+          mutations={[updatePageMutation]}
+          onClick={saveChanges}
+        >
           <Save className="h-4 w-4 mr-2" /> Save Changes
         </ActionButton>
       </div>
 
       <BaseCard
-        title={`Configuring Page: ${page?.name ?? '...' }`}
+        title={`Configuring Page: ${page?.name ?? '...'}`}
         description={`Slug: ${page?.slug ?? '...'}`}
         loading={isLoading}
       >
         <div className="space-y-4">
           <div className="flex space-x-2">
-            <Button onClick={() => handleAddBlock(BlockType.TITLE)}>
+            <Button
+              variant="outline"
+              onClick={() => handleAddBlock(BlockType.TITLE)}
+            >
               <PlusCircle className="h-4 w-4 mr-2" /> Add Title Block
             </Button>
             <Button onClick={() => handleAddBlock(BlockType.MARKDOWN)}>

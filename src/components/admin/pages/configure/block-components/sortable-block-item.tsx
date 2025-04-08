@@ -1,13 +1,21 @@
 'use client'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BlockType } from '@prisma/client'
-import { GripVertical, Trash2, Edit, Save, X } from 'lucide-react'
+import {
+  GripVertical,
+  Trash2,
+  Edit,
+  Save,
+  X,
+  ArrowUp,
+  ArrowDown,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { BlockComponentEditor } from './block-component-editor'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { BlockComponentView } from './block-component-view'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
   blockEditContentAtom,
   blockEditingAtom,
@@ -26,12 +34,11 @@ interface SortableBlockItemProps {
 }
 
 export function SortableBlockItem({ id, block }: SortableBlockItemProps) {
-  console.log('SortableBlockItem', id, block)
   const [blockInitialContent, setBlockInitialContent] = useState<any>(
     block.content,
   )
   const formGetValue = useAtomValue(formGetValuesAtom)
-  const setBlocksState = useSetAtom(blocksAtom)
+  const [blocksState, setBlocksState] = useAtom(blocksAtom)
   const [isEditing, setIsEditing] = useState(false)
   const setBlockEditingContent = useSetAtom(blockEditContentAtom)
 
@@ -43,12 +50,8 @@ export function SortableBlockItem({ id, block }: SortableBlockItemProps) {
     transition,
   }
 
-  console.log('isEditing', isEditing)
-
   const handleSave = useCallback(() => {
     const values = formGetValue?.()
-
-    console.log('contentUpdated', values)
 
     setBlocksState(prevBlocks => {
       const updatedBlocks = prevBlocks.map(b => {
@@ -67,19 +70,16 @@ export function SortableBlockItem({ id, block }: SortableBlockItemProps) {
 
   const handleDiscard = useCallback(() => {
     setBlockInitialContent(block.content)
-    console.log('discarding changes', block.content)
     setIsEditing(false)
     setBlockEditingContent(null)
   }, [block.content, setIsEditing, setBlockEditingContent])
 
   const handleClickEdit = useCallback(() => {
-    console.log('click edit', block.content)
     setIsEditing(true)
     setBlockEditingContent(block.content)
   }, [block, setIsEditing, setBlockEditingContent])
 
   const handleDelete = useCallback(() => {
-    console.log('delete block', block.id)
     setBlocksState(prevBlocks => {
       const updatedBlocks = prevBlocks.filter(b => b.id !== block.id)
       return updatedBlocks
@@ -88,18 +88,56 @@ export function SortableBlockItem({ id, block }: SortableBlockItemProps) {
     setBlockEditingContent(null)
   }, [setBlockEditingContent, block.id, setBlocksState, setIsEditing])
 
-  console.log('isEditing', isEditing)
+  const moveBlock = useCallback(
+    (direction: 'up' | 'down') => {
+      const index = blocksState.findIndex(block => block.id === id)
+      if (index === -1) return
+
+      if (direction === 'up' && index === 0) return
+
+      if (direction === 'down' && index === blocksState.length - 1) return
+
+      const newBlocks = [...blocksState]
+
+      const orderedBlocks = newBlocks.sort((a, b) => a.order - b.order)
+
+      if (direction === 'up') {
+        orderedBlocks[index - 1].order += 1
+        orderedBlocks[index].order -= 1
+      } else {
+        orderedBlocks[index + 1].order -= 1
+        orderedBlocks[index].order += 1
+      }
+      setBlocksState(orderedBlocks.sort((a, b) => a.order - b.order))
+    },
+    [setBlocksState, blocksState, id],
+  )
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="border rounded-md p-4 bg-primary-foreground transition-colors shadow-sm"
+      className="border rounded-md p-4 bg-secondary transition-colors shadow-sm"
     >
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
-          <div {...attributes} {...listeners} className="mr-2 cursor-move">
-            <GripVertical />
+          <div className="mr-2 p-2 w-fit gap-2 flex bg-secondary">
+            <Button
+              className="h-5 w-5 hover:bg-primary-foreground"
+              variant="ghost"
+              size="icon"
+              onClick={() => moveBlock('up')}
+            >
+              <ArrowUp className="h-4 w-4" />
+            </Button>
+            <Button
+              className="h-5 w-5 hover:bg-primary-foreground"
+              variant="ghost"
+              size="icon"
+              onClick={() => moveBlock('down')}
+            >
+              <ArrowDown className="h-4 w-4" />
+            </Button>
           </div>
           <span className="font-medium">
             {block.blockType === BlockType.TITLE

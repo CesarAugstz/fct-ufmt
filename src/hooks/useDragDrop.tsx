@@ -30,13 +30,17 @@ export function useDragDrop<T extends { id: string }>(
     const { active, over } = event
 
     if (over && active.id !== over.id) {
-      setItems(
-        arrayMove(
-          items,
-          items.findIndex(item => item.id === active.id),
-          items.findIndex(item => item.id === over.id),
-        ),
-      )
+      const oldIndex = items.findIndex(item => item.id === active.id)
+      const newIndex = items.findIndex(item => item.id === over.id)
+
+      const reorderedItems = arrayMove(items, oldIndex, newIndex)
+
+      const updatedItems = reorderedItems.map((item, index) => ({
+        ...item,
+        order: index,
+      }))
+
+      setItems(updatedItems)
     }
   }
 
