@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { getCurrentUser } from './auth'
+import { enhance } from '@zenstackhq/runtime'
 
 const createPrismaClient = () =>
   new PrismaClient({
@@ -15,3 +17,10 @@ const globalForPrisma = globalThis as unknown as {
 export const db = globalForPrisma.prisma ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
+
+export async function getPrisma() {
+  const user = await getCurrentUser()
+  console.log('user', user);
+  return enhance(db, { user: user ?? undefined }, { logPrismaQuery: true })
+}
+

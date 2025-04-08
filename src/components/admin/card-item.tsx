@@ -61,9 +61,6 @@ export function CardItem({ card, onRemove }: CardItemProps) {
           <Button 
             variant="ghost" 
             size="sm" 
-            as="a" 
-            href={card.link} 
-            target="_blank" 
             rel="noopener noreferrer"
           >
             <ExternalLink className="h-4 w-4 mr-1" />

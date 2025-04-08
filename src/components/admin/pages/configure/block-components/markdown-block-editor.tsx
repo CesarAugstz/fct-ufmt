@@ -17,8 +17,6 @@ import {
   MarkdownBlockContent,
   markdownBlockSchema,
 } from '@/types/admin/block-components.types'
-import { useCachedNode } from '@dnd-kit/core/dist/hooks/utilities'
-import { useBlocksContext } from '../../context/BlocksContext'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { blockEditContentAtom, formGetValuesAtom } from '../state/blocks.state'
 import { useOnMount } from '@/lib/hooks/on-mount'

@@ -10,7 +10,6 @@ import {
   TitleBlockContent,
   titleBlockSchema,
 } from '@/types/admin/block-components.types'
-import { useBlocksContext } from '../../context/BlocksContext'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
   blockEditContentAtom,

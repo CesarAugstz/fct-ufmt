@@ -11,8 +11,7 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, ChevronDown, Edit, Trash2 } from 'lucide-react'
-import { Section } from '@/types/admin/section.types'
-import { atom, useRecoilState } from 'recoil'
+import { Section } from '@/components/home/components/nav-items/nav-items'
 
 interface SectionsTableProps {
   sections: Section[]
@@ -59,7 +58,6 @@ export function SectionsTable({
               {section.name}
             </div>
           </TableCell>
-          <TableCell>{section.slug}</TableCell>
           <TableCell>{section.isVisible ? 'Yes' : 'No'}</TableCell>
           <TableCell>{section.order}</TableCell>
           <TableCell>

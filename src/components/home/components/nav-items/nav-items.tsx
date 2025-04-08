@@ -10,7 +10,6 @@ import {
   useFindManySection,
   useInfiniteFindManySection,
 } from '@/lib/zenstack-hooks'
-import { getPrisma } from '@/app/api/model/[...path]/route'
 import { unstable_cache } from 'next/cache'
 import { db } from '@/server/db'
 import { Page } from '@prisma/client'

@@ -55,20 +55,18 @@ export function CardForm({ onSubmit, onCancel, isSubmitting }: CardFormProps) {
         <div className="space-y-2">
           <Label htmlFor="title">Título</Label>
           <FormText
-            id="title"
             name="title"
             placeholder="Título do card"
-            error={errors.title?.message}
+            label="Título"
           />
         </div>
         
         <div className="space-y-2">
           <Label htmlFor="description">Descrição (opcional)</Label>
           <FormText
-            id="description"
             name="description"
             placeholder="Descrição breve"
-            error={errors.description?.message}
+            label="Descrição"
           />
         </div>
         
@@ -125,10 +123,9 @@ export function CardForm({ onSubmit, onCancel, isSubmitting }: CardFormProps) {
         <div className="space-y-2">
           <Label htmlFor="link">Link (opcional)</Label>
           <FormText
-            id="link"
             name="link"
             placeholder="URL do link"
-            error={errors.link?.message}
+            label="Link"
           />
         </div>
         
