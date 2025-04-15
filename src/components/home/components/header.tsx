@@ -23,7 +23,7 @@ export function Header() {
           </div>
           <div  className="text-lg font-bold">
             <div>FACULDADE DE</div>
-            <div>CIÊNCIAS E TECNOLOGIA</div>
+            <div>CIÊNCIA E TECNOLOGIA</div>
           </div>
         </Link>
 

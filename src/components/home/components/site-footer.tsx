@@ -52,7 +52,7 @@ function FooterAbout() {
         </div>
         <div className="text-lg font-bold">
           <div>INSTITUTO DE</div>
-          <div>COMPUTAÇÃO</div>
+          <div>CIÊNCIA E TECNOLOGIA</div>
         </div>
       </div>
       <p className="text-sm text-white/80 mb-4">
