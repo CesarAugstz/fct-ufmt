@@ -5,6 +5,7 @@ import { NavigationCard, type CardItem } from './navigation-card'
 export interface NavigationCardsProps {
   cards: CardItem[]
   className?: string
+  cardsClassName?: string
 }
 
 export default function NavigationCards({
@@ -14,7 +15,7 @@ export default function NavigationCards({
   return (
     <div
       className={cn(
-        'w-full bg-gradient-to-b from-primary-50 to-seconday py-12',
+        'w-full bg-background py-12',
         className,
       )}
     >

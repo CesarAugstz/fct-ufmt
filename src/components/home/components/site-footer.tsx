@@ -104,10 +104,10 @@ function FooterContact() {
         <Phone className="h-5 w-5 mr-2" /> Contato
       </h3>
       <p className="text-sm text-white/80 mb-1 flex items-center">
-        <Phone className="h-4 w-4 mr-2" /> (65) 3615-8791
+        <Phone className="h-4 w-4 mr-2" /> (65) 3615-8078
       </p>
       <p className="text-sm text-white/80 mb-1 flex items-center">
-        <Mail className="h-4 w-4 mr-2" /> secretaria@ic.ufmt.br
+        <Mail className="h-4 w-4 mr-2" /> diretoria.fct@ufmt.br
       </p>
       <p className="text-sm text-white/80 flex items-center">
         <Clock className="h-4 w-4 mr-2" /> Segunda a Sexta, 8h às 18h
@@ -120,6 +120,7 @@ function FooterLinks() {
   return (
     <div>
       <h3 className="text-lg font-bold mb-4">Links Úteis</h3>
+      <div className="text-destructive"> ajustar com links reais </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <ul className="text-sm space-y-2">
           <FooterLink href="#" label="Portal da UFMT" />
