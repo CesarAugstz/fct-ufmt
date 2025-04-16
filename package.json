@@ -53,6 +53,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "dayjs": "^1.11.13",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.7.3",
     "input": "^1.0.1",
     "jotai": "^2.12.2",
