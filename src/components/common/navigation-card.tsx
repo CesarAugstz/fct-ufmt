@@ -72,7 +72,7 @@ export function NavigationCard({
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
       <LinkComponent>
-        <Card className="overflow-hidden h-full border-none bg-background shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl">
+        <Card className="cursor-pointer overflow-hidden h-full border-none bg-background shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl">
           <div
             className={cn(
               'h-1.5 w-full bg-primary',
