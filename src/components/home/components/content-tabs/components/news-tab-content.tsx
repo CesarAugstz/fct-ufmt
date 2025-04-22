@@ -1,3 +1,4 @@
+// WARN: verificar se esta usando
 import Image from "next/image"
 import { ArrowRight, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"

@@ -1,4 +1,3 @@
-import { ContentTabs } from './components/content-tabs/content-tabs'
 import { StatsSection } from './components/content-tabs/components/stats-section'
 import { HeroBanner } from './components/hero-banner'
 import QuickLinksSection from './components/content-tabs/components/quick-links-section'
@@ -12,7 +11,6 @@ export default function Home() {
       <CardHeroMadrid />
       <QuickLinksSection/>
       <NewsPreview />
-      <ContentTabs />
       <StatsSection />
     </div>
   )

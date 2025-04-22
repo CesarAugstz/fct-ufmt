@@ -1,3 +1,4 @@
+// WARN: verificar se esta usando
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { NewsTabContent } from "./components/news-tab-content"
 import { PhotosTabContent } from "./components/photos-tab-content"
@@ -38,9 +39,7 @@ export function ContentTabs() {
               </TabsTrigger>
             </TabsList>
 
-            <NewsTabContent />
             <PhotosTabContent />
-            <NewsTabContent />
             <TourTabContent />
           </Tabs>
         </div>
