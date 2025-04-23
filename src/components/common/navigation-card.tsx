@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { twMerge } from 'tailwind-merge'
 import { ReactNode } from 'react'
 
 export interface CardItem {
@@ -14,6 +13,7 @@ export interface CardItem {
   href?: string
   color?: string
   iconSize?: number
+  description?: string
 }
 
 interface NavigationCardProps {
@@ -48,7 +48,7 @@ export function NavigationCard({
         </Link>
       )
     }
-    return (
+    return card.href ? (
       <a
         href={card.href}
         target="_blank"
@@ -57,6 +57,8 @@ export function NavigationCard({
       >
         {children}
       </a>
+    ) : (
+      <div className="block h-full">{children}</div>
     )
   }
 
@@ -68,33 +70,46 @@ export function NavigationCard({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      whileHover={{
+        y: -8,
+        transition: { duration: 0.2 },
+      }}
     >
       <LinkComponent>
-        <Card className="cursor-pointer overflow-hidden h-full border-none bg-background shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl">
-          <div
-            className={cn(
-              'h-1.5 w-full bg-primary',
-              card.color && `bg-${card.color}-500`,
-            )}
-          />
-          <CardContent className="p-8 flex flex-col items-center justify-center text-center h-full">
-            <div
-              className={twMerge(
-                'mb-6 relative',
-                `w-${card.iconSize || '16'} h-${card.iconSize || '16'}`,
-              )}
-            >
-              <div className="absolute -inset-3 rounded-full bg-slate-100/80 blur-sm -z-10" />
-              <div className="relative text-primary">{card.icon}</div>
+        <Card className="overflow-hidden h-full border bg-background/50 backdrop-blur-sm hover:bg-background/80 shadow-sm hover:shadow-lg transition-all duration-300 rounded-xl group">
+          <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+            <div className="mb-4 relative w-16 h-16 flex items-center justify-center">
+              <div
+                className={cn(
+                  'absolute inset-0 rounded-full opacity-20 group-hover:opacity-30 transition-all duration-300 scale-90 group-hover:scale-100',
+                  card.color ? `bg-${card.color}-200` : 'bg-primary/20',
+                )}
+              />
+              <div
+                className={cn(
+                  'relative text-primary group-hover:scale-110 transition-all duration-300',
+                  card.color && `text-${card.color}-600`,
+                )}
+              >
+                {card.icon}
+              </div>
             </div>
-            <span className="text-foreground font-medium text-lg">
+            <span className="text-foreground font-semibold text-lg mb-1 group-hover:text-primary transition-colors duration-300">
               {card.title}
             </span>
+            {card.description && (
+              <p className="text-muted-foreground text-sm mt-1">
+                {card.description}
+              </p>
+            )}
+            {card.href && (
+              <div className="mt-3 text-xs font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                Acessar →
+              </div>
+            )}
           </CardContent>
         </Card>
       </LinkComponent>
     </motion.div>
   )
 }
-

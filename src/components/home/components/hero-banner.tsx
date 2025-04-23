@@ -17,11 +17,9 @@ export function HeroBanner() {
       </div>
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="max-w-3xl">
-          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1 }}>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-              Formando profissionais e pesquisadores em Computação
-            </h1>
-          </motion.div>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+            Formando profissionais e pesquisadores em Computação
+          </h1>
           <p className="text-lg md:text-xl opacity-90 mb-8 leading-relaxed">
             Inovação e Conhecimento para Transformar o Futuro.
           </p>
