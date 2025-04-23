@@ -29,11 +29,9 @@ const getSections = unstable_cache(
       include: {
         children: {
           include: {
-            page: true,
-            children: { include: { page: true, children: true } },
+            children: { include: { children: true } },
           },
         },
-        page: true,
       },
     })
   },
@@ -60,17 +58,13 @@ export default async function NavItems() {
                 <NavDropdown section={section} />
               ) : (
                 <Link
-                  href={
-                    section.page?.slug
-                      ? `/home/pages/${section.page?.slug}`
-                      : '#'
-                  }
+                  href={section.href ? `/home/pages/${section.href}` : '#'}
                   className="ml-2"
                 >
                   <Button
                     variant="ghost"
                     className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto transition-all duration-200 rounded-md text-sm relative after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-0.5 after:bg-blue-300 after:transform after:-translate-x-1/2 hover:after:w-2/3 after:transition-all after:duration-300"
-                    disabled={!section.page?.slug}
+                    disabled={!section.href}
                   >
                     {section.name}
                   </Button>

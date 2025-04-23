@@ -42,8 +42,7 @@ model Section {
   order     Int
   children  Section[] @relation("SectionToSection")
   parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id], onDelete: Cascade)
-  page      Page?     @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  pageId    String?
+  href      String?
 }
 
 model Page {
@@ -52,7 +51,6 @@ model Page {
   updatedAt       DateTime         @updatedAt()
   name            String
   slug            String           @unique()
-  sections        Section[]
   blockComponents BlockComponent[]
 }
 

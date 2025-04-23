@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
-import { FormSelect } from '@/components/ui/form-fields/form-select'
 import { Switch } from '@/components/ui/switch'
 import {
   sectionFormSchema,
@@ -23,11 +22,9 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormMessage,
 } from '@/components/ui/form'
 import {
   useCreateSection,
-  useFindManyPage,
   useFindUniqueSection,
   useUpdateSection,
 } from '@/lib/zenstack-hooks'
@@ -67,13 +64,11 @@ export function SectionDialog({
     { enabled: !!sectionId },
   )
 
-  const { data: pages } = useFindManyPage({})
-
   const form = useForm<SectionFormValues>({
     resolver: zodResolver(sectionFormSchema),
     values: {
       name: section?.name || '',
-      pageId: section?.pageId || null,
+      href: section?.href || '',
       parentId: section?.parentId || null,
       isVisible: section?.isVisible || true,
       order: section?.order || 0,
@@ -93,9 +88,9 @@ export function SectionDialog({
     try {
       const sectionFormatted = {
         name: data.name,
-        pageId: data.pageId,
         parentId: parentId || data.parentId,
         isVisible: data.isVisible,
+        href: data.href,
         order: data.order,
       }
 
@@ -144,14 +139,7 @@ export function SectionDialog({
               description="Enter the name of the section"
             />
 
-            <FormSelect
-              name="pageId"
-              label="Page"
-              placeholder="Select a page"
-              options={
-                pages?.map(page => ({ value: page.id, label: page.name })) ?? []
-              }
-            />
+            <FormText name="href" label="Link to the page" />
 
             <FormText
               name="order"

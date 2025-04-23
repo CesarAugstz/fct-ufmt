@@ -8,7 +8,19 @@
     "start": "next start",
     "lint": "next lint",
     "update-db": "npx zenstack generate && npx prisma db push",
-    "seed-db": "npx prisma db seed"
+    "seed-db": "npx prisma db seed",
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -104,10 +116,11 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "prisma": "^6.5.0",
     "tailwindcss": "^4",
-    "tsc": "^2.0.4",
     "tsx": "^4.19.3",
     "typescript": "^5",
     "zenstack": "2.12.1"
