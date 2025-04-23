@@ -52,7 +52,7 @@ export default function CardHeroMadrid() {
                       width={600}
                       height={400}
                       src="/placeholder.svg?height=400&width=600"
-                      alt="Entrada do Instituto de Computação"
+                      alt="Entrada do Instituto"
                       className="h-full w-full object-cover"
                     />
                   </div>
@@ -63,7 +63,7 @@ export default function CardHeroMadrid() {
                       width={600}
                       height={400}
                       src="/placeholder.svg?height=400&width=600"
-                      alt="Vista aérea do Instituto de Computação"
+                      alt="Vista aérea do Instituto"
                       className="h-full w-full object-cover"
                     />
                   </div>
@@ -74,7 +74,7 @@ export default function CardHeroMadrid() {
                       width={600}
                       height={400}
                       src="/placeholder.svg?height=400&width=600"
-                      alt="Caminho de entrada do Instituto de Computação"
+                      alt="Caminho de entrada do Instituto"
                       className="h-full w-full object-cover"
                     />
                   </div>

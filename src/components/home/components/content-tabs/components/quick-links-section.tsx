@@ -8,7 +8,6 @@ import {
   Map,
   MonitorCog,
   Settings,
-  Smartphone,
 } from 'lucide-react'
 
 export default function QuickLinksSection() {

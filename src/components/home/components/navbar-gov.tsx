@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-export function Navbar() {
+export function NavbarGov() {
   return (
     <div className="bg-[#0a1f40] text-white">
       <div className="container mx-auto flex justify-between items-center px-4 py-1 text-xs">

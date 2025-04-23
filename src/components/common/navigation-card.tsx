@@ -1,9 +1,7 @@
 'use client'
-
 import type React from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { twMerge } from 'tailwind-merge'
@@ -50,7 +48,6 @@ export function NavigationCard({
         </Link>
       )
     }
-
     return (
       <a
         href={card.href}
@@ -62,13 +59,15 @@ export function NavigationCard({
       </a>
     )
   }
+
   return (
     <motion.div
       custom={index}
-      initial="hidden"
-      animate="visible"
-      variants={cardVariants}
       className={className}
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.25 }}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
       <LinkComponent>
@@ -98,3 +97,4 @@ export function NavigationCard({
     </motion.div>
   )
 }
+

@@ -1,15 +1,11 @@
-import { ChevronDown, ChevronRight, ExternalLink } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  useFindManySection,
-  useInfiniteFindManySection,
-} from '@/lib/zenstack-hooks'
+
 import { unstable_cache } from 'next/cache'
 import { db } from '@/server/db'
 import { Page } from '@prisma/client'

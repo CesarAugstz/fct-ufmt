@@ -1,17 +1,27 @@
+'use client'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { motion } from 'framer-motion'
 
 export function HeroBanner() {
   return (
     <div className="relative bg-gradient-to-r from-[#001428] to-[#003366] text-white overflow-hidden">
       <div className="absolute inset-0 opacity-20">
-        <Image src="/bg.png" alt="Background" fill className="object-cover" />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <Image src="/bg.png" alt="Background" fill className="object-cover" />
+        </motion.div>
       </div>
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="max-w-3xl">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-            Formando profissionais e pesquisadores em Computação
-          </h1>
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1 }}>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+              Formando profissionais e pesquisadores em Computação
+            </h1>
+          </motion.div>
           <p className="text-lg md:text-xl opacity-90 mb-8 leading-relaxed">
             Inovação e Conhecimento para Transformar o Futuro.
           </p>

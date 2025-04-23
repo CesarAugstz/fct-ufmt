@@ -1,3 +1,7 @@
+'use client'
+import { useEffect, useState, useRef } from 'react'
+import { motion, useAnimation, useInView } from 'framer-motion'
+
 export function StatsSection() {
   return (
     <div className="bg-[#003366] text-white py-16">
@@ -25,10 +29,52 @@ interface StatItemProps {
 }
 
 function StatItem({ count, label }: StatItemProps) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.5 })
+  const controls = useAnimation()
+  const [displayCount, setDisplayCount] = useState("0")
+  
+  const hasPlus = count.endsWith('+')
+  const numericValue = parseInt(hasPlus ? count.slice(0, -1) : count)
+  
+  useEffect(() => {
+    if (isInView) {
+      controls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5 }
+      })
+      
+      let startCount = 0
+      const duration = 1000 
+      const interval = 30 
+      const incrementPerInterval = numericValue / (duration / interval)
+      
+      const timer = setInterval(() => {
+        startCount += incrementPerInterval
+        if (startCount >= numericValue) {
+          startCount = numericValue
+          clearInterval(timer)
+        }
+        
+        const formattedCount = Math.floor(startCount).toString()
+        setDisplayCount(hasPlus ? formattedCount + '+' : formattedCount)
+      }, interval)
+      
+      return () => clearInterval(timer)
+    }
+  }, [isInView, numericValue, hasPlus, controls])
+  
   return (
-    <div className="text-center">
-      <div className="text-4xl md:text-5xl font-bold mb-2">{count}</div>
+    <motion.div 
+      ref={ref}
+      className="text-center"
+      initial={{ opacity: 0, y: 20 }}
+      animate={controls}
+    >
+      <div className="text-4xl md:text-5xl font-bold mb-2">{displayCount}</div>
       <div className="text-lg text-white/80">{label}</div>
-    </div>
+    </motion.div>
   )
 }
+
