@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Section } from './nav-items'
 import { ExternalLink, ChevronRight } from 'lucide-react'
 import {
   DropdownMenu,
@@ -9,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Section } from '@/data/sections'
 
 interface NavMenuItemProps {
   item: Section
@@ -22,10 +22,10 @@ export function NavMenuItem({ item }: NavMenuItemProps) {
     return (
       <DropdownMenuItem
         onClick={() =>
-          item?.page?.slug ? router.push(`/home/pages/${item.page.slug}`) : null
+          item?.href ? router.push(`/home/pages/${item.href}`) : null
         }
         className="cursor-pointer group/item flex items-center px-4 py-2.5 my-0.5 text-[#00335e] hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100/50 hover:text-blue-700 rounded-md transition-all duration-200 focus:bg-blue-50 focus:text-blue-700 text-sm font-medium relative overflow-hidden"
-        disabled={!item.page?.slug}
+        disabled={!item.href}
       >
         <span className="relative z-10 flex items-center">
           <span className="mr-2 h-1.5 w-1.5 rounded-full bg-blue-300 opacity-0 group-hover/item:opacity-100 transition-all duration-200 group-hover/item:scale-110"></span>
@@ -38,8 +38,6 @@ export function NavMenuItem({ item }: NavMenuItemProps) {
   }
 
   const sortedChildren = [...(item.children ?? [])]
-    .filter(child => child.isVisible)
-    .sort((a, b) => a.order - b.order)
 
   return (
     <DropdownMenu>
@@ -59,7 +57,7 @@ export function NavMenuItem({ item }: NavMenuItemProps) {
         className="w-64 rounded-lg border border-blue-100/30 bg-white/98 backdrop-blur-md shadow-[0_10px_40px_-15px_rgba(0,30,80,0.3)] animate-in slide-in-from-left-2 fade-in-50 zoom-in-95 p-1.5"
       >
         {sortedChildren.map(child => (
-          <NavMenuItem key={child.id} item={child} />
+          <NavMenuItem key={child.name} item={child} />
         ))}
       </DropdownMenuContent>
     </DropdownMenu>

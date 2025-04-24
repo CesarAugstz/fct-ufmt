@@ -17,11 +17,6 @@ enum Role {
   USER
 }
 
-enum BlockType {
-  TITLE
-  MARKDOWN
-}
-
 model User {
   id        String   @id() @default(ulid())
   createdAt DateTime @default(now())
@@ -30,37 +25,4 @@ model User {
   password  String
   name      String?
   role      Role     @default(USER)
-}
-
-model Section {
-  id        String    @id() @default(ulid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  name      String
-  parentId  String?
-  isVisible Boolean   @default(true)
-  order     Int
-  children  Section[] @relation("SectionToSection")
-  parent    Section?  @relation("SectionToSection", fields: [parentId], references: [id], onDelete: Cascade)
-  href      String?
-}
-
-model Page {
-  id              String           @id() @default(ulid())
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt()
-  name            String
-  slug            String           @unique()
-  blockComponents BlockComponent[]
-}
-
-model BlockComponent {
-  id        String    @id() @default(ulid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  blockType BlockType
-  content   Json
-  order     Int       @default(0)
-  page      Page?     @relation(fields: [pageId], references: [id])
-  pageId    String?
 }

@@ -6,54 +6,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { unstable_cache } from 'next/cache'
-import { db } from '@/server/db'
-import { Page } from '@prisma/client'
 import { NavMenuItem } from './nav-menu-item'
 import Link from 'next/link'
-
-export interface Section {
-  id: string
-  name: string
-  parentId: string | null
-  isVisible: boolean
-  order: number
-  children?: Section[]
-  page?: Page | null
-}
-
-const getSections = unstable_cache(
-  async () => {
-    return await db.section.findMany({
-      where: { isVisible: true },
-      include: {
-        children: {
-          include: {
-            children: { include: { children: true } },
-          },
-        },
-      },
-    })
-  },
-  ['sections'],
-  { revalidate: 3600, tags: ['sections'] },
-)
+import { DataSections, Section } from '@/data/sections'
 
 export default async function NavItems() {
-  const sections = await getSections()
-
-  const rootSections = sections.filter(section => section.parentId === null)
-
-  const sortedSections = [...rootSections]
-    .filter(section => section.isVisible)
-    .sort((a, b) => a.order - b.order)
+  const { sections } = DataSections
 
   return (
     <nav className="bg-gradient-to-r from-[#001a35] via-[#002347] to-[#00305e] text-white py-3 sticky top-0 z-50 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.4)] border-b border-blue-900/20">
       <div className="container mx-auto px-4 overflow-x-auto">
         <ul className="flex space-x-1 md:space-x-4 min-w-max py-0.5">
-          {sortedSections.map(section => (
-            <li key={section.id} className="relative group">
+          {sections.map(section => (
+            <li key={section.name} className="relative group">
               {section.children && section.children.length > 0 ? (
                 <NavDropdown section={section} />
               ) : (
@@ -90,7 +55,7 @@ function NavDropdown({ section }: NavDropdownProps) {
       <Button
         variant="ghost"
         className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto transition-all duration-200 rounded-md text-sm"
-        disabled={!section.page?.slug}
+        disabled={!section.href}
       >
         {section.name}
       </Button>
@@ -98,8 +63,6 @@ function NavDropdown({ section }: NavDropdownProps) {
   }
 
   const sortedChildren = [...(section.children ?? [])]
-    .filter(child => child.isVisible)
-    .sort((a, b) => a.order - b.order)
 
   return (
     <DropdownMenu>
@@ -117,7 +80,7 @@ function NavDropdown({ section }: NavDropdownProps) {
         sideOffset={8}
       >
         {sortedChildren.map(child => (
-          <NavMenuItem key={child.id} item={child} />
+          <NavMenuItem key={child.name} item={child} />
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
