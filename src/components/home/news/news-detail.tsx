@@ -1,3 +1,4 @@
+'use client'
 import { ArrowLeft, CalendarDays, Share2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -6,9 +7,40 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 import { newsItems } from './news-data-mock'
+import { useToast } from '@/lib/hooks/toast'
+import { useIsMobile } from '@/lib/hooks/is-mobile'
 
 export default function NewsDetail({ id }: { id: string }) {
   const news = newsItems.find(item => item.id === parseInt(id))
+  const toast = useToast()
+  const isMobile = useIsMobile()
+
+  const handleShare = async () => {
+    const platform = isMobile ? 'native' : 'copy'
+
+    const shareUrl = window.location.href
+    const shareTitle = news?.title || 'Notícia FCT'
+    const shareText = news?.excerpt || ''
+
+    if (platform === 'native' && navigator.share) {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
+        })
+      } catch (error) {
+        console.log('Error sharing:', error)
+      }
+    } else if (platform === 'copy') {
+      try {
+        await navigator.clipboard.writeText(shareUrl)
+        toast.success('Link copiado para a área de transferência!')
+      } catch (error) {
+        console.log('Error copying:', error)
+      }
+    }
+  }
 
   if (!news) {
     return (
@@ -31,7 +63,7 @@ export default function NewsDetail({ id }: { id: string }) {
     .slice(0, 3)
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <div className="mb-8 flex items-center justify-between">
           <Button variant="ghost" className="gap-2" asChild>
@@ -40,7 +72,8 @@ export default function NewsDetail({ id }: { id: string }) {
               Voltar para notícias
             </Link>
           </Button>
-          <Button variant="outline" size="icon">
+
+          <Button onClick={() => handleShare()} variant="outline" size="icon">
             <Share2 className="h-4 w-4" />
           </Button>
         </div>
