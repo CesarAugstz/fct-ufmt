@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, CalendarDays, ExternalLink } from 'lucide-react'
+import { ArrowRight, CalendarDays, ExternalLink, Newspaper } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -36,7 +36,8 @@ const latestNews = [
   },
   {
     id: 3,
-    title: 'Prazo para Submissões do Simpósio de Pesquisa Termina na Próxima Semana',
+    title:
+      'Prazo para Submissões do Simpósio de Pesquisa Termina na Próxima Semana',
     excerpt:
       'O prazo para a submissão de artigos científicos para o simpósio anual está se aproximando. Certifique-se de finalizar suas submissões até 25 de abril.',
     date: '2025-04-12',
@@ -114,76 +115,82 @@ const latestNews = [
     image: '/placeholder.svg?height=200&width=400',
     isPinned: false,
   },
-];
-
+]
 
 export default function NewsPreview() {
   const featuredNews = latestNews.slice(0, 2)
   const smallerNews = latestNews.slice(2, 5)
 
   return (
-    <section className="w-full m-0 bg-background py-8">
-      <div className="px-10 mx-10">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">Últimas Notícias</h2>
-          <Button variant="link" className="text-primary" asChild>
-            <Link href="/news">
-             Ver todas <ArrowRight className="ml-1 h-4 w-4" />
+    <section className="w-full bg-gradient-to-b from-background to-gray-50/50 py-12">
+      <div className="container mx-auto px-6">
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Newspaper className="h-6 w-6 text-primary" />
+            <h2 className="text-3xl font-bold tracking-tight text-[#003366]">
+              Últimas Notícias
+            </h2>
+          </div>
+          <Button variant="link" className="text-primary group" asChild>
+            <Link href="/home/news">
+              Ver todas
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2">
           {featuredNews.map(item => (
             <Card
               key={item.id}
-              className="overflow-hidden transition-all hover:shadow-md"
+              className="group overflow-hidden border-0 bg-white transition-all hover:shadow-lg"
             >
-              <div className="relative h-48 w-full overflow-hidden bg-muted">
+              <div className="relative h-56 w-full overflow-hidden bg-muted">
                 <Image
                   src={item.image || '/placeholder.svg'}
                   alt={item.title}
                   width={600}
                   height={400}
-                  className="h-full w-full object-cover transition-transform hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute left-3 top-3">
-                  <Badge className="bg-primary text-primary-foreground">
+                  <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm">
                     {item.category}
                   </Badge>
                 </div>
               </div>
-              <CardHeader className="p-4 pb-2">
+              <CardHeader className="p-5 pb-3">
                 <CardTitle className="line-clamp-2 text-xl">
                   <Link
-                    href={`/news/${item.id}`}
+                    href={`/home/news/${item.id}`}
                     className="hover:text-primary"
                   >
                     {item.title}
                   </Link>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-4 pt-0">
+              <CardContent className="p-5 pt-0">
                 <p className="line-clamp-2 text-sm text-muted-foreground">
                   {item.excerpt}
                 </p>
               </CardContent>
-              <CardFooter className="flex items-center justify-between p-4 pt-0">
+              <CardFooter className="flex items-center justify-between p-5 pt-0">
                 <div className="flex items-center text-xs text-muted-foreground">
                   <CalendarDays className="mr-1 h-3 w-3" />
                   {new Date(item.date).toLocaleDateString('pt-BR', {
-                    month: 'short',
                     day: 'numeric',
+                    month: 'long',
                   })}
                 </div>
                 <Button
-                  variant="ghost"
+                  variant="link"
                   size="sm"
-                  className="text-primary"
+                  className="text-primary group/link"
                   asChild
                 >
-                  <Link href={`/news/${item.id}`}>
-                    Read more <ExternalLink className="ml-1 h-3 w-3" />
+                  <Link href={`/home/news/${item.id}`}>
+                    Ler mais
+                    <ExternalLink className="ml-1 h-3 w-3 transition-transform group-hover/link:translate-x-1" />
                   </Link>
                 </Button>
               </CardFooter>
@@ -191,45 +198,46 @@ export default function NewsPreview() {
           ))}
         </div>
 
-        <Separator className="my-6" />
+        <Separator className="my-8" />
 
-        {/* Smaller news items */}
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
           {smallerNews.map(item => (
             <Card
               key={item.id}
-              className="flex h-full flex-col overflow-hidden transition-all hover:shadow-md"
+              className="group flex h-full flex-col overflow-hidden border-0 bg-white transition-all hover:shadow-lg"
             >
-              <div className="flex gap-3 p-3">
+              <div className="flex gap-4 p-4">
                 <div className="hidden sm:block">
-                  <div className="relative h-16 w-16 overflow-hidden rounded-md bg-muted">
-                    <img
+                  <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-muted">
+                    <Image
                       src={item.image || '/placeholder.svg'}
                       alt={item.title}
-                      className="h-full w-full object-cover"
+                      width={80}
+                      height={80}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 </div>
                 <div className="flex-1">
                   <Badge
                     variant="outline"
-                    className="mb-1 bg-secondary/10 text-xs text-secondary-foreground"
+                    className="mb-2 bg-secondary/10 text-xs text-secondary-foreground"
                   >
                     {item.category}
                   </Badge>
                   <h4 className="line-clamp-2 text-sm font-medium">
                     <Link
-                      href={`/news/${item.id}`}
+                      href={`/home/news/${item.id}`}
                       className="hover:text-primary"
                     >
                       {item.title}
                     </Link>
                   </h4>
-                  <div className="mt-1 flex items-center text-xs text-muted-foreground">
+                  <div className="mt-2 flex items-center text-xs text-muted-foreground">
                     <CalendarDays className="mr-1 h-3 w-3" />
                     {new Date(item.date).toLocaleDateString('pt-BR', {
-                      month: 'short',
                       day: 'numeric',
+                      month: 'long',
                     })}
                   </div>
                 </div>
