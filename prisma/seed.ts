@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, Section } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -20,9 +20,32 @@ async function main() {
   type SectionsToCreate = {
     name: string
     children?: SectionsToCreate
+    href?: string
   }[]
 
   const sections: SectionsToCreate = [
+    {
+      name: 'O Instituto',
+      href: '/home',
+      children: [
+        { name: 'História' },
+        { name: 'Gestão' },
+        { name: 'Docentes' },
+        { name: 'Técnicos' },
+        { name: 'Contatos' },
+        { name: 'Tour 360º' },
+      ],
+    },
+    {
+      name: 'Inovatec',
+    },
+    {
+      name: 'Notícias',
+      href: '/home/news',
+    },
+    {
+      name: 'Estágios',
+    },
     {
       name: 'Pós-Graduação',
       children: [{ name: 'Especialização em Agrocomputação' }],
@@ -46,9 +69,6 @@ async function main() {
       name: 'Pesquisa',
     },
     {
-      name: 'Docentes',
-    },
-    {
       name: 'Agendas',
     },
   ]
@@ -68,6 +88,7 @@ async function main() {
         data: {
           name: section.name,
           parentId,
+          href: section.href || null,
           order: i,
         },
       })

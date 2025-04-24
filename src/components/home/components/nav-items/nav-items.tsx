@@ -58,7 +58,7 @@ export default async function NavItems() {
                 <NavDropdown section={section} />
               ) : (
                 <Link
-                  href={section.href ? `/home/pages/${section.href}` : '#'}
+                  href={section.href ? `${section.href}` : '#'}
                   className="ml-2"
                 >
                   <Button
