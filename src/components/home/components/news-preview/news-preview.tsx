@@ -122,7 +122,7 @@ export default function NewsPreview() {
   const smallerNews = latestNews.slice(2, 5)
 
   return (
-    <section className="w-full bg-gradient-to-b from-background to-gray-50/50 py-12">
+    <section className="w-full  py-12">
       <div className="container mx-auto px-6">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -143,7 +143,7 @@ export default function NewsPreview() {
           {featuredNews.map(item => (
             <Card
               key={item.id}
-              className="group overflow-hidden border-0 bg-white transition-all hover:shadow-lg"
+              className="group overflow-hidden border-0 transition-all hover:shadow-lg"
             >
               <div className="relative h-56 w-full overflow-hidden bg-muted">
                 <Image
@@ -204,7 +204,7 @@ export default function NewsPreview() {
           {smallerNews.map(item => (
             <Card
               key={item.id}
-              className="group flex h-full flex-col overflow-hidden border-0 bg-white transition-all hover:shadow-lg"
+              className="group flex h-full flex-col overflow-hidden border-0 transition-all hover:shadow-lg"
             >
               <div className="flex gap-4 p-4">
                 <div className="hidden sm:block">
