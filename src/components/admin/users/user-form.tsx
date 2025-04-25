@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Prisma, Role } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
 import LoadingSpinner from '@/components/common/loading-spinner'
-import { useCreateUser, useFindUniqueUser, useUpdateUser } from '@/lib/zenstack-hooks'
+import {
+  useCreateUser,
+  useFindUniqueUser,
+  useUpdateUser,
+} from '@/lib/zenstack-hooks'
 import {
   Select,
   SelectContent,
@@ -35,10 +39,12 @@ import { useToast } from '@/lib/hooks/toast'
 
 const formSchema = z.object({
   name: z.string().optional(),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  email: z
+    .string()
+    .email({ message: 'Por favor, insira um endereço de email válido.' }),
   password: z
     .string()
-    .min(6, { message: 'Password must be at least 6 characters.' })
+    .min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' })
     .or(z.string().length(0))
     .optional(),
   role: z.enum(['ADMIN', 'USER']),
@@ -80,8 +86,6 @@ export default function UserForm({
       role: userData?.role || 'USER',
     },
   })
-
-  console.log(`user role is ${userData?.role}`)
 
   const onSubmit = (values: UserFormValues) => {
     setIsSubmitting(true)
@@ -157,11 +161,13 @@ export default function UserForm({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit User' : 'Add New User'}</DialogTitle>
+          <DialogTitle>
+            {isEditMode ? 'Editar Usuário' : 'Adicionar Novo Usuário'}
+          </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Update the user information in the form below.'
-              : 'Enter the details for the new user.'}
+              ? 'Atualize as informações do usuário no formulário abaixo.'
+              : 'Insira os detalhes do novo usuário.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -177,14 +183,14 @@ export default function UserForm({
             >
               <FormText
                 name="name"
-                label="Name"
-                placeholder="Enter user's name"
+                label="Nome"
+                placeholder="Digite o nome do usuário"
               />
 
               <FormText
                 name="email"
                 label="Email"
-                placeholder="Enter email address"
+                placeholder="Digite o endereço de email"
                 required
               />
 
@@ -192,11 +198,11 @@ export default function UserForm({
                 name="password"
                 label={
                   isEditMode
-                    ? 'Password (leave empty to keep current)'
-                    : 'Password'
+                    ? 'Senha (deixe em branco para manter a atual)'
+                    : 'Senha'
                 }
                 placeholder={
-                  isEditMode ? 'Enter new password' : 'Enter password'
+                  isEditMode ? 'Digite a nova senha' : 'Digite a senha'
                 }
                 type="password"
                 required={!isEditMode}
@@ -207,16 +213,16 @@ export default function UserForm({
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>Função</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
+                          <SelectValue placeholder="Selecione uma função" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="USER">User</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
+                        <SelectItem value="USER">Usuário</SelectItem>
+                        <SelectItem value="ADMIN">Administrador</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -226,16 +232,16 @@ export default function UserForm({
 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <LoadingSpinner className="mr-2 h-4 w-4" />
-                      {isEditMode ? 'Updating...' : 'Creating...'}
+                      {isEditMode ? 'Atualizando...' : 'Criando...'}
                     </>
                   ) : (
-                    <>{isEditMode ? 'Update User' : 'Create User'}</>
+                    <>{isEditMode ? 'Atualizar Usuário' : 'Criar Usuário'}</>
                   )}
                 </Button>
               </DialogFooter>

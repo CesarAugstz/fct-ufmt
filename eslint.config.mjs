@@ -17,6 +17,7 @@ const eslintConfig = [
     files: ['**/*.ts', '**/*.tsx'],
     plugins: { 'unused-imports': unusedImports },
     rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'warn',
