@@ -126,3 +126,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+[data-slot='form-item'] p {
+  @apply text-destructive text-sm;
+}

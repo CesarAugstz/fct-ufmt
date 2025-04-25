@@ -30,35 +30,36 @@ import { Edit, MoreVertical, Trash } from 'lucide-react'
 import { useState } from 'react'
 import { useDeleteUser } from '@/lib/zenstack-hooks'
 import { dayJs } from '@/utils/dayjs'
-import { Role } from '@prisma/client'
-import { RoleMapper } from '@/utils/mappers/role.mapper'
+import { Course } from '@prisma/client'
+import { CourseMapper } from '@/utils/mappers/course.mapper'
 
-interface UserWithRelations {
+interface ProfessorWithRelations {
+  courses: Course[]
   id: string
-  email: string
-  name?: string | null
-  role: Role
+  user: {
+    email: string
+    name?: string | null
+  }
   createdAt: Date
   updatedAt: Date
 }
 
-interface UserTableProps {
-  users: UserWithRelations[]
+interface ProfessorTableProps {
+  professors: ProfessorWithRelations[]
   onRefresh: () => void
   onClickEdit: (id: string) => void
 }
 
-export default function UserTable({
-  users,
+export default function ProfessorTable({
+  professors,
   onRefresh,
   onClickEdit,
-}: UserTableProps) {
+}: ProfessorTableProps) {
   const [userToDelete, setUserToDelete] = useState<string | null>(null)
-
   const { mutate: deleteUser } = useDeleteUser()
 
   const handleDelete = () => {
-    if (!userToDelete) throw new Error('No user to delete')
+    if (!userToDelete) return
 
     deleteUser(
       {
@@ -73,19 +74,8 @@ export default function UserTable({
     )
   }
 
-  const getRoleBadgeVariant = (role: Role) => {
-    switch (role) {
-      case 'ADMIN':
-        return 'destructive'
-      case 'PROFESSOR':
-        return 'secondary'
-      default:
-        return 'outline'
-    }
-  }
-
-  if (users.length === 0) {
-    return <div className="text-center py-4">Nenhum usuário encontrado</div>
+  if (professors.length === 0) {
+    return <div className="text-center py-4">Nenhum professor encontrado</div>
   }
 
   return (
@@ -95,28 +85,26 @@ export default function UserTable({
           <TableRow>
             <TableHead>Nome</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Função</TableHead>
-            <TableHead>Última Atualização</TableHead>
-            <TableHead className="w-[80px]">Ações</TableHead>
+            <TableHead>Cursos</TableHead>
+            <TableHead>Última atualização</TableHead>
+            <TableHead className="w-[50px]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map(user => (
-            <TableRow key={user.id}>
-              <TableCell className="font-medium">
-                {user.name || (
-                  <span className="text-muted-foreground italic">
-                    Não definido
-                  </span>
-                )}
-              </TableCell>
-              <TableCell>{user.email}</TableCell>
+          {professors.map(professor => (
+            <TableRow key={professor.id}>
+              <TableCell>{professor.user.name}</TableCell>
+              <TableCell>{professor.user.email}</TableCell>
               <TableCell>
-                <Badge variant={getRoleBadgeVariant(user.role)}>
-                  {RoleMapper.getRoleLabel(user.role)}
-                </Badge>
+                <div className="flex flex-wrap gap-1">
+                  {professor.courses?.map(course => (
+                    <Badge key={course} variant="secondary">
+                      {CourseMapper.getCourseLabel(course)}
+                    </Badge>
+                  ))}
+                </div>
               </TableCell>
-              <TableCell>{dayJs(user.updatedAt).fromNow()}</TableCell>
+              <TableCell>{dayJs(professor.updatedAt).fromNow()}</TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -125,12 +113,12 @@ export default function UserTable({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onClickEdit(user.id)}>
+                    <DropdownMenuItem onClick={() => onClickEdit(professor.id)}>
                       <Edit className="mr-2 h-4 w-4" />
                       Editar
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => setUserToDelete(user.id)}
+                      onClick={() => setUserToDelete(professor.id)}
                       className="text-red-600"
                     >
                       <Trash className="mr-2 h-4 w-4" />
@@ -146,23 +134,20 @@ export default function UserTable({
 
       <AlertDialog
         open={!!userToDelete}
-        onOpenChange={open => !open && setUserToDelete(null)}
+        onOpenChange={() => setUserToDelete(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+            <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
               Esta ação não pode ser desfeita. Isso excluirá permanentemente o
-              usuário e todos os dados associados.
+              professor.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              Excluir
+            <AlertDialogAction onClick={handleDelete}>
+              Continuar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

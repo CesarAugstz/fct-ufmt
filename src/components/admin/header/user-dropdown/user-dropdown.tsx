@@ -1,6 +1,6 @@
 'use client'
 
-import { LogOut, User as UserIcon } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import {
   DropdownMenu,
@@ -16,13 +16,18 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 export default function UserDropdown() {
   const { data: session } = useSession()
-  
+
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/login' })
   }
 
-  const userInitials = session?.user?.name 
-    ? session.user.name.split(' ').map(n => n[0]).slice(0, 3).join('').toUpperCase() 
+  const userInitials = session?.user?.name
+    ? session.user.name
+        .split(' ')
+        .map(n => n[0])
+        .slice(0, 3)
+        .join('')
+        .toUpperCase()
     : 'U'
 
   return (
@@ -37,7 +42,9 @@ export default function UserDropdown() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{session?.user?.name || 'User'}</p>
+            <p className="text-sm font-medium leading-none">
+              {session?.user?.name || 'User'}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
               {session?.user?.email || ''}
             </p>
@@ -45,9 +52,13 @@ export default function UserDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={handleLogout}>
+          <DropdownMenuItem
+            variant="destructive"
+            className="cursor-pointer"
+            onClick={handleLogout}
+          >
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
+            <span>Sair</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

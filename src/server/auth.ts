@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@prisma/client'
+import { Role, type PrismaClient } from '@prisma/client'
 import { compare } from 'bcryptjs'
 import {
   getServerSession,
@@ -41,7 +41,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, token }) {
       if (session.user) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         session.user.id = token.sub!
       }
       return session
@@ -50,11 +49,20 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
     CredentialsProvider({
+      id: 'admin-login',
       credentials: {
         email: { type: 'email' },
         password: { type: 'password' },
       },
       authorize: authorize(db),
+    }),
+    CredentialsProvider({
+      id: 'professor-login',
+      credentials: {
+        email: { type: 'email' },
+        password: { type: 'password' },
+      },
+      authorize: authorize(db, false),
     }),
     /**
      * ...add more providers here.
@@ -68,7 +76,7 @@ export const authOptions: NextAuthOptions = {
   ],
 }
 
-function authorize(prisma: PrismaClient) {
+function authorize(prisma: PrismaClient, isAdmin = true) {
   return async (
     credentials: Record<'email' | 'password', string> | undefined,
   ) => {
@@ -81,7 +89,10 @@ function authorize(prisma: PrismaClient) {
       throw new Error('"password" is required in credentials')
 
     const maybeUser = await prisma.user.findFirst({
-      where: { email: credentials.email },
+      where: {
+        email: credentials.email,
+        role: isAdmin ? Role.ADMIN : Role.PROFESSOR,
+      },
       select: { id: true, email: true, password: true, name: true, role: true },
     })
 
@@ -107,7 +118,7 @@ export const getServerAuthSession = () => getServerSession(authOptions)
 
 export const getCurrentUser = async () => {
   const session = await getServerAuthSession()
-  console.log('session', session);
+  console.log('session', session)
   const userId = session?.user?.id
 
   if (!userId) return null

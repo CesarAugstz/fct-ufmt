@@ -4,12 +4,11 @@ import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Prisma, Role } from '@prisma/client'
+import { Course, Role } from '@prisma/client'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -17,74 +16,76 @@ import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
 import LoadingSpinner from '@/components/common/loading-spinner'
 import {
-  useCreateUser,
-  useFindUniqueUser,
-  useUpdateUser,
+  useCreateProfessor,
+  useFindUniqueProfessor,
+  useUpdateProfessor,
 } from '@/lib/zenstack-hooks'
 
 import { useToast } from '@/lib/hooks/toast'
-import { UserSchema } from '@/utils/schemas/user.schema'
-import { FormSelect } from '@/components/ui/form-fields/form-select'
-import { RoleMapper } from '@/utils/mappers/role.mapper'
+import { ProfessorSchema } from '@/utils/schemas/professor.schema'
+import { FormMultiSelect } from '@/components/common/form/form-mutiple-select'
+import { CourseMapper } from '@/utils/mappers/course.mapper'
 
-const formSchema = UserSchema.formSchema
+const formSchema = ProfessorSchema.formSchema
 
-type UserFormValues = z.infer<typeof formSchema>
+type ProfessorFormValues = z.infer<typeof formSchema>
 
-interface UserFormProps {
+interface ProfessorFormProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
-  userId?: string
+  professorId?: string
 }
 
-export default function UserForm({
+export default function ProfessorForm({
   isOpen,
   onClose,
   onSuccess,
-  userId,
-}: UserFormProps) {
+  professorId,
+}: ProfessorFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const isEditMode = !!userId
+  const isEditMode = !!professorId
   const toast = useToast()
 
-  const { data: userData, isLoading: isLoadingUser } = useFindUniqueUser(
-    { where: { id: userId } },
-    { enabled: !!userId },
-  )
+  const { data: professorData, isLoading: isLoadingUser } =
+    useFindUniqueProfessor(
+      { where: { id: professorId }, include: { user: true } },
+      { enabled: !!professorId },
+    )
 
-  const { mutate: createUser } = useCreateUser()
-  const { mutate: updateUser } = useUpdateUser()
+  const { user: userData } = professorData ?? {}
 
-  const methods = useForm<UserFormValues>({
+  const { mutate: updateProfessor } = useUpdateProfessor()
+  const { mutate: createProfessor } = useCreateProfessor()
+
+  const methods = useForm<ProfessorFormValues>({
     resolver: zodResolver(formSchema),
     values: {
       name: userData?.name || '',
       email: userData?.email || '',
       password: '',
-      role: userData?.role || 'USER',
+      courses: professorData?.courses || [],
+      role: userData?.role || 'PROFESSOR',
     },
   })
 
-  const onSubmit = (values: UserFormValues) => {
+  const onSubmit = async (values: ProfessorFormValues) => {
     setIsSubmitting(true)
 
-    const data: Omit<Prisma.UserUpdateInput, 'id' | 'createdAt' | 'updatedAt'> =
-      {
-        name: values.name,
-        email: values.email,
-        role: values.role as Role,
-      }
-
-    if (values.password && values.password.length > 0) {
-      data.password = values.password
-    }
-
     if (isEditMode && userData) {
-      updateUser(
+      updateProfessor(
         {
           where: { id: userData.id },
-          data: data as any,
+          data: {
+            courses: values.courses as Course[],
+            user: {
+              update: {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+              },
+            },
+          },
         },
         {
           onSuccess: () => {
@@ -92,34 +93,35 @@ export default function UserForm({
             onSuccess()
           },
           onError: error => {
-            console.error('Error updating user:', error)
+            console.error('Error updating professor:', error)
             setIsSubmitting(false)
             toast.exception(error)
           },
         },
       )
     } else {
-      if (!data.password) {
+      if (!values.password) {
         methods.setError('password', {
           type: 'manual',
-          message: 'Senha é obrigatória para novos usuários',
+          message: 'Senha é obrigatória para novos professores',
         })
         setIsSubmitting(false)
         return
       }
 
-      if (!data.email || typeof data.email !== 'string') {
-        methods.setError('email', {
-          type: 'manual',
-          message: 'Email is required',
-        })
-        setIsSubmitting(false)
-        return
-      }
-
-      createUser(
+      createProfessor(
         {
-          data: data as any,
+          data: {
+            courses: values.courses as Course[],
+            user: {
+              create: {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+                role: values.role as Role,
+              },
+            },
+          },
         },
         {
           onSuccess: () => {
@@ -127,7 +129,7 @@ export default function UserForm({
             onSuccess()
           },
           onError: error => {
-            console.error('Error creating user:', error)
+            console.error('Error creating professor:', error)
             setIsSubmitting(false)
             toast.exception(error)
           },
@@ -141,12 +143,12 @@ export default function UserForm({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode ? 'Editar Usuário' : 'Adicionar Novo Usuário'}
+            {isEditMode ? 'Editar Professor' : 'Adicionar Novo Professor'}
           </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? 'Atualize as informações do usuário no formulário abaixo.'
-              : 'Insira os detalhes do novo usuário.'}
+              ? 'Atualize as informações do professor no formulário abaixo.'
+              : 'Insira os detalhes do novo professor.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -163,7 +165,7 @@ export default function UserForm({
               <FormText
                 name="name"
                 label="Nome"
-                placeholder="Digite o nome do usuário"
+                placeholder="Digite o nome do professor"
               />
 
               <FormText
@@ -187,27 +189,21 @@ export default function UserForm({
                 required={!isEditMode}
               />
 
-              <FormSelect
-                name="role"
-                label="Função"
-                options={RoleMapper.roleOptions}
+              <FormMultiSelect
+                name="courses"
+                label="Cursos"
+                options={CourseMapper.courseOptions}
               />
 
-              <DialogFooter>
+              <div className="flex justify-end space-x-2">
                 <Button type="button" variant="outline" onClick={onClose}>
                   Cancelar
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <>
-                      <LoadingSpinner className="mr-2 h-4 w-4" />
-                      {isEditMode ? 'Atualizando...' : 'Criando...'}
-                    </>
-                  ) : (
-                    <>{isEditMode ? 'Atualizar Usuário' : 'Criar Usuário'}</>
-                  )}
+                  {isSubmitting && <LoadingSpinner className="mr-2" />}
+                  {isEditMode ? 'Salvar' : 'Criar'}
                 </Button>
-              </DialogFooter>
+              </div>
             </form>
           </FormProvider>
         )}

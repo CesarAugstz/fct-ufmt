@@ -10,7 +10,7 @@ import {
   CardFooter,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { PlusCircle, RefreshCw, Trash2 } from 'lucide-react'
+import { PlusCircle, RefreshCw } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 
 interface BaseCardProps {
@@ -71,7 +71,11 @@ export function BaseCard({
 
           <div className="flex gap-4">
             {onUpdate && (
-              <Button variant="outline" className="text-sm" onClick={onUpdate}>
+              <Button
+                variant="secondary"
+                className="text-sm"
+                onClick={onUpdate}
+              >
                 <RefreshCw className="mr-2 h-4 w-4" />
                 {updateButtonText}
               </Button>

@@ -27,6 +27,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { useOnMount } from '@/lib/hooks/on-mount'
 
 export interface Option {
   value: string
@@ -49,16 +50,25 @@ interface FormMultiSelectProps {
 export function FormMultiSelect({
   name,
   label,
-  placeholder = 'Select options...',
+  placeholder = 'Selecione opções...',
   description,
   options,
   required = false,
   disabled = false,
   className,
-  emptyMessage = 'No options found.',
+  emptyMessage = 'Nenhuma opção encontrada.',
   onValuesChange,
 }: FormMultiSelectProps) {
   const form = useFormContext()
+  const triggerRef = React.useRef<HTMLButtonElement>(null)
+  const [triggerWidth, setTriggerWidth] = React.useState('100%')
+
+  useOnMount(() => {
+    if (triggerRef.current) {
+      const width = triggerRef.current.offsetWidth
+      setTriggerWidth(`${width}px`)
+    }
+  })
 
   return (
     <FormField
@@ -98,22 +108,23 @@ export function FormMultiSelect({
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
+                        ref={triggerRef}
                         variant="outline"
                         role="combobox"
-                        disabled={disabled}
                         className={cn(
                           'w-full justify-between',
-                          !field.value?.length && 'text-muted-foreground',
+                          !field.value && 'text-muted-foreground',
                         )}
+                        disabled={disabled}
                       >
                         {selectedItems.length > 0
-                          ? `${selectedItems.length} selected`
+                          ? `${selectedItems.length} selecionados`
                           : placeholder}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-full p-0" align="start">
-                      <Command>
+                    <PopoverContent style={{ width: triggerWidth }}>
+                      <Command className="w-full">
                         <CommandInput placeholder="Search options..." />
                         <CommandList>
                           <CommandEmpty>{emptyMessage}</CommandEmpty>

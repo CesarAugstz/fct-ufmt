@@ -20,18 +20,39 @@ abstract model BaseModel {
   updatedAt DateTime @updatedAt
 }
 
+enum Role {
+  ADMIN
+  PROFESSOR
+  USER
+  ADMIN_PROFESSOR
+}
+
 model User extends BaseModel {
   email    String  @unique
   password String  @password @omit
   name     String?
   role     Role    @default(USER)
 
+  professor Professor? 
+
   @@allow('create,read', true)
   @@allow('update,delete', auth().role == 'ADMIN')
 }
 
-enum Role {
-  ADMIN
-  USER
+enum Course {
+  CIENCIA_TECNOLOGIA
+  ENGENHARIA_SOFTWARE
+  CIENCIA_NATURAL_MATEMATICA
 }
+
+model Professor extends BaseModel {
+  courses Course[]
+
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@allow('create,read', true)
+  @@allow('update,delete', auth().role == 'ADMIN')
+}
+
 

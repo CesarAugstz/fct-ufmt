@@ -1,24 +1,24 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   loginFormSchema,
   LoginFormValues,
-} from "@/types/forms/login-form.types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useAuthStore } from "@/store/auth-store";
-import { formatLoginApiError } from "@/lib/formaters/format-login-api-error.formater";
+} from '@/types/forms/login-form.types'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from 'next-auth/react'
+import { useAuthStore } from '@/store/auth-store'
+import { formatLoginApiError } from '@/lib/formaters/format-login-api-error.formater'
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const authStore = useAuthStore();
+  const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
+  const authStore = useAuthStore()
 
   const {
     register,
@@ -29,40 +29,40 @@ export default function LoginPage() {
     values: {
       remember: authStore.rememberData.remember,
       email: authStore.rememberData.email,
-      password: "",
+      password: '',
     },
-  });
+  })
 
   const onSubmit = async (data: LoginFormValues) => {
-    setIsLoading(true);
-    setLoginError(null);
+    setIsLoading(true)
+    setLoginError(null)
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn('admin-login', {
         redirect: false,
         email: data.email,
         password: data.password,
-      });
+      })
 
       if (!result || result.error) {
-        setLoginError(formatLoginApiError(result));
-        return;
+        setLoginError(formatLoginApiError(result))
+        return
       }
 
       if (data.remember) {
-        authStore.setRememberData({ remember: true, email: data.email });
+        authStore.setRememberData({ remember: true, email: data.email })
       } else {
-        authStore.setRememberData({ remember: false, email: "" });
+        authStore.setRememberData({ remember: false, email: '' })
       }
 
-      router.push("/admin");
+      router.push('/admin')
     } catch (error) {
-      console.error("Login failed:", error);
-      setLoginError("An unexpected error occurred. Please try again.");
+      console.error('Login failed:', error)
+      setLoginError('An unexpected error occurred. Please try again.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -72,7 +72,7 @@ export default function LoginPage() {
             Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{" "}
+            Or{' '}
             <Link
               href="/register"
               className="font-medium text-indigo-600 hover:text-indigo-500"
@@ -98,9 +98,9 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 autoComplete="email"
-                {...register("email")}
+                {...register('email')}
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                  errors.email ? "border-red-300" : "border-gray-300"
+                  errors.email ? 'border-red-300' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Email address"
               />
@@ -117,11 +117,11 @@ export default function LoginPage() {
               <div className="relative">
                 <input
                   id="password"
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
-                  {...register("password")}
+                  {...register('password')}
                   className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                    errors.password ? "border-red-300" : "border-gray-300"
+                    errors.password ? 'border-red-300' : 'border-gray-300'
                   } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                   placeholder="Password"
                 />
@@ -130,7 +130,7 @@ export default function LoginPage() {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? 'Hide' : 'Show'}
                 </button>
               </div>
               {errors.password && (
@@ -146,7 +146,7 @@ export default function LoginPage() {
               <input
                 id="remember"
                 type="checkbox"
-                {...register("remember")}
+                {...register('remember')}
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
               <label
@@ -173,7 +173,7 @@ export default function LoginPage() {
               disabled={isLoading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
 
@@ -185,5 +185,5 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
-  );
+  )
 }

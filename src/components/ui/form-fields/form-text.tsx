@@ -1,4 +1,4 @@
-import { useController, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import {
   FormControl,
   FormField,
@@ -29,6 +29,7 @@ export function FormText({
   onChange,
   formatter,
   onBlur,
+  type = 'text',
   required = false,
 }: FormTextProps) {
   const { control } = useFormContext()
@@ -50,6 +51,7 @@ export function FormText({
               placeholder={placeholder}
               {...field}
               onBlur={onBlur}
+              type={type}
               onChange={e => {
                 const value = e.target.value
                 const formattedValue = formatter ? formatter(value) : value
@@ -59,6 +61,7 @@ export function FormText({
               }}
             />
           </FormControl>
+
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>

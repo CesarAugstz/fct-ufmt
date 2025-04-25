@@ -44,6 +44,13 @@ const metadata = {
           type: 'Role',
           attributes: [{ name: '@default', args: [] }],
         },
+        professor: {
+          name: 'professor',
+          type: 'Professor',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'user',
+        },
       },
       uniqueConstraints: {
         id: {
@@ -56,8 +63,60 @@ const metadata = {
         },
       },
     },
+    professor: {
+      name: 'Professor',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        courses: {
+          name: 'courses',
+          type: 'Course',
+          isArray: true,
+        },
+        userId: {
+          name: 'userId',
+          type: 'String',
+          isForeignKey: true,
+          relationField: 'user',
+        },
+        user: {
+          name: 'user',
+          type: 'User',
+          isDataModel: true,
+          backLink: 'professor',
+          isRelationOwner: true,
+          foreignKeyMapping: { id: 'userId' },
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+        userId: {
+          name: 'userId',
+          fields: ['userId'],
+        },
+      },
+    },
   },
-  deleteCascade: {},
+  deleteCascade: {
+    user: ['Professor'],
+  },
   authModel: 'User',
 }
 export default metadata

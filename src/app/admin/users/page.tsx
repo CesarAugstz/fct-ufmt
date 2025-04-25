@@ -1,19 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { PlusCircle, RefreshCw } from 'lucide-react'
 import { useFindManyUser } from '@/lib/zenstack-hooks'
 import UserTable from '@/components/admin/users/user-table'
 import UserForm from '@/components/admin/users/user-form'
-import LoadingSpinner from '@/components/common/loading-spinner'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+
+import { BaseCard } from '@/components/ui/base-card'
 
 export default function UsersPage() {
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -37,55 +29,26 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="container mx-auto py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Gerenciamento de Usuários</h1>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => refetch()}
-            className="flex items-center gap-1"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Atualizar
-          </Button>
-          <Button onClick={handleAddNew} className="flex items-center gap-1">
-            <PlusCircle className="h-4 w-4" />
-            Adicionar Novo
-          </Button>
-        </div>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Usuários</CardTitle>
-          <CardDescription>
-            Gerencie todos os usuários a partir deste painel.
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          {isLoading ? (
-            <div className="flex justify-center py-8">
-              <LoadingSpinner />
-            </div>
-          ) : (
-            <UserTable
-              users={users || []}
-              onRefresh={refetch}
-              onClickEdit={handleEditClick}
-            />
-          )}
-        </CardContent>
-      </Card>
-
+    <>
+      <BaseCard
+        title="Usuários"
+        description="Gerencie todos os usuários a partir deste painel."
+        onAdd={handleAddNew}
+        onUpdate={refetch}
+        loading={isLoading}
+      >
+        <UserTable
+          users={users || []}
+          onRefresh={refetch}
+          onClickEdit={handleEditClick}
+        />
+      </BaseCard>
       <UserForm
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onSuccess={handleFormSuccess}
         userId={editingUserId}
       />
-    </div>
+    </>
   )
 }
