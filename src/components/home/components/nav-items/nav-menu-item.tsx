@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Section } from '@/data/sections'
+import { useIsMobile } from '@/lib/hooks/is-mobile'
 
 interface NavMenuItemProps {
   item: Section
@@ -17,6 +18,7 @@ interface NavMenuItemProps {
 export function NavMenuItem({ item }: NavMenuItemProps) {
   const hasChildren = item.children && item.children.length > 0
   const router = useRouter()
+  const { isMobileScreen: isMobile } = useIsMobile()
 
   if (!hasChildren) {
     return (
@@ -50,8 +52,8 @@ export function NavMenuItem({ item }: NavMenuItemProps) {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        side="right"
-        sideOffset={-5}
+        side={isMobile ? 'bottom' : 'right'}
+        sideOffset={isMobile ? 0 : -5}
         className="w-64 rounded-lg border border-blue-100/30 bg-white/98 backdrop-blur-md shadow-[0_10px_40px_-15px_rgba(0,30,80,0.3)] animate-in slide-in-from-left-2 fade-in-50 zoom-in-95 p-1.5"
       >
         {sortedChildren.map(child => (

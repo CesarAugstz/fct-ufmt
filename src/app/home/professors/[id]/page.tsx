@@ -1,5 +1,10 @@
 import ProfessorDetail from '@/components/home/professors/professor-detail'
 
-export default function ProfessorPage({ params }: { params: { id: string } }) {
-  return <ProfessorDetail id={params.id} />
+export default async function ProfessorPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  return <ProfessorDetail id={id} />
 }

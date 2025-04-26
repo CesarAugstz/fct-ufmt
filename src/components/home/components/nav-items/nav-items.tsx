@@ -1,42 +1,131 @@
-import { ChevronDown } from 'lucide-react'
+'use client'
+
+import { ChevronDown, Dot, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
 import { NavMenuItem } from './nav-menu-item'
 import Link from 'next/link'
 import { DataSections, Section } from '@/data/sections'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { useState } from 'react'
 
-export default async function NavItems() {
+export default function NavItems() {
   const { sections } = DataSections
 
   return (
     <nav className="bg-gradient-to-r from-[#001a35] via-[#002347] to-[#00305e] text-white py-3 sticky top-0 z-50 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.4)] border-b border-blue-900/20">
-      <div className="container mx-auto px-4 overflow-x-auto">
-        <ul className="flex space-x-1 md:space-x-4 min-w-max py-0.5">
-          {sections.map(section => (
-            <li key={section.name} className="relative group">
-              {section.children && section.children.length > 0 ? (
-                <NavDropdown section={section} />
-              ) : (
-                <Link href={section.href ?? '#'} className="ml-2">
-                  <Button
-                    variant="ghost"
-                    className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto transition-all duration-200 rounded-md text-sm relative after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-0.5 after:bg-blue-300 after:transform after:-translate-x-1/2 hover:after:w-2/3 after:transition-all after:duration-300"
-                    disabled={!section.href}
-                  >
-                    {section.name}
-                  </Button>
-                </Link>
-              )}
-            </li>
-          ))}
-        </ul>
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center">
+          {/* Mobile Menu */}
+          <div className="md:hidden w-full">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="text-white w-full hover:bg-white/10"
+                  size="icon"
+                >
+                  <Menu
+                    style={{ aspectRatio: '99/1' }}
+                    width={30}
+                    className=""
+                  />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] p-0">
+                <div className="py-4 mt-6 px-2">
+                  <ul className="space-y-2">
+                    {sections.map(section => (
+                      <MobileNavItem key={section.name} section={section} />
+                    ))}
+                  </ul>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:block w-full overflow-x-auto">
+            <ul className="flex space-x-1 md:space-x-4 min-w-max py-0.5">
+              {sections.map(section => (
+                <li key={section.name} className="relative group">
+                  {section.children && section.children.length > 0 ? (
+                    <NavDropdown section={section} />
+                  ) : (
+                    <Link href={section.href ?? '#'} className="ml-2">
+                      <Button
+                        variant="ghost"
+                        className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto transition-all duration-200 rounded-md text-sm relative after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-0.5 after:bg-blue-300 after:transform after:-translate-x-1/2 hover:after:w-2/3 after:transition-all after:duration-300"
+                        disabled={!section.href}
+                      >
+                        {section.name}
+                      </Button>
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </nav>
+  )
+}
+
+function MobileNavItem({
+  section,
+  depth = 0,
+}: {
+  section: Section
+  depth?: number
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  if (!section.children?.length) {
+    return (
+      <li>
+        <Link href={section.href ?? '#'} className="flex flex-row items-center">
+          {depth !== 0 && (
+            <Dot size={0 ? 18 : 14} className="absolute h-4 w-4" />
+          )}
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-medium"
+            disabled={!section.href}
+          >
+            {section.name}
+          </Button>
+        </Link>
+      </li>
+    )
+  }
+
+  return (
+    <li>
+      <Button
+        variant="ghost"
+        className="w-full justify-between text-left font-medium"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {section.name}
+        <ChevronDown
+          className={`h-4 w-4 transition-transform ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </Button>
+      {isOpen && (
+        <ul className="ml-4 mt-2 space-y-2">
+          {section.children.map(child => (
+            <MobileNavItem key={child.name} section={child} depth={depth + 1} />
+          ))}
+        </ul>
+      )}
+    </li>
   )
 }
 

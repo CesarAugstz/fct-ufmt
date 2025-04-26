@@ -74,7 +74,7 @@ export function Header() {
             <Linkedin className="h-5 w-5" />
           </Button>
         </div>
-        <ThemeToggle className="ml-4" buttonProps={{ variant: 'ghost' }} />
+        <ThemeToggle className="" buttonProps={{ variant: 'ghost' }} />
       </div>
     </header>
   )

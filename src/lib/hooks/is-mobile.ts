@@ -1,4 +1,26 @@
+import { useEffect, useState } from 'react'
+
 export function useIsMobile() {
+  const [screenSize, setScreenSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  })
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   function check(a: string) {
     if (
       /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
@@ -12,9 +34,15 @@ export function useIsMobile() {
     return false
   }
 
-  return [
+  const byUserAgent = [
+    window.navigator.userAgent,
     navigator.userAgent ||
       navigator.vendor ||
       (window as unknown as { opera: string }).opera,
   ].some(a => check(a))
+
+  return {
+    isMobileUserAgent: byUserAgent,
+    isMobileScreen: screenSize.width < 768,
+  }
 }

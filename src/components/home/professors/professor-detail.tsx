@@ -14,10 +14,12 @@ import { CourseMapper } from '@/utils/mappers/course.mapper'
 export default function ProfessorDetail({ id }: { id: string }) {
   const professor = professorsMock.find(p => p.id === id)
   const toast = useToast()
-  const isMobile = useIsMobile()
+  const { isMobileUserAgent: isMobile } = useIsMobile()
 
   const handleShare = async () => {
     const platform = isMobile ? 'native' : 'copy'
+    console.log('Sharing platform:', platform)
+
     const shareUrl = window.location.href
 
     if (platform === 'native' && navigator.share) {
@@ -74,8 +76,8 @@ export default function ProfessorDetail({ id }: { id: string }) {
 
         <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
           <div className="space-y-8">
-            <div className="flex gap-6">
-              <div className="relative h-48 w-48 overflow-hidden rounded-full">
+            <div className="flex ">
+              <div className="relative mr-4 self-center size-[100px] sm:h-28 sm:w-28 overflow-hidden rounded-full">
                 <Image
                   src="/example/profile.jpg"
                   alt={professor.name}

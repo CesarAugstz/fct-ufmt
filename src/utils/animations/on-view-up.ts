@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 export function getAnimationOnViewUp(
   index: number,
   axis: 'x' | 'y' = 'y',
+  onView: boolean = true,
 ): Parameters<typeof motion.div>[0] {
   return {
     variants: {
@@ -18,7 +19,7 @@ export function getAnimationOnViewUp(
       },
     },
     initial: 'hidden',
-    whileInView: 'visible',
+    [onView ? 'whileInView' : 'animate']: 'visible',
     viewport: { once: true },
   }
 }
