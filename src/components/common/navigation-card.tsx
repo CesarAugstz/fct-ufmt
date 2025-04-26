@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { ReactNode } from 'react'
+import { getAnimationOnViewUp } from '@/utils/animations/on-view-up'
 
 export interface CardItem {
   id: string
@@ -20,19 +21,6 @@ interface NavigationCardProps {
   card: CardItem
   index: number
   className?: string
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.5,
-      ease: [0.4, 0, 0.2, 1],
-    },
-  }),
 }
 
 export function NavigationCard({
@@ -66,14 +54,7 @@ export function NavigationCard({
     <motion.div
       custom={index}
       className={className}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.25 }}
-      whileHover={{
-        y: -8,
-        transition: { duration: 0.2 },
-      }}
+      {...getAnimationOnViewUp(index)}
     >
       <LinkComponent>
         <Card className="overflow-hidden h-full border bg-background/50 backdrop-blur-sm hover:bg-background/80 shadow-sm hover:shadow-lg transition-all duration-300 rounded-xl group">

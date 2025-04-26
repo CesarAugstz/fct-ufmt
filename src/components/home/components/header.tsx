@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Search, Facebook, Instagram, Youtube, Linkedin, } from 'lucide-react'
+import { Search, Facebook, Instagram, Youtube, Linkedin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/common/theme-toggle'
@@ -21,7 +21,7 @@ export function Header() {
               />
             </div>
           </div>
-          <div  className="text-lg font-bold">
+          <div className="text-lg font-bold">
             <div>FACULDADE DE</div>
             <div>CIÊNCIA E TECNOLOGIA</div>
           </div>
@@ -32,12 +32,12 @@ export function Header() {
             <Input
               type="text"
               placeholder="O que você procura?"
-              className="w-full py-2 px-4 pr-10 rounded-full text-black border-accent focus:ring-2 focus:ring-blue-300 transition-all"
+              className="w-full py-2 px-4 pr-10 rounded-full border-accent focus:ring-2 focus:ring-blue-300 transition-all"
             />
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-0 top-0 h-full text-gray-400 hover:text-blue-500"
+              className="absolute right-0 top-0 h-full text-gray-400 hover:text-primary"
             >
               <Search className="h-4 w-4" />
             </Button>

@@ -11,7 +11,7 @@ const sections: Section[] = [
     children: [
       { name: 'História' },
       { name: 'Gestão' },
-      { name: 'Docentes' },
+      { name: 'Docentes', href: '/home/professors' },
       { name: 'Técnicos' },
       { name: 'Contatos' },
       { name: 'Tour 360º' },

@@ -1,0 +1,173 @@
+'use client'
+
+import { ArrowLeft, Book, Calendar, Mail, Share2 } from 'lucide-react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { professorsMock } from './professors-data-mock'
+import { useToast } from '@/lib/hooks/toast'
+import { useIsMobile } from '@/lib/hooks/is-mobile'
+import { CourseMapper } from '@/utils/mappers/course.mapper'
+
+export default function ProfessorDetail({ id }: { id: string }) {
+  const professor = professorsMock.find(p => p.id === id)
+  const toast = useToast()
+  const isMobile = useIsMobile()
+
+  const handleShare = async () => {
+    const platform = isMobile ? 'native' : 'copy'
+    const shareUrl = window.location.href
+
+    if (platform === 'native' && navigator.share) {
+      try {
+        await navigator.share({
+          title: professor?.name || 'Professor FCT',
+          text: professor?.summary || '',
+          url: shareUrl,
+        })
+      } catch (error) {
+        console.log('Error sharing:', error)
+      }
+    } else if (platform === 'copy') {
+      try {
+        await navigator.clipboard.writeText(shareUrl)
+        toast.success('Link copiado para a área de transferência!')
+      } catch (error) {
+        console.log('Error copying:', error)
+      }
+    }
+  }
+
+  if (!professor) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Professor não encontrado</h1>
+          <p className="mt-2 text-muted-foreground">
+            O professor que você está procurando não existe ou foi removido.
+          </p>
+          <Button asChild className="mt-4">
+            <Link href="/home/professors">Voltar para professores</Link>
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 py-12">
+        <div className="mb-8 flex items-center justify-between">
+          <Button variant="ghost" className="gap-2" asChild>
+            <Link href="/home/professors">
+              <ArrowLeft className="h-4 w-4" />
+              Voltar para professores
+            </Link>
+          </Button>
+
+          <Button onClick={handleShare} variant="outline" size="icon">
+            <Share2 className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
+          <div className="space-y-8">
+            <div className="flex gap-6">
+              <div className="relative h-48 w-48 overflow-hidden rounded-full">
+                <Image
+                  src="/example/profile.jpg"
+                  alt={professor.name}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {professor.courses.map(course => (
+                    <Badge key={course} variant="secondary">
+                      {CourseMapper.getCourseLabel(course)}
+                    </Badge>
+                  ))}
+                </div>
+                <h1 className="text-4xl font-bold tracking-tight text-primary">
+                  {professor.name}
+                </h1>
+                <div className="mt-2 flex items-center gap-2 text-muted-foreground">
+                  <Mail className="h-4 w-4" />
+                  {professor.email}
+                </div>
+              </div>
+            </div>
+
+            <div className="prose prose-lg max-w-none">
+              <p className="lead">{professor.summary}</p>
+
+              <h2>Áreas de Pesquisa</h2>
+              <ul>
+                {professor.researchAreas.map(area => (
+                  <li key={area}>{area}</li>
+                ))}
+              </ul>
+
+              <h2>Especialidades</h2>
+              <div className="flex flex-wrap gap-2 not-prose">
+                {professor.specialties.map(specialty => (
+                  <Badge key={specialty} variant="outline">
+                    {specialty}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4">
+                Informações de Contato
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span>Horário de Atendimento:</span>
+                </div>
+                <p className="text-sm text-muted-foreground pl-6">
+                  {professor.officeHours}
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4">
+                Métricas Acadêmicas
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Book className="h-4 w-4 text-muted-foreground" />
+                    <span>Publicações:</span>
+                  </div>
+                  <span className="font-semibold">
+                    {professor.publications}
+                  </span>
+                </div>
+              </div>
+            </Card>
+
+            <Button className="w-full" asChild>
+              <a
+                href={professor.lattes}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver Currículo Lattes
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

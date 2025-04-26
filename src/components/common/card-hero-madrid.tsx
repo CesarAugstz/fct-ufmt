@@ -24,7 +24,7 @@ export default function CardHeroMadrid() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 flex flex-col justify-center">
             <CardHeader className="p-0 pb-4">
-              <CardTitle className="text-3xl font-bold text-[#0a4b8f]">
+              <CardTitle className="text-3xl font-bold text-primary">
                 O Instituto de Ciência e Tecnologia
               </CardTitle>
             </CardHeader>
@@ -36,14 +36,14 @@ export default function CardHeroMadrid() {
               </CardDescription>
             </CardContent>
             <CardFooter className="p-0 text-wrap">
-              <Button className="bg-[#0a4b8f] hover:bg-[#0a3b6f] text-white h-20 text-wrap w-full whitespace-pre-wrap max-w-4xl md:h-10">
+              <Button className="bg-primary hover:bg-accent text-white h-20 text-wrap w-full whitespace-pre-wrap max-w-4xl md:h-10">
                 <History className="mr-2 h-4 w-4" />
                 Saiba mais sobre a História da FCT
               </Button>
             </CardFooter>
           </div>
 
-          <div className="relative h-full rounded-xl overflow-hidden bg-[#0a4b8f]/5">
+          <div className="relative h-full rounded-xl overflow-hidden bg-primary/5">
             <Carousel className="w-full h-full">
               <CarouselContent className="h-full">
                 <CarouselItem className="h-full">

@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowRight, CalendarDays, ExternalLink, Newspaper } from 'lucide-react'
 
@@ -12,6 +14,8 @@ import {
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import Image from 'next/image'
+import { getAnimationOnViewUp } from '@/utils/animations/on-view-up'
+import { motion } from 'framer-motion'
 
 const latestNews = [
   {
@@ -127,7 +131,7 @@ export default function NewsPreview() {
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Newspaper className="h-6 w-6 text-primary" />
-            <h2 className="text-3xl font-bold tracking-tight text-[#003366]">
+            <h2 className="text-3xl font-bold tracking-tight text-primary">
               Últimas Notícias
             </h2>
           </div>
@@ -140,109 +144,113 @@ export default function NewsPreview() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2">
-          {featuredNews.map(item => (
-            <Card
-              key={item.id}
-              className="group overflow-hidden border-0 transition-all hover:shadow-lg"
-            >
-              <div className="relative h-56 w-full overflow-hidden bg-muted">
-                <Image
-                  src={item.image || '/placeholder.svg'}
-                  alt={item.title}
-                  width={600}
-                  height={400}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute left-3 top-3">
-                  <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm">
-                    {item.category}
-                  </Badge>
-                </div>
-              </div>
-              <CardHeader className="p-5 pb-3">
-                <CardTitle className="line-clamp-2 text-xl">
-                  <Link
-                    href={`/home/news/${item.id}`}
-                    className="hover:text-primary"
-                  >
-                    {item.title}
-                  </Link>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-5 pt-0">
-                <p className="line-clamp-2 text-sm text-muted-foreground">
-                  {item.excerpt}
-                </p>
-              </CardContent>
-              <CardFooter className="flex items-center justify-between p-5 pt-0">
-                <div className="flex items-center text-xs text-muted-foreground">
-                  <CalendarDays className="mr-1 h-3 w-3" />
-                  {new Date(item.date).toLocaleDateString('pt-BR', {
-                    day: 'numeric',
-                    month: 'long',
-                  })}
-                </div>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-primary group/link"
-                  asChild
-                >
-                  <Link href={`/home/news/${item.id}`}>
-                    Ler mais
-                    <ExternalLink className="ml-1 h-3 w-3 transition-transform group-hover/link:translate-x-1" />
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-
-        <Separator className="my-8" />
-
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {smallerNews.map(item => (
-            <Card
-              key={item.id}
-              className="group flex h-full flex-col overflow-hidden border-0 transition-all hover:shadow-lg"
-            >
-              <div className="flex gap-4 p-4">
-                <div className="hidden sm:block">
-                  <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-muted">
-                    <Image
-                      src={item.image || '/placeholder.svg'}
-                      alt={item.title}
-                      width={80}
-                      height={80}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
+          {featuredNews.map((item, index) => (
+            <motion.div key={item.id} {...getAnimationOnViewUp(index)}>
+              <Card
+                key={item.id}
+                className="group overflow-hidden border-0 transition-all hover:shadow-lg"
+              >
+                <div className="relative h-56 w-full overflow-hidden bg-muted">
+                  <Image
+                    src={item.image || '/placeholder.svg'}
+                    alt={item.title}
+                    width={600}
+                    height={400}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute left-3 top-3">
+                    <Badge className="bg-primary/90 text-primary-foreground backdrop-blur-sm">
+                      {item.category}
+                    </Badge>
                   </div>
                 </div>
-                <div className="flex-1">
-                  <Badge
-                    variant="outline"
-                    className="mb-2 bg-secondary/10 text-xs text-secondary-foreground"
-                  >
-                    {item.category}
-                  </Badge>
-                  <h4 className="line-clamp-2 text-sm font-medium">
+                <CardHeader className="p-5 pb-3">
+                  <CardTitle className="line-clamp-2 text-xl">
                     <Link
                       href={`/home/news/${item.id}`}
                       className="hover:text-primary"
                     >
                       {item.title}
                     </Link>
-                  </h4>
-                  <div className="mt-2 flex items-center text-xs text-muted-foreground">
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-5 pt-0">
+                  <p className="line-clamp-2 text-sm text-muted-foreground">
+                    {item.excerpt}
+                  </p>
+                </CardContent>
+                <CardFooter className="flex items-center justify-between p-5 pt-0">
+                  <div className="flex items-center text-xs text-muted-foreground">
                     <CalendarDays className="mr-1 h-3 w-3" />
                     {new Date(item.date).toLocaleDateString('pt-BR', {
                       day: 'numeric',
                       month: 'long',
                     })}
                   </div>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-primary group/link"
+                    asChild
+                  >
+                    <Link href={`/home/news/${item.id}`}>
+                      Ler mais
+                      <ExternalLink className="ml-1 h-3 w-3 transition-transform group-hover/link:translate-x-1" />
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        <Separator className="my-8" />
+
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          {smallerNews.map((item, index) => (
+            <motion.div key={item.id} {...getAnimationOnViewUp(index, 'x')}>
+              <Card
+                key={item.id}
+                className="group flex h-full flex-col overflow-hidden border-0 transition-all hover:shadow-lg"
+              >
+                <div className="flex gap-4 p-4">
+                  <div className="hidden sm:block">
+                    <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-muted">
+                      <Image
+                        src={item.image || '/placeholder.svg'}
+                        alt={item.title}
+                        width={80}
+                        height={80}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <Badge
+                      variant="outline"
+                      className="mb-2 bg-secondary/10 text-xs text-secondary-foreground"
+                    >
+                      {item.category}
+                    </Badge>
+                    <h4 className="line-clamp-2 text-sm font-medium">
+                      <Link
+                        href={`/home/news/${item.id}`}
+                        className="hover:text-primary"
+                      >
+                        {item.title}
+                      </Link>
+                    </h4>
+                    <div className="mt-2 flex items-center text-xs text-muted-foreground">
+                      <CalendarDays className="mr-1 h-3 w-3" />
+                      {new Date(item.date).toLocaleDateString('pt-BR', {
+                        day: 'numeric',
+                        month: 'long',
+                      })}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -47,7 +47,7 @@ export default function News() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Newspaper className="h-7 w-7 text-primary" />
-            <h2 className="text-4xl font-bold tracking-tight text-[#003366]">
+            <h2 className="text-4xl font-bold tracking-tight text-primary">
               Notícias
             </h2>
           </div>

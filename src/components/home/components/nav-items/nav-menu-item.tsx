@@ -21,9 +21,7 @@ export function NavMenuItem({ item }: NavMenuItemProps) {
   if (!hasChildren) {
     return (
       <DropdownMenuItem
-        onClick={() =>
-          item?.href ? router.push(`/home/pages/${item.href}`) : null
-        }
+        onClick={() => (item?.href ? router.push(`${item.href}`) : null)}
         className="cursor-pointer group/item flex items-center px-4 py-2.5 my-0.5 text-[#00335e] hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100/50 hover:text-blue-700 rounded-md transition-all duration-200 focus:bg-blue-50 focus:text-blue-700 text-sm font-medium relative overflow-hidden"
         disabled={!item.href}
       >

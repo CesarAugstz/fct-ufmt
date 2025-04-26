@@ -24,7 +24,7 @@ export function HeroBanner() {
             Inovação e Conhecimento para Transformar o Futuro.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button className="bg-[#0088cc] hover:bg-[#0088cc]/90 text-white rounded-md px-6 py-3 font-medium transition-all transform hover:scale-105">
+            <Button className="bg-primary hover:bg-accent/90 text-white rounded-md px-6 py-3 font-medium transition-all transform hover:scale-105">
               Conheça nossos cursos
             </Button>
             <Button
