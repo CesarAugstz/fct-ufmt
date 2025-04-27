@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Book, GraduationCap, Mail, ArrowRight } from 'lucide-react'
+import { Book, GraduationCap, Mail, ArrowRight, User } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -81,17 +81,21 @@ export default function Professors() {
             {filteredProfessors.map((professor, index) => (
               <motion.div
                 key={professor.id}
-                className="flex flex-col md:flex-row gap-6 py-8 group hover:bg-gray-50 transition-colors"
+                className="flex flex-col rounded-lg md:flex-row gap-6 py-8 group hover:bg-background-hover transition-colors"
                 {...getAnimationOnViewUp(index, 'y', false)}
               >
                 <div className="flex justify-center">
                   <div className="rounded-full flex relative w-48 h-48 overflow-hidden flex-shrink-0">
-                    <Image
-                      src="/example/profile.jpg"
-                      alt={professor.name}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
+                    {professor.image ? (
+                      <Image
+                        src={professor.image ?? '/example/profile.jpg'}
+                        alt={professor.name}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <User className="h-full w-full text-gray-400 opacity-50 rounded-full" />
+                    )}
                   </div>
                 </div>
 
@@ -132,10 +136,12 @@ export default function Professors() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Book className="h-4 w-4" />
-                      {professor.publications} publicações
-                    </div>
+                    {professor.publications && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Book className="h-4 w-4" />
+                        {professor.publications.length} publicações
+                      </div>
+                    )}
                     <Button variant="ghost" className="group" asChild>
                       <Link
                         href={`/home/professors/${professor.id}`}

@@ -58,7 +58,7 @@ export function NavigationCard({
     >
       <LinkComponent>
         <Card className="overflow-hidden h-full border bg-background/50 backdrop-blur-sm hover:bg-background/80 shadow-sm hover:shadow-lg transition-all duration-300 rounded-xl group">
-          <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+          <CardContent className="flex flex-col items-center justify-center text-center h-full">
             <div className="mb-4 relative w-16 h-16 flex items-center justify-center">
               <div
                 className={cn(

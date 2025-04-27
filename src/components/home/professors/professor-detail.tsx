@@ -1,6 +1,15 @@
 'use client'
 
-import { ArrowLeft, Book, Calendar, Mail, Share2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  Book,
+  Calendar,
+  Mail,
+  Share2,
+  Clock,
+  Beaker,
+  User,
+} from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
@@ -10,6 +19,7 @@ import { professorsMock } from './professors-data-mock'
 import { useToast } from '@/lib/hooks/toast'
 import { useIsMobile } from '@/lib/hooks/is-mobile'
 import { CourseMapper } from '@/utils/mappers/course.mapper'
+import { formatDate } from '@/lib/utils'
 
 export default function ProfessorDetail({ id }: { id: string }) {
   const professor = professorsMock.find(p => p.id === id)
@@ -78,13 +88,17 @@ export default function ProfessorDetail({ id }: { id: string }) {
           <div className="space-y-8">
             <div className="flex ">
               <div className="relative mr-4 self-center size-[100px] sm:h-28 sm:w-28 overflow-hidden rounded-full">
-                <Image
-                  src="/example/profile.jpg"
-                  alt={professor.name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                {professor.image ? (
+                  <Image
+                    src={professor.image}
+                    alt={professor.name}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                ) : (
+                  <User className="h-full w-full text-gray-400 opacity-50 rounded-full" />
+                )}
               </div>
               <div>
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -122,6 +136,123 @@ export default function ProfessorDetail({ id }: { id: string }) {
                   </Badge>
                 ))}
               </div>
+
+              {professor.publications?.length && (
+                <>
+                  <h2>Publicações Recentes</h2>
+                  <div className="space-y-4 not-prose">
+                    {professor.publications.map((pub, index) => (
+                      <Card key={index} className="p-4">
+                        <h3 className="font-semibold">{pub.title}</h3>
+                        {pub.authors && (
+                          <p className="text-sm text-muted-foreground">
+                            {pub.authors.join(', ')}
+                          </p>
+                        )}
+                        <div className="flex items-center gap-2 mt-2">
+                          <Calendar className="h-4 w-4" />
+                          <span className="text-sm">
+                            {formatDate(pub.date)}
+                          </span>
+                          {pub.link && (
+                            <a
+                              href={pub.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline ml-auto"
+                            >
+                              Ver publicação
+                            </a>
+                          )}
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {professor.researchProjects &&
+                professor.researchProjects.length > 0 && (
+                  <>
+                    <h2>Projetos de Pesquisa</h2>
+                    <div className="space-y-4 not-prose">
+                      {professor.researchProjects.map((project, index) => (
+                        <Card key={index} className="p-4">
+                          <div className="flex items-center gap-2">
+                            <Beaker className="h-4 w-4" />
+                            <h3 className="font-semibold">{project.title}</h3>
+                            <Badge
+                              variant={
+                                project.status === 'ongoing'
+                                  ? 'default'
+                                  : 'secondary'
+                              }
+                            >
+                              {project.status === 'ongoing'
+                                ? 'Em andamento'
+                                : 'Concluído'}
+                            </Badge>
+                          </div>
+                          {project.description && (
+                            <p className="mt-2 text-muted-foreground">
+                              {project.description}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-2 mt-2">
+                            <Clock className="h-4 w-4" />
+                            <span className="text-sm">
+                              {formatDate(project.startDate)}
+                              {project.endDate
+                                ? ` - ${formatDate(project.endDate)}`
+                                : ' - Atual'}
+                            </span>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+              {professor.extensionProjects &&
+                professor.extensionProjects.length > 0 && (
+                  <>
+                    <h2>Projetos de Extensão</h2>
+                    <div className="space-y-4 not-prose">
+                      {professor.extensionProjects.map((project, index) => (
+                        <Card key={index} className="p-4">
+                          <div className="flex items-center gap-2">
+                            <Book className="h-4 w-4" />
+                            <h3 className="font-semibold">{project.title}</h3>
+                            <Badge
+                              variant={
+                                project.status === 'ongoing'
+                                  ? 'default'
+                                  : 'secondary'
+                              }
+                            >
+                              {project.status === 'ongoing'
+                                ? 'Em andamento'
+                                : 'Concluído'}
+                            </Badge>
+                          </div>
+                          {project.description && (
+                            <p className="mt-2 text-muted-foreground">
+                              {project.description}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-2 mt-2">
+                            <Clock className="h-4 w-4" />
+                            <span className="text-sm">
+                              {formatDate(project.startDate)}
+                              {project.endDate &&
+                                ` - ${formatDate(project.endDate)}`}
+                            </span>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
+                )}
             </div>
           </div>
 
@@ -152,7 +283,7 @@ export default function ProfessorDetail({ id }: { id: string }) {
                     <span>Publicações:</span>
                   </div>
                   <span className="font-semibold">
-                    {professor.publications}
+                    {professor.publications?.length || 0}
                   </span>
                 </div>
               </div>

@@ -17,7 +17,7 @@ export default function NavigationCards({
   description,
 }: NavigationCardsProps) {
   return (
-    <div className={cn('w-full bg-background/50 py-12', className)}>
+    <div className={cn('w-full bg-background/50 py-2 md:py-6', className)}>
       <div className="container px-4 mx-auto">
         {(title || description) && (
           <div className="mb-10 text-center">

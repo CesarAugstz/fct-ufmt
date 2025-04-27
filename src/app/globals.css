@@ -11,6 +11,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-background-hover: var(--background-hover);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -58,6 +59,7 @@
 
   --radius: 0.75rem;
   --background: oklch(1 0 0);
+  --background-hover: oklch(0.89 0.05 261.52 / 0.34);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
@@ -92,6 +94,7 @@
 
 .dark {
   --background: oklch(0.141 0.005 285.823);
+  --background-hover: oklch(0.25 0.0207 284.83);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
   --card-foreground: oklch(0.985 0 0);
