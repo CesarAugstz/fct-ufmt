@@ -10,8 +10,14 @@ import {
 import { NavMenuItem } from './nav-menu-item'
 import Link from 'next/link'
 import { DataSections, Section } from '@/data/sections'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 import { useState } from 'react'
+import { VisuallyHidden } from 'radix-ui'
 
 export default function NavItems() {
   const { sections } = DataSections
@@ -36,6 +42,9 @@ export default function NavItems() {
                   />
                 </Button>
               </SheetTrigger>
+              <VisuallyHidden.Root>
+                <SheetTitle>Menu</SheetTitle>
+              </VisuallyHidden.Root>{' '}
               <SheetContent side="left" className="w-[300px] p-0">
                 <div className="py-4 mt-6 px-2">
                   <ul className="space-y-2">

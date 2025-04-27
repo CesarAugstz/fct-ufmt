@@ -7,11 +7,32 @@ export interface ProfessorMock {
   summary: string
   courses: Course[]
   specialties: string[]
-  image: string
+  image?: string
   researchAreas: string[]
   officeHours: string
   lattes: string
-  publications: number
+  publications?: {
+    title: string
+    authors?: string[]
+    date: Date
+    link?: string
+  }[]
+  researchProjects?: {
+    title: string
+    startDate: Date
+    endDate?: Date
+    status: 'finished' | 'ongoing'
+    description?: string
+  }[]
+  extensionProjects?: {
+    title: string
+    startDate: Date
+    status: 'finished' | 'ongoing'
+    endDate?: Date
+    description?: string
+  }[]
+
+  // TODO: ensino ??
 }
 
 export const professorsMock: ProfessorMock[] = [
@@ -23,11 +44,36 @@ export const professorsMock: ProfessorMock[] = [
       'Especialista em Engenharia de Software com foco em arquitetura de sistemas distribuídos e computação em nuvem.',
     courses: ['ENGENHARIA_SOFTWARE'],
     specialties: ['Arquitetura de Software', 'Cloud Computing', 'DevOps'],
-    image: '/placeholder.svg?height=400&width=400',
+    image: '/example/profile.jpg',
     researchAreas: ['Sistemas Distribuídos', 'Microserviços', 'Containers'],
     officeHours: 'Segunda e Quarta, 14h-16h',
     lattes: 'http://lattes.cnpq.br/123456789',
-    publications: 45,
+    publications: [
+      {
+        title: 'Distributed Systems Architecture in Cloud Computing',
+        authors: ['João Silva', 'Maria Santos'],
+        date: new Date('2024-01-15'),
+        link: 'https://example.com/paper1',
+      },
+    ],
+    researchProjects: [
+      {
+        title: 'Cloud Native Applications',
+        startDate: new Date('2023-01-01'),
+        status: 'ongoing',
+        description:
+          'Research on modern cloud-native application architectures',
+      },
+    ],
+    extensionProjects: [
+      {
+        title: 'DevOps Workshop Series',
+        startDate: new Date('2023-06-01'),
+        endDate: new Date('2023-12-01'),
+        status: 'finished',
+        description: 'Workshop series teaching DevOps practices to students',
+      },
+    ],
   },
   {
     id: '2',
@@ -37,11 +83,10 @@ export const professorsMock: ProfessorMock[] = [
       'Pesquisadora na área de Ciências Naturais com ênfase em Biologia Molecular e Genética.',
     courses: ['CIENCIA_NATURAL_MATEMATICA'],
     specialties: ['Genética', 'Biologia Molecular', 'Biotecnologia'],
-    image: '/placeholder.svg?height=400&width=400',
+    image: '/example/profile-f.jpg',
     researchAreas: ['Genômica', 'Proteômica', 'Bioinformática'],
     officeHours: 'Terça e Quinta, 10h-12h',
     lattes: 'http://lattes.cnpq.br/987654321',
-    publications: 32,
   },
   {
     id: '3',
@@ -55,10 +100,8 @@ export const professorsMock: ProfessorMock[] = [
       'Matemática Computacional',
       'Modelagem Numérica',
     ],
-    image: '/placeholder.svg?height=400&width=400',
     researchAreas: ['Física Computacional', 'Simulação Numérica', 'Otimização'],
     officeHours: 'Quarta e Sexta, 8h-10h',
     lattes: 'http://lattes.cnpq.br/456789123',
-    publications: 28,
   },
 ]

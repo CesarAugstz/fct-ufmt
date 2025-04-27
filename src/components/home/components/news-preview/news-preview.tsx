@@ -150,7 +150,7 @@ export default function NewsPreview() {
                 key={item.id}
                 className="group overflow-hidden border-0 transition-all hover:shadow-lg"
               >
-                <div className="relative h-56 w-full overflow-hidden bg-muted">
+                <div className="relative sm:h-56 w-full overflow-hidden bg-muted">
                   <Image
                     src={item.image || '/placeholder.svg'}
                     alt={item.title}

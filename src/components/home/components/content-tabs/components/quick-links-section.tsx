@@ -2,16 +2,10 @@ import NavigationCards, {
   NavigationCardsProps,
 } from '@/components/common/navigation-cards'
 import SeiLogo from '@/components/logos/sei.logo'
-import {
-  Calendar,
-  FileUser,
-  Map,
-  MonitorCog,
-  Settings,
-} from 'lucide-react'
+import { Calendar, FileUser, Map, MonitorCog, Settings } from 'lucide-react'
 
 export default function QuickLinksSection() {
-  const cardClassName = 'w-12 h-12'
+  const cardClassName = 'size-8 md:size-12'
 
   const cards: NavigationCardsProps['cards'] = [
     {
