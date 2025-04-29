@@ -7,39 +7,22 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 import { newsItems } from './news-data-mock'
-import { useToast } from '@/lib/hooks/toast'
-import { useIsMobile } from '@/lib/hooks/is-mobile'
+import { useShare } from '@/lib/hooks/share'
 
 export default function NewsDetail({ id }: { id: string }) {
   const news = newsItems.find(item => item.id === parseInt(id))
-  const toast = useToast()
-  const isMobile = useIsMobile()
+  const { share } = useShare()
 
   const handleShare = async () => {
-    const platform = isMobile ? 'native' : 'copy'
-
     const shareUrl = window.location.href
     const shareTitle = news?.title || 'Notícia FCT'
     const shareText = news?.excerpt || ''
 
-    if (platform === 'native' && navigator.share) {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: shareUrl,
-        })
-      } catch (error) {
-        console.log('Error sharing:', error)
-      }
-    } else if (platform === 'copy') {
-      try {
-        await navigator.clipboard.writeText(shareUrl)
-        toast.success('Link copiado para a área de transferência!')
-      } catch (error) {
-        console.log('Error copying:', error)
-      }
-    }
+    await share({
+      title: shareTitle,
+      text: shareText,
+      url: shareUrl,
+    })
   }
 
   if (!news) {

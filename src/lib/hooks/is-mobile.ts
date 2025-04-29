@@ -1,10 +1,34 @@
 import { useEffect, useState } from 'react'
 
 export function useIsMobile() {
+  const [isClient, setIsClient] = useState(false)
   const [screenSize, setScreenSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 0,
+    height: 0,
   })
+  const [byUserAgent, setByUserAgent] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClient) return
+
+    setScreenSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    })
+
+    setByUserAgent(
+      [
+        window.navigator.userAgent,
+        navigator.userAgent ||
+          navigator.vendor ||
+          (window as unknown as { opera: string }).opera,
+      ].some(a => check(a)),
+    )
+  }, [isClient])
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,13 +57,6 @@ export function useIsMobile() {
       return true
     return false
   }
-
-  const byUserAgent = [
-    window.navigator.userAgent,
-    navigator.userAgent ||
-      navigator.vendor ||
-      (window as unknown as { opera: string }).opera,
-  ].some(a => check(a))
 
   return {
     isMobileUserAgent: byUserAgent,

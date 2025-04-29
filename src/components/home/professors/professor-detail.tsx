@@ -16,41 +16,24 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { professorsMock } from './professors-data-mock'
-import { useToast } from '@/lib/hooks/toast'
-import { useIsMobile } from '@/lib/hooks/is-mobile'
 import { CourseMapper } from '@/utils/mappers/course.mapper'
 import { formatDate } from '@/lib/utils'
+import { useShare } from '@/lib/hooks/share'
+import { useCallback } from 'react'
 
 export default function ProfessorDetail({ id }: { id: string }) {
   const professor = professorsMock.find(p => p.id === id)
-  const toast = useToast()
-  const { isMobileUserAgent: isMobile } = useIsMobile()
+  const { share } = useShare()
 
-  const handleShare = async () => {
-    const platform = isMobile ? 'native' : 'copy'
-    console.log('Sharing platform:', platform)
-
+  const handleShare = useCallback(async () => {
     const shareUrl = window.location.href
 
-    if (platform === 'native' && navigator.share) {
-      try {
-        await navigator.share({
-          title: professor?.name || 'Professor FCT',
-          text: professor?.summary || '',
-          url: shareUrl,
-        })
-      } catch (error) {
-        console.log('Error sharing:', error)
-      }
-    } else if (platform === 'copy') {
-      try {
-        await navigator.clipboard.writeText(shareUrl)
-        toast.success('Link copiado para a área de transferência!')
-      } catch (error) {
-        console.log('Error copying:', error)
-      }
-    }
-  }
+    await share({
+      title: professor?.name || 'Professor FCT',
+      text: professor?.summary || '',
+      url: shareUrl,
+    })
+  }, [professor?.name, professor?.summary, share])
 
   if (!professor) {
     return (
