@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-interface SelectFieldProps {
+export interface SelectFieldProps {
   placeholder?: string
   children: ReactNode
   value?: string

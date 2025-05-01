@@ -9,13 +9,16 @@ import {
 } from '@/components/ui/form'
 import { TextField } from './text-field'
 
-interface FormTextProps {
+export interface FormTextProps {
   name: string
-  label: string
+  label?: string
+  customLabel?: React.ReactNode
   placeholder?: string
   description?: string
+  endAdornment?: React.ReactNode
   required?: boolean
   type?: 'text' | 'password'
+  showPasswordToggle?: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   formatter?: (value: string) => string
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
@@ -26,15 +29,15 @@ export function FormText({
   label,
   placeholder,
   description,
+  customLabel,
   onChange,
   formatter,
   onBlur,
   type = 'text',
   required = false,
+  showPasswordToggle = false,
 }: FormTextProps) {
   const { control } = useFormContext()
-
-  // TODO: implement type password field
 
   return (
     <FormField
@@ -43,11 +46,13 @@ export function FormText({
       render={({ field }) => (
         <FormItem>
           <FormLabel>
+            {customLabel}
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </FormLabel>
           <FormControl>
             <TextField
+              showPasswordToggle={showPasswordToggle}
               placeholder={placeholder}
               {...field}
               onBlur={onBlur}

@@ -93,7 +93,7 @@ export function BaseCard({
       <CardContent>
         {loading ? (
           <div className="flex justify-center py-8">
-            <p>Loading...</p>
+            <p>Carregando...</p>
           </div>
         ) : showEmptyState ? (
           <div className="text-center py-8 text-gray-500">

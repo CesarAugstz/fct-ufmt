@@ -1,39 +1,40 @@
 'use client'
 
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { ChevronLeft, AlertCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
+import { signIn } from 'next-auth/react'
+import { useAuthStore } from '@/store/auth-store'
+import { formatLoginApiError } from '@/lib/formaters/format-login-api-error.formater'
 import {
   loginFormSchema,
   LoginFormValues,
 } from '@/types/forms/login-form.types'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { signIn } from 'next-auth/react'
-import { useAuthStore } from '@/store/auth-store'
-import { formatLoginApiError } from '@/lib/formaters/format-login-api-error.formater'
+import LoginForm from '@/components/login/form'
+import { ActionButton } from '@/components/ui/action-button'
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null)
+  const router = useRouter()
   const authStore = useAuthStore()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormValues>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
-    values: {
-      remember: authStore.rememberData.remember,
+    defaultValues: {
       email: authStore.rememberData.email,
       password: '',
+      remember: authStore.rememberData.remember,
     },
   })
 
-  const onSubmit = async (data: LoginFormValues) => {
+  async function onSubmit(data: LoginFormValues) {
     setIsLoading(true)
     setLoginError(null)
 
@@ -65,124 +66,104 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link
-              href="/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              create a new account
+    <div className="min-h-screen grid md:grid-cols-2">
+      <div className="hidden md:block relative">
+        <div className="absolute inset-0 ">
+          <Image
+            src="/bg/1.jpg"
+            alt="Background"
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-primary/40 flex flex-col justify-between p-8 text-white">
+          <div>
+            <h1 className="text-3xl font-bold">FCT-UFMT</h1>
+            <p className="mt-2 text-white/90">
+              Universidade Federal de Mato Grosso
+            </p>
+          </div>
+          <p className="text-sm text-white/80">
+            © {new Date().getFullYear()} FCT-UFMT. All rights reserved.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col">
+        <div className="flex items-center justify-between p-4 md:p-6">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/">
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Ir para o site
+            </Link>
+          </Button>
+          <p className="text-sm text-muted-foreground">
+            Precisa de ajuda?{' '}
+            <Link href="#" className="text-primary hover:underline">
+              Contate-nos
             </Link>
           </p>
         </div>
 
-        {loginError && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
-            {loginError}
-          </div>
-        )}
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                {...register('email')}
-                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                placeholder="Email address"
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.email.message}
-                </p>
-              )}
+        <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
+          <div className="w-full max-w-md space-y-6">
+            <div className="space-y-2 text-center">
+              <h1 className="text-3xl font-bold">
+                Bem vindo(a) de volta Professor(a)
+              </h1>
+              <p className="text-muted-foreground">
+                Acesse sua conta para continuar
+              </p>
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  {...register('password')}
-                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
-                  } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                  placeholder="Password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? 'Hide' : 'Show'}
-                </button>
+
+            {loginError && (
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm flex items-start">
+                <AlertCircle className="mr-2 mt-0.5 flex-shrink-0 size-5" />
+                <span>{loginError}</span>
               </div>
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-          </div>
+            )}
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember"
-                type="checkbox"
-                {...register('remember')}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="remember"
-                className="ml-2 block text-sm text-gray-900"
+            <Form {...form}>
+              <LoginForm />
+              <ActionButton
+                isLoading={isLoading}
+                className="w-full justify-center"
+                onClick={form.handleSubmit(onSubmit)}
               >
-                Remember me
-              </label>
+                Entrar
+              </ActionButton>
+            </Form>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Ou
+                </span>
+              </div>
             </div>
 
-            <div className="text-sm">
+            <div className="text-center">
               <Link
-                href="/forgot-password"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
+                href="/register"
+                className="text-sm text-primary hover:underline"
               >
-                Forgot your password?
+                Ainda não tem uma conta? Crie uma agora
               </Link>
             </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-            >
-              {isLoading ? 'Signing in...' : 'Sign in'}
-            </button>
+            <div className="p-4 bg-muted rounded-lg border border-border">
+              <div className="text-muted-foreground text-sm font-medium">
+                Credenciais de teste:
+              </div>
+              <div className="font-mono text-xs mt-1">Email: cgl@email.com</div>
+              <div className="font-mono text-xs">Password: password123</div>
+            </div>
           </div>
-
-          <div className="mt-4 text-center text-sm">
-            <div className="text-gray-600">Test credentials:</div>
-            <div className="font-mono text-gray-800">Email: cgl@email.com</div>
-            <div className="font-mono text-gray-800">Password: password123</div>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   )

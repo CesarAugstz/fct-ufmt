@@ -5,27 +5,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from '@/components/ui/form'
-import { TextAreaField } from './text-area-field'
+import { Checkbox } from '../checkbox'
 
-export interface FormTextareaProps {
+export interface FormCheckboxProps {
   name: string
   label: string
-  className?: string
-  placeholder?: string
-  description?: string
   required?: boolean
 }
 
-export function FormTextarea({
+export function FormCheckbox({
   name,
   label,
-  placeholder,
-  description,
-  className,
   required = false,
-}: FormTextareaProps) {
+}: FormCheckboxProps) {
   const { control } = useFormContext()
 
   return (
@@ -33,19 +26,15 @@ export function FormTextarea({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={className}>
+        <FormItem className="flex flex-row items-start ">
+          <FormControl>
+            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+          </FormControl>
           <FormLabel>
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </FormLabel>
-          <FormControl>
-            <TextAreaField
-              placeholder={placeholder}
-              {...field}
-              value={field.value || ''}
-            />
-          </FormControl>
-          {description && <FormDescription>{description}</FormDescription>}
+
           <FormMessage />
         </FormItem>
       )}

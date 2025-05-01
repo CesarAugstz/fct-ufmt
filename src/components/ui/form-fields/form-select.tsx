@@ -15,7 +15,7 @@ interface Option {
   label: string
 }
 
-interface FormSelectProps {
+export interface FormSelectProps {
   name: string
   label: string
   placeholder?: string

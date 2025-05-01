@@ -3,12 +3,12 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
-import { UseMutationResult } from '@tanstack/react-query'
 
 type ButtonProps = Parameters<typeof Button>[0]
 
 interface ActionButtonProps extends ButtonProps {
   mutations?: Array<{ isPending: boolean }>
+  isLoading?: boolean
   children: React.ReactNode
 }
 
@@ -17,7 +17,7 @@ export function ActionButton({
   children,
   ...props
 }: ActionButtonProps) {
-  const isLoading = mutations?.some((mutation) => mutation.isPending)
+  const isLoading = props.isLoading || mutations?.some(mutation => mutation.isPending)
 
   return (
     <Button disabled={isLoading} {...props}>
