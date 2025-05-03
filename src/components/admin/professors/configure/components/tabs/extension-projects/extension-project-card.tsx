@@ -29,7 +29,7 @@ export default function ExtensionProjectCard({
   }
 
   return (
-    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
+    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex justify-between">
         <div>
           <h4 className="font-medium">{project.title}</h4>

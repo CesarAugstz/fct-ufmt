@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
-import { twMerge } from 'tailwind-merge'
+import { useColorScheme } from '@mui/material'
 
 interface ThemeToggleProps {
   className?: string
@@ -13,13 +13,20 @@ interface ThemeToggleProps {
 
 export function ThemeToggle({ className, buttonProps }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme()
+  const { setMode } = useColorScheme()
+
+  const onClick = React.useCallback(() => {
+    const updatedTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(updatedTheme)
+    setMode(updatedTheme)
+  }, [setMode, setTheme, theme])
 
   return (
     <Button
       variant="outline"
       size="icon"
       className={className}
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      onClick={onClick}
       {...buttonProps}
     >
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

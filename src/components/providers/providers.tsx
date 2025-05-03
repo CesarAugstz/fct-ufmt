@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/providers/theme-provider'
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { Provider as JotaiProvider } from 'jotai'
+import { MuiThemeProvider } from './mui-theme-provider'
 
 interface ProvidersProps {
   children: ReactNode
@@ -22,9 +23,11 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       disableTransitionOnChange
     >
       <JotaiProvider>
-        <QueryProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </QueryProvider>
+        <MuiThemeProvider>
+          <QueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryProvider>
+        </MuiThemeProvider>
       </JotaiProvider>
     </ThemeProvider>
   )

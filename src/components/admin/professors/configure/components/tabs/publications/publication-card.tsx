@@ -29,7 +29,7 @@ export default function PublicationCard({
   }
 
   return (
-    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
+    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex justify-between">
         <div>
           <h4 className="font-medium">{publication.title}</h4>
@@ -38,7 +38,7 @@ export default function PublicationCard({
             {formatDate(publication.date)}
           </p>
           {publication.link && (
-            <p className="text-sm text-teal-600 hover:underline cursor-pointer mt-1">
+            <p className="text-sm text-primary hover:underline cursor-pointer mt-1">
               {publication.link}
             </p>
           )}
