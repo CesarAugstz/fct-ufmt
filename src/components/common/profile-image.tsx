@@ -5,13 +5,11 @@ interface Props {
   alt: string
   src?: string
   className?: string
-  size?: number
 }
 
-export default function ProfileImage({ size, src, alt, className }: Props) {
-  const sizeClass = size ? `h-${size} w-${size}` : 'h-24 w-24'
+export default function ProfileImage({ src, alt, className }: Props) {
   return (
-    <Avatar className={twMerge(sizeClass,'border-4 border-white',  className)}>
+    <Avatar className={twMerge('border-4 border-white h-24 w-24', className)}>
       <AvatarImage src={src} alt="Professor" />
       <AvatarFallback className="text-xl">{alt}</AvatarFallback>
     </Avatar>

@@ -40,7 +40,6 @@ export default function Professors() {
           prof.courses.includes(CourseMapper.courseMapReverse[activeTab]),
         )
       }
-      console.log(filtered)
       setFilteredProfessors(filtered)
     },
     [activeTab, searchTerm],

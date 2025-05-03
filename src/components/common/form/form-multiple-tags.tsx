@@ -4,7 +4,6 @@ import React, { useState, useRef, KeyboardEvent } from 'react'
 import { X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
 import {
   FormControl,
   FormField,
@@ -76,14 +75,11 @@ export function FormMultipleTags({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={className}>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
             <div
-              className={cn(
-                'flex flex-wrap gap-2 p-1 rounded-md border border-input focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 min-h-10',
-                className,
-              )}
+              className="flex flex-wrap gap-2 p-1 rounded-md border border-input focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 min-h-10"
               onClick={handleContainerClick}
             >
               {(field.value || []).map((tag: string, index: number) => (

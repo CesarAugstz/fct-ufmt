@@ -47,8 +47,6 @@ export default function DialogForm<T extends z.ZodType<any, any>>({
 }: DialogFormProps<T>) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  console.log('values', values)
-
   const methods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
     values: values ?? ({} as any),

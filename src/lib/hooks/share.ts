@@ -29,14 +29,14 @@ export function useShare() {
             url,
           })
         } catch (error) {
-          console.log('Error sharing:', error)
+          console.error('Error sharing:', error)
         }
       } else {
         try {
           await navigator.clipboard.writeText(shareUrl)
           toast.success('Link copiado para a área de transferência!')
         } catch (error) {
-          console.log('Error copying:', error)
+          console.error('Error copying:', error)
         }
       }
     },

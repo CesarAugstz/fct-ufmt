@@ -1,28 +1,36 @@
-import { FormMultipleTags } from '@/components/common/form/form-multiple-tags'
 import { Card, CardContent } from '@/components/ui/card'
-import { FormText } from '@/components/ui/form-fields/form-text'
-import { FormTextarea } from '@/components/ui/form-fields/form-textarea'
-import { Separator } from '@/components/ui/separator'
-import { Fragment } from 'react'
+import {
+  FormFieldSection,
+  useRenderFormSections,
+} from '@/lib/hooks/form/render-form-fields'
+import { useEffect, useState } from 'react'
 
 export default function BasicTab() {
-  const sections = [
+  const sections: FormFieldSection[] = [
     {
       title: 'Informações Básicas',
       fields: [
         {
-          getComponent: () => (
-            <FormText name="name" label="Nome" placeholder="Dr. João Silva" />
-          ),
+          name: 'name',
+          label: 'Nome',
+          type: 'text',
+          getProps: () => ({
+            name: 'name',
+            label: 'Nome',
+            placeholder: 'Dr. João Silva',
+            required: true,
+          }),
         },
         {
-          getComponent: () => (
-            <FormText
-              name="email"
-              label="Email"
-              placeholder="joao.silva@fct.com"
-            />
-          ),
+          name: 'email',
+          label: 'Email',
+          type: 'text',
+          getProps: () => ({
+            name: 'email',
+            label: 'Email',
+            placeholder: 'joao.silva@fct.com',
+            required: true,
+          }),
         },
       ],
     },
@@ -30,14 +38,15 @@ export default function BasicTab() {
       title: 'Resumo Profissional',
       fields: [
         {
-          getComponent: () => (
-            <FormTextarea
-              className="md:col-span-2"
-              name="summary"
-              label="Resumo"
-              placeholder="Resumo profissional"
-            />
-          ),
+          name: 'summary',
+          label: 'Resumo',
+          type: 'textarea',
+          getProps: () => ({
+            name: 'summary',
+            label: 'Resumo',
+            placeholder: 'Resumo profissional',
+            className: 'md:col-span-2',
+          }),
         },
       ],
     },
@@ -45,22 +54,24 @@ export default function BasicTab() {
       title: 'Informações de Contato',
       fields: [
         {
-          getComponent: () => (
-            <FormText
-              name="officeHours"
-              label="Horário de Atendimento"
-              placeholder="Segunda e Quarta, 14h-16h"
-            />
-          ),
+          name: 'officeHours',
+          label: 'Horário de Atendimento',
+          type: 'text',
+          getProps: () => ({
+            name: 'officeHours',
+            label: 'Horário de Atendimento',
+            placeholder: 'Segunda e Quarta, 14h-16h',
+          }),
         },
         {
-          getComponent: () => (
-            <FormText
-              name="lattes"
-              label="Currículo Lattes"
-              placeholder="http://lattes.cnpq.br/123456789"
-            />
-          ),
+          name: 'lattes',
+          label: 'Currículo Lattes',
+          type: 'text',
+          getProps: () => ({
+            name: 'lattes',
+            label: 'Currículo Lattes',
+            placeholder: 'http://lattes.cnpq.br/123456789',
+          }),
         },
       ],
     },
@@ -68,31 +79,37 @@ export default function BasicTab() {
       title: 'Áreas de Atuação',
       fields: [
         {
-          getComponent: () => (
-            <FormMultipleTags name="expertise" label="Especialidades" />
-          ),
+          name: 'specialties',
+          label: 'Especialidades',
+          type: 'multiple-tags',
+          getProps: () => ({
+            name: 'specialties',
+            label: 'Especialidades',
+            className: 'md:col-span-2',
+          }),
         },
       ],
     },
   ]
 
+  const [canRender, setCanRender] = useState(false)
+
+  // FIX: something is wrong on formcontext render
+  useEffect(() => {
+    setTimeout(() => {
+      setCanRender(true)
+    }, 100)
+  }, [])
+
+  const sectionsComponent = useRenderFormSections(sections)
+
+  if (!canRender) {
+    return null
+  }
+
   return (
     <Card>
-      <CardContent className="p-6 space-y-6">
-        <div className="grid  gap-8 gap-y-10">
-          {sections.map(section => (
-            <div key={section.title} className="grid ">
-              <h3 className="text-lg font-medium">{section.title}</h3>
-              <Separator className="mb-4" />
-              <div className="gap-4 gap-y-4 md:space-y-0 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 ">
-                {section.fields.map((field, index) => (
-                  <Fragment key={index}>{field.getComponent()}</Fragment>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
+      <CardContent className="p-6 space-y-6">{sectionsComponent}</CardContent>
     </Card>
   )
 }

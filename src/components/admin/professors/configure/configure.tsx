@@ -36,14 +36,6 @@ export default function Configure() {
     [setActiveTab],
   )
 
-  const goNextTab = useCallback(() => {
-    setActiveTab(nextTab.id)
-  }, [setActiveTab, nextTab?.id])
-
-  const goPrevTab = useCallback(() => {
-    setActiveTab(prevTab.id)
-  }, [setActiveTab, prevTab?.id])
-
   useOnMount(() => {
     setProfessor(professorsMock[0])
   })
@@ -58,6 +50,24 @@ export default function Configure() {
     const professorNameParts = professor?.name.split(' ') ?? []
     return [...greetingParts, ...professorNameParts]
   }, [greeting, professor?.name])
+
+  const updateProfessor = useCallback(() => {
+    if (!professor) return
+    setProfessor(form.getValues() as typeof professor)
+  }, [form, professor, setProfessor])
+
+  const goNextTab = useCallback(() => {
+    if (!nextTab) return
+    setActiveTab(nextTab.id)
+    updateProfessor()
+  }, [nextTab, setActiveTab, updateProfessor])
+
+  const goPrevTab = useCallback(() => {
+    if (!prevTab) return
+    setActiveTab(prevTab.id)
+
+    updateProfessor()
+  }, [prevTab, setActiveTab, updateProfessor])
 
   return (
     <div className="container mx-auto px-4 scroll-smooth">
@@ -99,7 +109,7 @@ export default function Configure() {
           </div>
           <div className="mt-6">
             <FormProvider {...form}>
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="sync">
                 {tabs.map(tab => (
                   <TabsContent
                     key={tab.id}

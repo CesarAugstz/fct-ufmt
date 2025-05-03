@@ -58,7 +58,6 @@ export function FormDatePicker({
                 value={field.value ? dayJs(field.value) : null}
                 onChange={date => {
                   const dateValue = date ? date.toDate() : null
-                  console.log(dateValue)
                   field.onChange(dateValue)
                   if (onChange) onChange(dateValue)
                 }}

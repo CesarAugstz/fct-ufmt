@@ -32,13 +32,6 @@ export default function AnimatedTextParts({
               duration: durationEach,
               delay: index * durationEach + 0.1,
             }}
-            onAnimationStart={() =>
-              console.log('start,', {
-                index,
-                durationEach,
-                delay: index * durationEach,
-              })
-            }
             className={twMerge(textClassName, 'mr-2')}
             style={{ display: 'inline-block' }}
           >

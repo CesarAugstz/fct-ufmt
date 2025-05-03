@@ -19,6 +19,7 @@ import {
   FormTextarea,
   FormTextareaProps,
 } from '@/components/ui/form-fields/form-textarea'
+import { Separator } from '@/components/ui/separator'
 import { useMemo } from 'react'
 
 type Field = {
@@ -55,6 +56,11 @@ type Field = {
     }
 )
 
+export type FormFieldSection = {
+  title: string
+  fields: Field[]
+}
+
 export type FormField = Field
 
 interface RenderFormFieldsProps {
@@ -82,4 +88,20 @@ function renderField(field: Field) {
     case 'custom':
       return field.render()
   }
+}
+
+function renderSection(section: FormFieldSection) {
+  return (
+    <div key={section.title} className="grid">
+      <h3 className="text-lg font-medium">{section.title}</h3>
+      <Separator className="mb-4" />
+      <div className="grid gap-4 gap-y-4 md:space-y-0 grid-cols-1 md:grid-cols-2 2xl:grid-cols-3">
+        {section.fields.map(renderField)}
+      </div>
+    </div>
+  )
+}
+
+export function useRenderFormSections(sections: FormFieldSection[]) {
+  return useMemo(() => sections.map(renderSection), [sections])
 }

@@ -23,7 +23,11 @@ export default function Photo() {
     <Card className="overflow-hidden pt-0">
       <div className="bg-gradient-to-r from-primary to-secondary h-24 relative">
         <div className="absolute -bottom-12 left-6 md:left-8">
-          <ProfileImage alt={initials} src={professor?.image} size={32} />
+          <ProfileImage
+            alt={initials}
+            src={professor?.image}
+            className="w-[120px] h-[120px]"
+          />
         </div>
       </div>
       <div className="pt-16 pb-6 px-6 md:px-8">

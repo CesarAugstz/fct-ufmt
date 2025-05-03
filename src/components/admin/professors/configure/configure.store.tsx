@@ -42,14 +42,14 @@ export const tabsAtom = atom(tabs)
 
 export const activeTabAtom = atom<TabId>('basic')
 
-export const nextTabAtom = atom(get => {
+export const nextTabAtom = atom<TabType | undefined>(get => {
   const tabs = get(tabsAtom)
   const activeTab = get(activeTabAtom)
   const nextIndex = tabs.findIndex(t => t.id === activeTab) + 1
   return tabs[nextIndex]
 })
 
-export const prevTabAtom = atom(get => {
+export const prevTabAtom = atom<TabType | undefined>(get => {
   const tabs = get(tabsAtom)
   const activeTab = get(activeTabAtom)
   const prevIndex = tabs.findIndex(t => t.id === activeTab) - 1
@@ -58,8 +58,6 @@ export const prevTabAtom = atom(get => {
 
 export const completitionStatusAtom = atom(get => {
   const professor = get(professorAtom)
-
-  console.log('professor', professor)
 
   const conditionsItems = [
     () => professor?.name,
