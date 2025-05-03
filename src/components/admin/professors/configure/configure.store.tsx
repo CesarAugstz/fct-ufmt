@@ -5,6 +5,11 @@ import BasicTab from './components/tabs/basic/basic'
 import ExtensionProjectsTab from './components/tabs/extension-projects/extension-projects'
 import PublicationsTab from './components/tabs/publications/publications'
 import ResearchTab from './components/tabs/research/research'
+import {
+  UseFormGetValues,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form'
 
 export const professorAtom = atom<ProfessorMock | null>(null)
 
@@ -83,3 +88,11 @@ export const completitionStatusAtom = atom(get => {
     total,
   }
 })
+
+interface FormMethods {
+  watch: UseFormWatch<ProfessorMock>
+  getValues: UseFormGetValues<ProfessorMock>
+  setValue: UseFormSetValue<ProfessorMock>
+}
+
+export const formMethodsAtom = atom<FormMethods | null>(null)

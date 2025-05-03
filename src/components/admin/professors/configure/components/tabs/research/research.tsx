@@ -4,18 +4,19 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { PlusCircle } from 'lucide-react'
 import { Fragment, useCallback, useState } from 'react'
-import { useAtom } from 'jotai'
-import { professorAtom } from '@/components/admin/professors/configure/configure.store'
+import { useAtomValue } from 'jotai'
+import { formMethodsAtom } from '@/components/admin/professors/configure/configure.store'
 import ResearchProjectCard, { ResearchProject } from './research-project-card'
 import ResearchProjectForm from './research-project-form'
 
 export default function ResearchTab() {
-  const [professor, setProfessor] = useAtom(professorAtom)
-  const [projects, setProjects] = useState(professor?.researchProjects || [])
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<
     ResearchProject | undefined
   >()
+  const formMethods = useAtomValue(formMethodsAtom)
+
+  const currentProjects = formMethods?.watch('researchProjects')
 
   const handleAddProject = () => {
     setEditingProject(undefined)
@@ -23,17 +24,11 @@ export default function ResearchTab() {
   }
 
   const handleDeleteProject = (index: number) => {
-    const updatedProjects = [...projects]
-    updatedProjects.splice(index, 1)
-    setProjects(updatedProjects)
+    if (!formMethods) return
 
-    setProfessor(prev =>
-      prev
-        ? {
-            ...prev,
-            researchProjects: updatedProjects,
-          }
-        : null,
+    formMethods.setValue(
+      'researchProjects',
+      currentProjects?.filter((_, i) => i !== index),
     )
   }
 
@@ -43,33 +38,19 @@ export default function ResearchTab() {
   }
 
   const handleSubmitProject = async (project: ResearchProject) => {
+    if (!formMethods) return
+
+    if (!currentProjects) return
+
     if (editingProject !== undefined) {
-      const updatedProjects = [...projects]
-      const editingIndex = projects.findIndex(
+      const updatedProjects = [...currentProjects]
+      const editingIndex = currentProjects.findIndex(
         p => p.title === editingProject.title,
       )
       updatedProjects[editingIndex] = project
-      setProjects(updatedProjects)
-
-      setProfessor(prev =>
-        prev
-          ? {
-              ...prev,
-              researchProjects: updatedProjects,
-            }
-          : null,
-      )
+      formMethods.setValue('researchProjects', updatedProjects)
     } else {
-      setProjects([...projects, project])
-
-      setProfessor(prev =>
-        prev
-          ? {
-              ...prev,
-              researchProjects: [...(prev.researchProjects || []), project],
-            }
-          : null,
-      )
+      formMethods.setValue('researchProjects', [...currentProjects, project])
     }
   }
 
@@ -89,7 +70,11 @@ export default function ResearchTab() {
       fields: [
         {
           getComponent: () => (
-            <FormMultipleTags name="researchAreas" label="Áreas de pesquisa" />
+            <FormMultipleTags
+              className="md:col-span-2"
+              name="researchAreas"
+              label="Áreas de pesquisa"
+            />
           ),
         },
       ],
@@ -123,7 +108,7 @@ export default function ResearchTab() {
           </div>
 
           <div className="space-y-4 mt-4">
-            {projects.map((project, index) => (
+            {currentProjects?.map((project, index) => (
               <ResearchProjectCard
                 key={index}
                 project={project as any}
@@ -132,7 +117,7 @@ export default function ResearchTab() {
               />
             ))}
 
-            {projects.length === 0 && (
+            {currentProjects?.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
                 Nenhum projeto de pesquisa cadastrado. Clique em &quot;
                 Adicionar Projeto &quot; para começar.

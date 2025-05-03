@@ -92,7 +92,7 @@ function renderField(field: Field) {
 
 function renderSection(section: FormFieldSection) {
   return (
-    <div key={section.title} className="grid">
+    <div key={section.title} className="grid mb-8">
       <h3 className="text-lg font-medium">{section.title}</h3>
       <Separator className="mb-4" />
       <div className="grid gap-4 gap-y-4 md:space-y-0 grid-cols-1 md:grid-cols-2 2xl:grid-cols-3">

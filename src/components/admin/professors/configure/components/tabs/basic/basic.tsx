@@ -109,7 +109,7 @@ export default function BasicTab() {
 
   return (
     <Card>
-      <CardContent className="p-6 space-y-6">{sectionsComponent}</CardContent>
+      <CardContent className="p-6">{sectionsComponent}</CardContent>
     </Card>
   )
 }

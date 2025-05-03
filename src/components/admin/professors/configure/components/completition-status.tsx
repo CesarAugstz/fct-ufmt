@@ -7,6 +7,8 @@ export default function CompletitionStatus() {
 
   const percentage = Math.round((completed / total) * 100)
 
+  const color = percentage >= 70 ? 'bg-emerald-500' : 'bg-warning'
+
   return (
     <Card>
       <CardContent className="p-6">
@@ -19,14 +21,14 @@ export default function CompletitionStatus() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center">
-              <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 mr-2"></div>
+              <div className={`h-2.5 w-2.5 rounded-full mr-2 ${color}`}></div>
               <span className="text-sm font-medium">
                 {percentage}% concluído
               </span>
             </div>
             <div className="w-24 h-2 bg-gray-200 rounded-full">
               <div
-                className="h-2 bg-emerald-500 rounded-full"
+                className={`h-2  rounded-full ${color}`}
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>

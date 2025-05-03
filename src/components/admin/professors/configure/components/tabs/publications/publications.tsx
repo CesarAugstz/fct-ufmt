@@ -2,20 +2,18 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { PlusCircle } from 'lucide-react'
 import { useCallback, useState } from 'react'
-import { useAtom } from 'jotai'
-import { professorAtom } from '@/components/admin/professors/configure/configure.store'
+import { useAtomValue } from 'jotai'
+import { formMethodsAtom } from '@/components/admin/professors/configure/configure.store'
 import PublicationCard, { Publication } from './publication-card'
 import PublicationForm from './publication-form'
 
 export default function PublicationsTab() {
-  const [professor, setProfessor] = useAtom(professorAtom)
-  const [publications, setPublications] = useState(
-    professor?.publications || [],
-  )
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingPublication, setEditingPublication] = useState<
     Publication | undefined
   >()
+  const formMethods = useAtomValue(formMethodsAtom)
+  const publications = formMethods?.watch('publications') ?? []
 
   const handleAddPublication = () => {
     setEditingPublication(undefined)
@@ -23,18 +21,11 @@ export default function PublicationsTab() {
   }
 
   const handleDeletePublication = (index: number) => {
+    if (!formMethods) return
+
     const updatedPublications = [...publications]
     updatedPublications.splice(index, 1)
-    setPublications(updatedPublications)
-
-    setProfessor(prev =>
-      prev
-        ? {
-            ...prev,
-            publications: updatedPublications,
-          }
-        : null,
-    )
+    formMethods.setValue('publications', updatedPublications)
   }
 
   const handleEditPublication = (publication: Publication) => {
@@ -43,34 +34,19 @@ export default function PublicationsTab() {
   }
 
   const handleSubmitPublication = async (publication: Publication) => {
+    if (!formMethods) return
+
     if (editingPublication !== undefined) {
       const updatedPublications = [...publications]
       const editingIndex = publications.findIndex(
         p => p.title === editingPublication.title,
       )
       updatedPublications[editingIndex] = publication
-      setPublications(updatedPublications)
-
-      setProfessor(prev =>
-        prev
-          ? {
-              ...prev,
-              publications: updatedPublications,
-            }
-          : null,
-      )
-    } else {
-      setPublications([...publications, publication])
-
-      setProfessor(prev =>
-        prev
-          ? {
-              ...prev,
-              publications: [...(prev.publications || []), publication],
-            }
-          : null,
-      )
+      formMethods.setValue('publications', updatedPublications)
+      return
     }
+
+    formMethods.setValue('publications', [...publications, publication])
   }
 
   const handleFormSuccess = () => {

@@ -2,20 +2,20 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { PlusCircle } from 'lucide-react'
 import { useCallback, useState } from 'react'
-import { useAtom } from 'jotai'
-import { professorAtom } from '@/components/admin/professors/configure/configure.store'
+import { formMethodsAtom } from '@/components/admin/professors/configure/configure.store'
 import ExtensionProjectCard, {
   ExtensionProject,
 } from './extension-project-card'
 import ExtensionProjectForm from './extension-project-form'
+import { useAtomValue } from 'jotai'
 
 export default function ExtensionProjectsTab() {
-  const [professor, setProfessor] = useAtom(professorAtom)
-  const [projects, setProjects] = useState(professor?.extensionProjects || [])
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<
     ExtensionProject | undefined
   >()
+  const formMethods = useAtomValue(formMethodsAtom)
+  const projects = formMethods?.watch('extensionProjects') ?? []
 
   const handleAddProject = () => {
     setEditingProject(undefined)
@@ -23,18 +23,11 @@ export default function ExtensionProjectsTab() {
   }
 
   const handleDeleteProject = (index: number) => {
+    if (!formMethods) return
+
     const updatedProjects = [...projects]
     updatedProjects.splice(index, 1)
-    setProjects(updatedProjects)
-
-    setProfessor(prev =>
-      prev
-        ? {
-            ...prev,
-            extensionProjects: updatedProjects,
-          }
-        : null,
-    )
+    formMethods.setValue('extensionProjects', updatedProjects)
   }
 
   const handleEditProject = (project: ExtensionProject) => {
@@ -43,34 +36,18 @@ export default function ExtensionProjectsTab() {
   }
 
   const handleSubmitProject = async (project: ExtensionProject) => {
+    if (!formMethods) return
+
     if (editingProject !== undefined) {
       const updatedProjects = [...projects]
       const editingIndex = projects.findIndex(
         p => p.title === editingProject.title,
       )
       updatedProjects[editingIndex] = project
-      setProjects(updatedProjects)
-
-      setProfessor(prev =>
-        prev
-          ? {
-              ...prev,
-              extensionProjects: updatedProjects,
-            }
-          : null,
-      )
-    } else {
-      setProjects([...projects, project])
-
-      setProfessor(prev =>
-        prev
-          ? {
-              ...prev,
-              extensionProjects: [...(prev.extensionProjects || []), project],
-            }
-          : null,
-      )
+      formMethods.setValue('extensionProjects', updatedProjects)
+      return
     }
+    formMethods.setValue('extensionProjects', [...projects, project])
   }
 
   const handleFormSuccess = () => {

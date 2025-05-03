@@ -3,16 +3,20 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Photo from './components/photo'
 import CompletitionStatus from './components/completition-status'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
   activeTabAtom,
+  formMethodsAtom,
   nextTabAtom,
   prevTabAtom,
   professorAtom,
   TabId,
   tabsAtom,
 } from './configure.store'
-import { professorsMock } from '@/components/home/professors/professors-data-mock'
+import {
+  ProfessorMock,
+  professorsMock,
+} from '@/components/home/professors/professors-data-mock'
 import { useGreeting } from '@/lib/hooks/greeting'
 import { useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
@@ -28,6 +32,7 @@ export default function Configure() {
   const greeting = useGreeting()
   const nextTab = useAtomValue(nextTabAtom)
   const prevTab = useAtomValue(prevTabAtom)
+  const setFormMethods = useSetAtom(formMethodsAtom)
 
   const onTabChange = useCallback(
     (tab: string) => {
@@ -40,9 +45,11 @@ export default function Configure() {
     setProfessor(professorsMock[0])
   })
 
-  const form = useForm({
-    values: professor ?? {},
+  const form = useForm<ProfessorMock>({
+    values: professor ?? ({} as ProfessorMock),
   })
+
+  setFormMethods(form)
 
   const greetingParts = useMemo(() => {
     if (!professor?.name) return []
