@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, Professor } from '@prisma/client'
+import type { Prisma, Professor } from '@zenstackhq/runtime/models'
 import type {
   UseMutationOptions,
   UseQueryOptions,
@@ -853,12 +853,22 @@ export function useSuspenseCountProfessor<
     fetch,
   )
 }
-import type { Course } from '@prisma/client'
+import type { Course } from '@zenstackhq/runtime/models'
 
 export function useCheckProfessor<TError = DefaultError>(
   args: {
     operation: PolicyCrudKind
-    where?: { id?: string; courses?: Course; userId?: string }
+    where?: {
+      id?: string
+      courses?: Course
+      summary?: string
+      specialties?: string
+      image?: string
+      researchAreas?: string
+      officeHours?: string
+      lattes?: string
+      userId?: string
+    }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
     ExtraQueryOptions,

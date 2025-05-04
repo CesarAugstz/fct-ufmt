@@ -28,7 +28,7 @@ export default function ResearchTab() {
 
     formMethods.setValue(
       'researchProjects',
-      currentProjects?.filter((_, i) => i !== index),
+      currentProjects?.filter((_, i) => i !== index) ?? [],
     )
   }
 

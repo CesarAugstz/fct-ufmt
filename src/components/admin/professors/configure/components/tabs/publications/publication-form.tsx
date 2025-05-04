@@ -5,7 +5,7 @@ import { FormField } from '@/lib/hooks/form/render-form-fields'
 
 const publicationSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
-  authors: z.array(z.string()).optional(),
+  authors: z.array(z.string()).min(1, 'Pelo menos um autor é obrigatório'),
   date: z.date(),
   link: z.string().url('Link inválido').optional(),
 })
@@ -36,8 +36,6 @@ export default function PublicationForm({
 
   const fields: FormField[] = [
     {
-      name: 'title',
-      label: 'Título',
       type: 'text',
       getProps: () => ({
         name: 'title',
@@ -47,8 +45,6 @@ export default function PublicationForm({
       }),
     },
     {
-      name: 'authors',
-      label: 'Autores',
       type: 'multiple-tags',
       getProps: () => ({
         name: 'authors',
@@ -56,8 +52,6 @@ export default function PublicationForm({
       }),
     },
     {
-      name: 'date',
-      label: 'Data de Publicação',
       type: 'date',
       getProps: () => ({
         name: 'date',
@@ -68,8 +62,6 @@ export default function PublicationForm({
       }),
     },
     {
-      name: 'link',
-      label: 'Link (opcional)',
       type: 'text',
       getProps: () => ({
         name: 'link',

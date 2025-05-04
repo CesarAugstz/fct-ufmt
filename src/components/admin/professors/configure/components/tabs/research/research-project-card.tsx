@@ -2,12 +2,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { PencilLine, Trash2 } from 'lucide-react'
 import { dayJs } from '@/utils/dayjs'
+import { ProjectStatus } from '@/types/admin/professor.types'
 
 export interface ResearchProject {
   title: string
   startDate: Date
   endDate?: Date
-  status: 'ongoing' | 'finished'
+  status: ProjectStatus
   description: string
 }
 
@@ -37,12 +38,14 @@ export default function ResearchProjectCard({
             <span>{formatDateRange(project.startDate, project.endDate)}</span>
             <Badge
               className={`ml-2 ${
-                project.status === 'ongoing'
+                project.status === ProjectStatus.ONGOING
                   ? 'bg-accent-foreground text-accent'
                   : 'bg-primary-foreground text-primary'
               } border-0`}
             >
-              {project.status === 'ongoing' ? 'Em andamento' : 'Finalizado'}
+              {project.status === ProjectStatus.ONGOING
+                ? 'Em andamento'
+                : 'Finalizado'}
             </Badge>
           </div>
           {project.description && (

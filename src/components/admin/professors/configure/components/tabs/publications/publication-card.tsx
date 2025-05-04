@@ -4,7 +4,7 @@ import { dayJs } from '@/utils/dayjs'
 
 export interface Publication {
   title: string
-  authors?: string[]
+  authors: string[]
   date: Date
   link?: string
 }

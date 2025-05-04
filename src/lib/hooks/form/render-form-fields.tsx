@@ -22,10 +22,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { useMemo } from 'react'
 
-type Field = {
-  name: string
-  label: string
-} & (
+type Field = {} & (
   | {
       type: 'text'
       getProps: () => FormTextProps
@@ -74,17 +71,23 @@ export function useRenderFormFields({ fields }: RenderFormFieldsProps) {
 function renderField(field: Field) {
   switch (field.type) {
     case 'text':
-      return <FormText key={field.name} {...field.getProps()} />
+      return <FormText key={field.getProps().name} {...field.getProps()} />
     case 'textarea':
-      return <FormTextarea key={field.name} {...field.getProps()} />
+      return <FormTextarea key={field.getProps().name} {...field.getProps()} />
     case 'select':
-      return <FormSelect key={field.name} {...field.getOptions()} />
+      return (
+        <FormSelect key={field.getOptions().name} {...field.getOptions()} />
+      )
     case 'checkbox':
-      return <FormCheckbox key={field.name} {...field.getProps()} />
+      return <FormCheckbox key={field.getProps().name} {...field.getProps()} />
     case 'date':
-      return <FormDatePicker key={field.name} {...field.getProps()} />
+      return (
+        <FormDatePicker key={field.getProps().name} {...field.getProps()} />
+      )
     case 'multiple-tags':
-      return <FormMultipleTags key={field.name} {...field.getProps()} />
+      return (
+        <FormMultipleTags key={field.getProps().name} {...field.getProps()} />
+      )
     case 'custom':
       return field.render()
   }

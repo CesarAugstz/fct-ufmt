@@ -3,7 +3,7 @@ import { FormLabel } from '../ui/form'
 import { FormText } from '../ui/form-fields/form-text'
 import { FormCheckbox } from '../ui/form-fields/form-checkbox'
 
-export default function LoginForm() {
+export default function LoginForm({ onEnter }: { onEnter?: () => void }) {
   return (
     <>
       <FormText name="email" label="Email" placeholder="seu@email.com" />
@@ -12,14 +12,12 @@ export default function LoginForm() {
         name="password"
         placeholder="********"
         type="password"
+        onEnter={onEnter}
         showPasswordToggle
         customLabel={
           <div className="flex w-full items-center justify-between">
             <FormLabel>Senha</FormLabel>
-            <Link
-              href="#"
-              className="text-sm text-primary hover:underline"
-            >
+            <Link href="#" className="text-sm text-primary hover:underline">
               Esqueceu sua senha?
             </Link>
           </div>

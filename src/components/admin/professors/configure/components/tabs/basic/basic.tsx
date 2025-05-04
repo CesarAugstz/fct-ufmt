@@ -11,22 +11,18 @@ export default function BasicTab() {
       title: 'Informações Básicas',
       fields: [
         {
-          name: 'name',
-          label: 'Nome',
           type: 'text',
           getProps: () => ({
-            name: 'name',
+            name: 'user.name',
             label: 'Nome',
             placeholder: 'Dr. João Silva',
             required: true,
           }),
         },
         {
-          name: 'email',
-          label: 'Email',
           type: 'text',
           getProps: () => ({
-            name: 'email',
+            name: 'user.email',
             label: 'Email',
             placeholder: 'joao.silva@fct.com',
             required: true,
@@ -38,8 +34,6 @@ export default function BasicTab() {
       title: 'Resumo Profissional',
       fields: [
         {
-          name: 'summary',
-          label: 'Resumo',
           type: 'textarea',
           getProps: () => ({
             name: 'summary',
@@ -54,8 +48,6 @@ export default function BasicTab() {
       title: 'Informações de Contato',
       fields: [
         {
-          name: 'officeHours',
-          label: 'Horário de Atendimento',
           type: 'text',
           getProps: () => ({
             name: 'officeHours',
@@ -64,8 +56,6 @@ export default function BasicTab() {
           }),
         },
         {
-          name: 'lattes',
-          label: 'Currículo Lattes',
           type: 'text',
           getProps: () => ({
             name: 'lattes',
@@ -79,8 +69,6 @@ export default function BasicTab() {
       title: 'Áreas de Atuação',
       fields: [
         {
-          name: 'specialties',
-          label: 'Especialidades',
           type: 'multiple-tags',
           getProps: () => ({
             name: 'specialties',

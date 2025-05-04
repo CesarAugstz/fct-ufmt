@@ -125,7 +125,7 @@ export default function LoginPage() {
             )}
 
             <Form {...form}>
-              <LoginForm />
+              <LoginForm onEnter={form.handleSubmit(onSubmit)} />
               <ActionButton
                 isLoading={isLoading}
                 className="w-full justify-center"

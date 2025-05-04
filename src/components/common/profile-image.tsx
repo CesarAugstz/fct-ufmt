@@ -10,7 +10,7 @@ interface Props {
 export default function ProfileImage({ src, alt, className }: Props) {
   return (
     <Avatar className={twMerge('border-4 border-white h-24 w-24', className)}>
-      <AvatarImage src={src} alt="Professor" />
+      <AvatarImage src={src} alt="Professor" className="object-cover" />
       <AvatarFallback className="text-xl">{alt}</AvatarFallback>
     </Avatar>
   )

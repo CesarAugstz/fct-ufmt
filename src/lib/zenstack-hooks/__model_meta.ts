@@ -87,6 +87,54 @@ const metadata = {
           type: 'Course',
           isArray: true,
         },
+        summary: {
+          name: 'summary',
+          type: 'String',
+          isOptional: true,
+        },
+        specialties: {
+          name: 'specialties',
+          type: 'String',
+          isArray: true,
+        },
+        image: {
+          name: 'image',
+          type: 'String',
+          isOptional: true,
+        },
+        researchAreas: {
+          name: 'researchAreas',
+          type: 'String',
+          isArray: true,
+        },
+        officeHours: {
+          name: 'officeHours',
+          type: 'String',
+          isOptional: true,
+        },
+        lattes: {
+          name: 'lattes',
+          type: 'String',
+          isOptional: true,
+        },
+        publications: {
+          name: 'publications',
+          type: 'Publication',
+          isTypeDef: true,
+          isArray: true,
+        },
+        researchProjects: {
+          name: 'researchProjects',
+          type: 'ResearchProject',
+          isTypeDef: true,
+          isArray: true,
+        },
+        extensionProjects: {
+          name: 'extensionProjects',
+          type: 'ExtensionProject',
+          isTypeDef: true,
+          isArray: true,
+        },
         userId: {
           name: 'userId',
           type: 'String',
@@ -110,6 +158,85 @@ const metadata = {
         userId: {
           name: 'userId',
           fields: ['userId'],
+        },
+      },
+    },
+  },
+  typeDefs: {
+    publication: {
+      name: 'Publication',
+      fields: {
+        title: {
+          name: 'title',
+          type: 'String',
+        },
+        authors: {
+          name: 'authors',
+          type: 'String',
+          isArray: true,
+        },
+        date: {
+          name: 'date',
+          type: 'DateTime',
+        },
+        link: {
+          name: 'link',
+          type: 'String',
+          isOptional: true,
+        },
+      },
+    },
+    researchProject: {
+      name: 'ResearchProject',
+      fields: {
+        title: {
+          name: 'title',
+          type: 'String',
+        },
+        startDate: {
+          name: 'startDate',
+          type: 'DateTime',
+        },
+        endDate: {
+          name: 'endDate',
+          type: 'DateTime',
+          isOptional: true,
+        },
+        status: {
+          name: 'status',
+          type: 'ProjectStatus',
+        },
+        description: {
+          name: 'description',
+          type: 'String',
+          isOptional: true,
+        },
+      },
+    },
+    extensionProject: {
+      name: 'ExtensionProject',
+      fields: {
+        title: {
+          name: 'title',
+          type: 'String',
+        },
+        startDate: {
+          name: 'startDate',
+          type: 'DateTime',
+        },
+        status: {
+          name: 'status',
+          type: 'ProjectStatus',
+        },
+        endDate: {
+          name: 'endDate',
+          type: 'DateTime',
+          isOptional: true,
+        },
+        description: {
+          name: 'description',
+          type: 'String',
+          isOptional: true,
         },
       },
     },

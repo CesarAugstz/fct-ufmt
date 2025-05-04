@@ -1,4 +1,3 @@
-import { ProfessorMock } from '@/components/home/professors/professors-data-mock'
 import { atom } from 'jotai'
 import { User, Briefcase, FileText, GraduationCap } from 'lucide-react'
 import BasicTab from './components/tabs/basic/basic'
@@ -10,8 +9,9 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form'
+import { ProfessorWithUser } from '@/app/admin/(without-sidebar)/professors-configure/page'
 
-export const professorAtom = atom<ProfessorMock | null>(null)
+export const professorAtom = atom<ProfessorWithUser | null>(null)
 
 const tabs = [
   {
@@ -65,8 +65,8 @@ export const completitionStatusAtom = atom(get => {
   const professor = get(professorAtom)
 
   const conditionsItems = [
-    () => professor?.name,
-    () => professor?.email,
+    () => professor?.user?.name,
+    () => professor?.user?.email,
     () => professor?.summary,
     () => professor?.courses.length ?? 0 > 0,
     () => professor?.specialties.length ?? 0 > 0,
@@ -90,9 +90,9 @@ export const completitionStatusAtom = atom(get => {
 })
 
 interface FormMethods {
-  watch: UseFormWatch<ProfessorMock>
-  getValues: UseFormGetValues<ProfessorMock>
-  setValue: UseFormSetValue<ProfessorMock>
+  watch: UseFormWatch<ProfessorWithUser>
+  getValues: UseFormGetValues<ProfessorWithUser>
+  setValue: UseFormSetValue<ProfessorWithUser>
 }
 
 export const formMethodsAtom = atom<FormMethods | null>(null)

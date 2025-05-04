@@ -113,6 +113,9 @@ export default function ProfessorForm({
         {
           data: {
             courses: values.courses as Course[],
+            extensionProjects: [],
+            publications: [],
+            researchProjects: [],
             user: {
               create: {
                 name: values.name,

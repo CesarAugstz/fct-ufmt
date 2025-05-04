@@ -2,12 +2,13 @@ import { z } from 'zod'
 import DialogForm from '@/components/common/dialog-form'
 import { ResearchProject } from './research-project-card'
 import { FormField } from '@/lib/hooks/form/render-form-fields'
+import { ProjectStatus } from '@/types/admin/professor.types'
 
 const researchProjectSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
   startDate: z.date(),
   endDate: z.date().optional(),
-  status: z.enum(['ongoing', 'finished']),
+  status: z.enum([ProjectStatus.ONGOING, ProjectStatus.FINISHED]),
   description: z.string().optional(),
 })
 
@@ -37,8 +38,6 @@ export default function ResearchProjectForm({
 
   const fields: FormField[] = [
     {
-      name: 'title',
-      label: 'Título',
       type: 'text',
       getProps: () => ({
         name: 'title',
@@ -48,8 +47,6 @@ export default function ResearchProjectForm({
       }),
     },
     {
-      name: 'startDate',
-      label: 'Data de Início',
       type: 'date',
       getProps: () => ({
         name: 'startDate',
@@ -60,8 +57,6 @@ export default function ResearchProjectForm({
       }),
     },
     {
-      name: 'endDate',
-      label: 'Data de Término (opcional)',
       type: 'date',
       getProps: () => ({
         name: 'endDate',
@@ -71,22 +66,18 @@ export default function ResearchProjectForm({
       }),
     },
     {
-      name: 'status',
-      label: 'Status',
       type: 'select',
       getOptions: () => ({
         name: 'status',
         label: 'Status',
         options: [
-          { value: 'ongoing', label: 'Em andamento' },
-          { value: 'finished', label: 'Finalizado' },
+          { value: ProjectStatus.ONGOING, label: 'Em andamento' },
+          { value: ProjectStatus.FINISHED, label: 'Finalizado' },
         ],
         required: true,
       }),
     },
     {
-      name: 'description',
-      label: 'Descrição',
       type: 'textarea',
       getProps: () => ({
         name: 'description',

@@ -28,15 +28,15 @@ enum Role {
 }
 
 model User extends BaseModel {
-  email    String  @unique
-  password String  @password @omit
-  name     String?
-  role     Role    @default(USER)
+  email     String     @unique
+  password  String     @password @omit
+  name      String?
+  role      Role       @default(USER)
 
-  professor Professor? 
+  professor Professor?
 
   @@allow('create,read', true)
-  @@allow('update,delete', auth().role == 'ADMIN')
+  @@allow('update,delete', auth().role == 'ADMIN' || auth() == this)
 }
 
 enum Course {
@@ -45,14 +45,53 @@ enum Course {
   CIENCIA_NATURAL_MATEMATICA
 }
 
-model Professor extends BaseModel {
-  courses Course[]
+type Publication {
+  title   String
+  authors String[]
+  date    DateTime
+  link    String?
+}
 
-  userId   String @unique
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+enum ProjectStatus {
+  ONGOING
+  FINISHED
+}
+
+type ResearchProject {
+  title       String
+  startDate   DateTime
+  endDate     DateTime?
+  status      ProjectStatus
+  description String?
+}
+
+type ExtensionProject {
+  title       String
+  startDate   DateTime
+  status      ProjectStatus
+  endDate     DateTime?
+  description String?
+}
+
+model Professor extends BaseModel {
+  courses           Course[]
+
+  summary           String?
+  specialties       String[]
+  image             String?
+  researchAreas     String[]
+  officeHours       String?
+  lattes            String?
+  publications      Publication[]      @json
+  researchProjects  ResearchProject[]  @json
+  extensionProjects ExtensionProject[] @json 
+
+  userId            String             @unique
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@allow('create,read', true)
-  @@allow('update,delete', auth().role == 'ADMIN')
+  @@allow('update,delete', auth().role == 'ADMIN' || auth() == user)
 }
 
 

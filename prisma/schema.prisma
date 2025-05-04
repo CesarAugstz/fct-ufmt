@@ -25,6 +25,11 @@ enum Course {
   CIENCIA_NATURAL_MATEMATICA
 }
 
+enum ProjectStatus {
+  ONGOING
+  FINISHED
+}
+
 model User {
   id        String     @id() @default(ulid())
   createdAt DateTime   @default(now())
@@ -37,10 +42,19 @@ model User {
 }
 
 model Professor {
-  id        String   @id() @default(ulid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  courses   Course[]
-  userId    String   @unique()
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String   @id() @default(ulid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt()
+  courses           Course[]
+  summary           String?
+  specialties       String[]
+  image             String?
+  researchAreas     String[]
+  officeHours       String?
+  lattes            String?
+  publications      Json
+  researchProjects  Json
+  extensionProjects Json
+  userId            String   @unique()
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

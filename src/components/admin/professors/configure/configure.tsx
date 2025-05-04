@@ -13,26 +13,33 @@ import {
   TabId,
   tabsAtom,
 } from './configure.store'
-import {
-  ProfessorMock,
-  professorsMock,
-} from '@/components/home/professors/professors-data-mock'
 import { useGreeting } from '@/lib/hooks/greeting'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { FormProvider, useForm } from 'react-hook-form'
 import { AnimatePresence, motion } from 'framer-motion'
 import AnimatedTextParts from '@/components/common/animated-text-parts'
+import { ProfessorWithUser } from '@/app/admin/(without-sidebar)/professors-configure/page'
 import { useOnMount } from '@/lib/hooks/on-mount'
+import { useUpdateProfessor } from '@/lib/zenstack-hooks'
+import { useToast } from '@/lib/hooks/toast'
+import { formatFormToBack } from './utils/utils'
 
-export default function Configure() {
+export default function Configure({
+  professor,
+}: {
+  professor: ProfessorWithUser
+}) {
   const tabs = useAtomValue(tabsAtom)
   const [activeTab, setActiveTab] = useAtom(activeTabAtom)
-  const [professor, setProfessor] = useAtom(professorAtom)
   const greeting = useGreeting()
   const nextTab = useAtomValue(nextTabAtom)
   const prevTab = useAtomValue(prevTabAtom)
+  const setProfessor = useSetAtom(professorAtom)
   const setFormMethods = useSetAtom(formMethodsAtom)
+  const updateProfessorMutation = useUpdateProfessor()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const toast = useToast()
 
   const onTabChange = useCallback(
     (tab: string) => {
@@ -41,22 +48,20 @@ export default function Configure() {
     [setActiveTab],
   )
 
-  useOnMount(() => {
-    setProfessor(professorsMock[0])
-  })
-
-  const form = useForm<ProfessorMock>({
-    values: professor ?? ({} as ProfessorMock),
+  const form = useForm<ProfessorWithUser>({
+    values: professor ?? ({} as ProfessorWithUser),
   })
 
   setFormMethods(form)
 
+  useOnMount(() => setProfessor(professor))
+
   const greetingParts = useMemo(() => {
-    if (!professor?.name) return []
+    if (!professor?.user?.name) return []
     const greetingParts = (greeting + ',').split(' ')
-    const professorNameParts = professor?.name.split(' ') ?? []
+    const professorNameParts = professor?.user?.name?.split(' ') ?? []
     return [...greetingParts, ...professorNameParts]
-  }, [greeting, professor?.name])
+  }, [greeting, professor?.user?.name])
 
   const updateProfessor = useCallback(() => {
     if (!professor) return
@@ -76,6 +81,30 @@ export default function Configure() {
     updateProfessor()
   }, [prevTab, setActiveTab, updateProfessor])
 
+  const handleSubmit = useCallback(async () => {
+    setIsSubmitting(true)
+    try {
+      const values = form.getValues()
+
+      console.log('submitting form', values)
+
+      const formattedValues = formatFormToBack(values)
+
+      console.log('formatted values', formattedValues)
+
+      await updateProfessorMutation.mutateAsync({
+        where: { id: values.id },
+        data: formattedValues,
+      })
+      toast.success('Informações atualizadas com sucesso')
+    } catch (error) {
+      console.error('Error updating professor:', error)
+      toast.exception(error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [form, toast, updateProfessorMutation])
+
   return (
     <div className="container mx-auto px-4 scroll-smooth">
       <div className="mb-8">
@@ -88,7 +117,7 @@ export default function Configure() {
       </div>
 
       <div className="grid gap-8">
-        <Photo />
+        <Photo onClickSave={handleSubmit} isSubmitting={isSubmitting} />
 
         <CompletitionStatus />
 

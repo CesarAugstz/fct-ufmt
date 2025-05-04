@@ -1,4 +1,4 @@
-import { Role, type PrismaClient } from '@prisma/client'
+import { type PrismaClient } from '@prisma/client'
 import { compare } from 'bcryptjs'
 import {
   getServerSession,
@@ -43,6 +43,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.sub!
       }
+
       return session
     },
   },
@@ -62,7 +63,7 @@ export const authOptions: NextAuthOptions = {
         email: { type: 'email' },
         password: { type: 'password' },
       },
-      authorize: authorize(db, false),
+      authorize: authorize(db),
     }),
     /**
      * ...add more providers here.
@@ -76,7 +77,7 @@ export const authOptions: NextAuthOptions = {
   ],
 }
 
-function authorize(prisma: PrismaClient, isAdmin = true) {
+function authorize(prisma: PrismaClient) {
   return async (
     credentials: Record<'email' | 'password', string> | undefined,
   ) => {
@@ -91,7 +92,6 @@ function authorize(prisma: PrismaClient, isAdmin = true) {
     const maybeUser = await prisma.user.findFirst({
       where: {
         email: credentials.email,
-        role: isAdmin ? Role.ADMIN : Role.PROFESSOR,
       },
       select: { id: true, email: true, password: true, name: true, role: true },
     })

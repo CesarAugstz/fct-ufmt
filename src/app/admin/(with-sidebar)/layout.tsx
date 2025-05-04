@@ -1,16 +1,19 @@
 import Sidebar from '@/components/admin/sidebar'
 import Header from '@/components/admin/header/header'
 import { redirect, RedirectType } from 'next/navigation'
-import { getServerAuthSession } from '@/server/auth'
+import { getCurrentUser } from '@/server/auth'
+import { Role } from '@prisma/client'
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerAuthSession()
+  const user = await getCurrentUser()
 
-  if (!session?.user?.id) redirect('/login', RedirectType.replace)
+  if (!user) redirect('/login', RedirectType.replace)
+
+  if (user.role === Role.PROFESSOR) redirect('/admin/professors-configure')
 
   return (
     <div className="flex h-screen overflow-hidden">

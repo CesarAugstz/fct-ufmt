@@ -22,6 +22,7 @@ export interface FormTextProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   formatter?: (value: string) => string
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
+  onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
 export function FormText({
@@ -33,6 +34,7 @@ export function FormText({
   onChange,
   formatter,
   onBlur,
+  onEnter,
   type = 'text',
   required = false,
   showPasswordToggle = false,
@@ -57,6 +59,12 @@ export function FormText({
               {...field}
               onBlur={onBlur}
               type={type}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  onEnter?.(e)
+                }
+              }}
               onChange={e => {
                 const value = e.target.value
                 const formattedValue = formatter ? formatter(value) : value
