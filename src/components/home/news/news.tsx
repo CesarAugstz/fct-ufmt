@@ -91,11 +91,14 @@ export default function News() {
                 >
                   <Card
                     key={item.id}
-                    className="group overflow-hidden border-0 hover:shadow-lg"
+                    className="group overflow-hidden border-0 hover:shadow-lg h-full"
                   >
                     <div className="relative h-52 w-full overflow-hidden">
                       <Image
-                        src={item.image || '/placeholder.svg'}
+                        src={
+                          item?.image ||
+                          `https://picsum.photos/seed/${Math.random() * 1000}/600/400`
+                        }
                         width={600}
                         height={400}
                         alt={item.title}

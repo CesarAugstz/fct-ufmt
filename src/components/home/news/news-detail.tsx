@@ -85,7 +85,7 @@ export default function NewsDetail({ id }: { id: string }) {
             {/* Featured image */}
             <div className="relative aspect-video w-full overflow-hidden rounded-lg">
               <Image
-                src={news.image}
+                src={news?.image ?? '/placeholder.svg'}
                 alt={news.title}
                 fill
                 className="object-cover"
@@ -145,7 +145,7 @@ export default function NewsDetail({ id }: { id: string }) {
                     >
                       <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
                         <Image
-                          src={item.image}
+                          src={item.image ?? '/placeholder.svg'}
                           alt={item.title}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
