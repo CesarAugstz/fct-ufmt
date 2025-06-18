@@ -1,10 +1,13 @@
 import AproveitamentoDisciplinas from '@/components/home/faq/faq-items/aproveitamento-disciplinas'
 import AtividadesComplementares from '@/components/home/faq/faq-items/atividades-complementares'
-import { redirect } from 'next/navigation'
+import BibliotecaVirtualUniversitariaDaPearson from '@/components/home/faq/faq-items/biblioteca-virtual-universitaria-da-pearson'
+import { notFound } from 'next/navigation'
 
 const faqPages = {
   'aproveitamento-de-disciplinas': AproveitamentoDisciplinas,
   'atividades-complementares': AtividadesComplementares,
+  'biblioteca-virtual-universitaria-da-pearson':
+    BibliotecaVirtualUniversitariaDaPearson,
 }
 
 export default async function Page({
@@ -16,7 +19,7 @@ export default async function Page({
 
   const Component = faqPages[faqItem as keyof typeof faqPages]
 
-  if (!Component) return redirect('/home/faq')
+  if (!Component) return notFound()
 
   return <Component />
 }

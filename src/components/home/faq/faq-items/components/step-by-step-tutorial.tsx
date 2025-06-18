@@ -29,6 +29,7 @@ export interface StepByStepTutorialProps {
   title: string
   subtitle: string
   icon?: ReactNode
+  headerWarning?: string | ReactNode
   steps: TutorialStep[]
   videoUrl?: string
   videoTitle?: string
@@ -45,6 +46,7 @@ export default function StepByStepTutorial({
   title,
   subtitle,
   icon,
+  headerWarning,
   steps,
   videoUrl,
   videoTitle,
@@ -93,6 +95,14 @@ export default function StepByStepTutorial({
         </div>
         <h1 className="text-4xl font-bold text-foreground mb-4">{title}</h1>
         <p className="text-lg text-muted-foreground">{subtitle}</p>
+
+        {headerWarning && (
+          <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+            <p className="text-amber-800 dark:text-amber-200 text-sm">
+              {headerWarning}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="space-y-8">
