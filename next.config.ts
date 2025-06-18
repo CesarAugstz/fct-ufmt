@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         hostname: 'picsum.photos',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh7-rt.googleusercontent.com',
+        port: '',
+      },
     ],
   },
 

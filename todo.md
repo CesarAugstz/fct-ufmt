@@ -57,3 +57,6 @@
 # ideias
 
 - ver fee.unicamp
+
+- campo site portfolio
+- mover publicacoes para baixo na home/professor
