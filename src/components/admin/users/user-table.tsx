@@ -97,7 +97,7 @@ export default function UserTable({
             <TableHead>Email</TableHead>
             <TableHead>Função</TableHead>
             <TableHead>Última Atualização</TableHead>
-            <TableHead className="w-[80px]">Ações</TableHead>
+            <TableHead className="w-[80px]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

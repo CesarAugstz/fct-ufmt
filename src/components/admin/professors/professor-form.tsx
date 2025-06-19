@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -70,6 +70,12 @@ export default function ProfessorForm({
       role: userData?.role || 'PROFESSOR',
     },
   })
+
+  useEffect(() => {
+    if (!isOpen) {
+      methods.reset()
+    }
+  }, [isOpen, methods])
 
   const onSubmit = async (values: ProfessorFormValues) => {
     setIsSubmitting(true)
@@ -209,7 +215,7 @@ export default function ProfessorForm({
                 <Button type="button" variant="outline" onClick={onClose}>
                   Cancelar
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" variant="default" disabled={isSubmitting}>
                   {isSubmitting && <LoadingSpinner className="mr-2" />}
                   {isEditMode ? 'Salvar' : 'Criar'}
                 </Button>

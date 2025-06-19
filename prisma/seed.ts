@@ -16,9 +16,17 @@ async function main() {
     },
   ]
 
-  await prisma.course.createMany({
-    data: courses,
-  })
+  for (const course of courses) {
+    await prisma.course.upsert({
+      where: {
+        name: course.name,
+      },
+      update: {},
+      create: {
+        ...course,
+      },
+    })
+  }
 
   await prisma.user.upsert({
     where: {

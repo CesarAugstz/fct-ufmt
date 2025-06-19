@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Settings, Users, House } from 'lucide-react'
+import { Settings, Users, House, Library } from 'lucide-react'
 
 interface Route {
   name: string
@@ -31,6 +31,11 @@ export default function Sidebar() {
       name: 'Usuários',
       path: '/admin/users',
       icon: <Users className="mr-2 h-5 w-5" />,
+    },
+    {
+      name: 'Cursos',
+      path: '/admin/courses',
+      icon: <Library className="mr-2 h-5 w-5" />,
     },
     {
       name: 'Configurações',

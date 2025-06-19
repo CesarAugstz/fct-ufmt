@@ -81,7 +81,7 @@ export function BaseCard({
               </Button>
             )}
             {onAdd && (
-              <Button onClick={onAdd}>
+              <Button onClick={onAdd} variant="default">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 {addButtonText}
               </Button>
