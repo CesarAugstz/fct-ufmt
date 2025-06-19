@@ -1,7 +1,7 @@
 import Configure from '@/components/admin/professors/configure/configure'
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
-import { Professor } from '@zenstackhq/runtime/models'
+import { Course, Professor } from '@zenstackhq/runtime/models'
 import { redirect } from 'next/navigation'
 
 export default async function Page() {
@@ -17,12 +17,15 @@ export default async function Page() {
 
   if (!professor) return redirect('/admin/professors')
 
-  return <Configure professor={professor as unknown as ProfessorWithUser} />
+  return (
+    <Configure professor={professor as unknown as ProfessorWithRelations} />
+  )
 }
 
-export type ProfessorWithUser = Professor & {
+export type ProfessorWithRelations = Professor & {
   user: {
     email: string
     name: string
   }
+  courses: Course[]
 }

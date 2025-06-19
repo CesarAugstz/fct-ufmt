@@ -30,18 +30,11 @@ import { Edit, MoreVertical, Trash } from 'lucide-react'
 import { useState } from 'react'
 import { useDeleteUser } from '@/lib/zenstack-hooks'
 import { dayJs } from '@/utils/dayjs'
-import { Course } from '@prisma/client'
-import { CourseMapper } from '@/utils/mappers/course.mapper'
+import { Professor, User, Course } from '@zenstackhq/runtime/models'
 
-interface ProfessorWithRelations {
+type ProfessorWithRelations = Professor & {
+  user: User
   courses: Course[]
-  id: string
-  user: {
-    email: string
-    name?: string | null
-  }
-  createdAt: Date
-  updatedAt: Date
 }
 
 interface ProfessorTableProps {
@@ -98,8 +91,8 @@ export default function ProfessorTable({
               <TableCell>
                 <div className="flex flex-wrap gap-1">
                   {professor.courses?.map(course => (
-                    <Badge key={course} variant="secondary">
-                      {CourseMapper.getCourseLabel(course)}
+                    <Badge key={course.name} variant="secondary">
+                      {course.name}
                     </Badge>
                   ))}
                 </div>

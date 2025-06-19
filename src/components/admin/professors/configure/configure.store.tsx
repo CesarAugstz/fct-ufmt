@@ -9,9 +9,9 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form'
-import { ProfessorWithUser } from '@/app/admin/(without-sidebar)/professors-configure/page'
+import { ProfessorWithRelations } from '@/app/admin/(without-sidebar)/professors-configure/page'
 
-export const professorAtom = atom<ProfessorWithUser | null>(null)
+export const professorAtom = atom<ProfessorWithRelations | null>(null)
 
 const tabs = [
   {
@@ -90,9 +90,9 @@ export const completitionStatusAtom = atom(get => {
 })
 
 interface FormMethods {
-  watch: UseFormWatch<ProfessorWithUser>
-  getValues: UseFormGetValues<ProfessorWithUser>
-  setValue: UseFormSetValue<ProfessorWithUser>
+  watch: UseFormWatch<ProfessorWithRelations>
+  getValues: UseFormGetValues<ProfessorWithRelations>
+  setValue: UseFormSetValue<ProfessorWithRelations>
 }
 
 export const formMethodsAtom = atom<FormMethods | null>(null)

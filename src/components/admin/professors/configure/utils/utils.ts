@@ -1,6 +1,6 @@
-import { ProfessorWithUser } from '@/app/admin/(without-sidebar)/professors-configure/page'
+import { ProfessorWithRelations } from '@/app/admin/(without-sidebar)/professors-configure/page'
 
-export function formatFormToBack(values: ProfessorWithUser) {
+export function formatFormToBack(values: ProfessorWithRelations) {
   return {
     extensionProjects: values.extensionProjects,
     publications: values.publications,
@@ -22,8 +22,8 @@ export function formatFormToBack(values: ProfessorWithUser) {
 }
 
 export function hasChangedData(
-  values: ProfessorWithUser,
-  professor: ProfessorWithUser,
+  values: ProfessorWithRelations,
+  professor: ProfessorWithRelations,
 ) {
   return JSON.stringify(values) !== JSON.stringify(professor)
 }

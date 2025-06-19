@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Course, Role } from '@prisma/client'
+import { Role } from '@prisma/client'
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,7 @@ import { FormText } from '@/components/ui/form-fields/form-text'
 import LoadingSpinner from '@/components/common/loading-spinner'
 import {
   useCreateProfessor,
+  useFindManyCourse,
   useFindUniqueProfessor,
   useUpdateProfessor,
 } from '@/lib/zenstack-hooks'
@@ -24,7 +25,6 @@ import {
 import { useToast } from '@/lib/hooks/toast'
 import { ProfessorSchema } from '@/utils/schemas/professor.schema'
 import { FormMultiSelect } from '@/components/common/form/form-mutiple-select'
-import { CourseMapper } from '@/utils/mappers/course.mapper'
 
 const formSchema = ProfessorSchema.formSchema
 
@@ -49,11 +49,13 @@ export default function ProfessorForm({
 
   const { data: professorData, isLoading: isLoadingUser } =
     useFindUniqueProfessor(
-      { where: { id: professorId }, include: { user: true } },
+      { where: { id: professorId }, include: { user: true, courses: true } },
       { enabled: !!professorId },
     )
 
   const { user: userData } = professorData ?? {}
+
+  const { data: coursesData } = useFindManyCourse()
 
   const { mutate: updateProfessor } = useUpdateProfessor()
   const { mutate: createProfessor } = useCreateProfessor()
@@ -64,7 +66,7 @@ export default function ProfessorForm({
       name: userData?.name || '',
       email: userData?.email || '',
       password: '',
-      courses: professorData?.courses || [],
+      courses: professorData?.courses?.map(c => c.id) || [],
       role: userData?.role || 'PROFESSOR',
     },
   })
@@ -77,7 +79,7 @@ export default function ProfessorForm({
         {
           where: { id: userData.id },
           data: {
-            courses: values.courses as Course[],
+            courses: { connect: values.courses.map(id => ({ id })) },
             user: {
               update: {
                 name: values.name,
@@ -112,7 +114,7 @@ export default function ProfessorForm({
       createProfessor(
         {
           data: {
-            courses: values.courses as Course[],
+            courses: { connect: values.courses.map(id => ({ id })) },
             extensionProjects: [],
             publications: [],
             researchProjects: [],
@@ -195,7 +197,12 @@ export default function ProfessorForm({
               <FormMultiSelect
                 name="courses"
                 label="Cursos"
-                options={CourseMapper.courseOptions}
+                options={
+                  coursesData?.map(course => ({
+                    value: course.id,
+                    label: course.name,
+                  })) || []
+                }
               />
 
               <div className="flex justify-end space-x-2">

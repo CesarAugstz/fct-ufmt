@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, Professor } from '@zenstackhq/runtime/models'
+import type { Prisma, Course } from '@zenstackhq/runtime/models'
 import type {
   UseMutationOptions,
   UseQueryOptions,
@@ -37,12 +37,12 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from '@tanstack/react-query'
 
-export function useCreateProfessor(
+export function useCreateCourse(
   options?: Omit<
     UseMutationOptions<
-      Professor | undefined,
+      Course | undefined,
       DefaultError,
-      Prisma.ProfessorCreateArgs
+      Prisma.CourseCreateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -50,14 +50,14 @@ export function useCreateProfessor(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ProfessorCreateArgs,
+    Prisma.CourseCreateArgs,
     DefaultError,
-    Professor,
+    Course,
     true
   >(
-    'Professor',
+    'Course',
     'POST',
-    `${endpoint}/professor/create`,
+    `${endpoint}/course/create`,
     metadata,
     options,
     fetch,
@@ -65,32 +65,32 @@ export function useCreateProfessor(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ProfessorCreateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ProfessorCreateArgs>,
+    mutateAsync: async <T extends Prisma.CourseCreateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.CourseCreateArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>> | undefined,
+          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ProfessorCreateArgs>
+          Prisma.SelectSubset<T, Prisma.CourseCreateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>>
+        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useCreateManyProfessor(
+export function useCreateManyCourse(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.ProfessorCreateManyArgs
+      Prisma.CourseCreateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -98,14 +98,14 @@ export function useCreateManyProfessor(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ProfessorCreateManyArgs,
+    Prisma.CourseCreateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Professor',
+    'Course',
     'POST',
-    `${endpoint}/professor/createMany`,
+    `${endpoint}/course/createMany`,
     metadata,
     options,
     fetch,
@@ -113,13 +113,13 @@ export function useCreateManyProfessor(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ProfessorCreateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ProfessorCreateManyArgs>,
+    mutateAsync: async <T extends Prisma.CourseCreateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.CourseCreateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ProfessorCreateManyArgs>
+          Prisma.SelectSubset<T, Prisma.CourseCreateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -134,35 +134,35 @@ export function useCreateManyProfessor(
   return mutation
 }
 
-export function useFindManyProfessor<
-  TArgs extends Prisma.ProfessorFindManyArgs,
+export function useFindManyCourse<
+  TArgs extends Prisma.CourseFindManyArgs,
   TQueryFnData = Array<
-    Prisma.ProfessorGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findMany`,
+    'Course',
+    `${endpoint}/course/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useInfiniteFindManyProfessor<
-  TArgs extends Prisma.ProfessorFindManyArgs,
-  TQueryFnData = Array<Prisma.ProfessorGetPayload<TArgs>>,
+export function useInfiniteFindManyCourse<
+  TArgs extends Prisma.CourseFindManyArgs,
+  TQueryFnData = Array<Prisma.CourseGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
   options?: Omit<
     UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -171,23 +171,23 @@ export function useInfiniteFindManyProfessor<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findMany`,
+    'Course',
+    `${endpoint}/course/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindManyProfessor<
-  TArgs extends Prisma.ProfessorFindManyArgs,
+export function useSuspenseFindManyCourse<
+  TArgs extends Prisma.CourseFindManyArgs,
   TQueryFnData = Array<
-    Prisma.ProfessorGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -196,21 +196,21 @@ export function useSuspenseFindManyProfessor<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findMany`,
+    'Course',
+    `${endpoint}/course/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseInfiniteFindManyProfessor<
-  TArgs extends Prisma.ProfessorFindManyArgs,
-  TQueryFnData = Array<Prisma.ProfessorGetPayload<TArgs>>,
+export function useSuspenseInfiniteFindManyCourse<
+  TArgs extends Prisma.CourseFindManyArgs,
+  TQueryFnData = Array<Prisma.CourseGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
   options?: Omit<
     UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -219,41 +219,41 @@ export function useSuspenseInfiniteFindManyProfessor<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findMany`,
+    'Course',
+    `${endpoint}/course/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindUniqueProfessor<
-  TArgs extends Prisma.ProfessorFindUniqueArgs,
-  TQueryFnData = Prisma.ProfessorGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindUniqueCourse<
+  TArgs extends Prisma.CourseFindUniqueArgs,
+  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.CourseFindUniqueArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findUnique`,
+    'Course',
+    `${endpoint}/course/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindUniqueProfessor<
-  TArgs extends Prisma.ProfessorFindUniqueArgs,
-  TQueryFnData = Prisma.ProfessorGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindUniqueCourse<
+  TArgs extends Prisma.CourseFindUniqueArgs,
+  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.CourseFindUniqueArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -262,41 +262,41 @@ export function useSuspenseFindUniqueProfessor<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findUnique`,
+    'Course',
+    `${endpoint}/course/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindFirstProfessor<
-  TArgs extends Prisma.ProfessorFindFirstArgs,
-  TQueryFnData = Prisma.ProfessorGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindFirstCourse<
+  TArgs extends Prisma.CourseFindFirstArgs,
+  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindFirstArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findFirst`,
+    'Course',
+    `${endpoint}/course/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindFirstProfessor<
-  TArgs extends Prisma.ProfessorFindFirstArgs,
-  TQueryFnData = Prisma.ProfessorGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindFirstCourse<
+  TArgs extends Prisma.CourseFindFirstArgs,
+  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindFirstArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -305,20 +305,20 @@ export function useSuspenseFindFirstProfessor<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/findFirst`,
+    'Course',
+    `${endpoint}/course/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useUpdateProfessor(
+export function useUpdateCourse(
   options?: Omit<
     UseMutationOptions<
-      Professor | undefined,
+      Course | undefined,
       DefaultError,
-      Prisma.ProfessorUpdateArgs
+      Prisma.CourseUpdateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -326,14 +326,14 @@ export function useUpdateProfessor(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ProfessorUpdateArgs,
+    Prisma.CourseUpdateArgs,
     DefaultError,
-    Professor,
+    Course,
     true
   >(
-    'Professor',
+    'Course',
     'PUT',
-    `${endpoint}/professor/update`,
+    `${endpoint}/course/update`,
     metadata,
     options,
     fetch,
@@ -341,32 +341,32 @@ export function useUpdateProfessor(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ProfessorUpdateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ProfessorUpdateArgs>,
+    mutateAsync: async <T extends Prisma.CourseUpdateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.CourseUpdateArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>> | undefined,
+          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ProfessorUpdateArgs>
+          Prisma.SelectSubset<T, Prisma.CourseUpdateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>>
+        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useUpdateManyProfessor(
+export function useUpdateManyCourse(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.ProfessorUpdateManyArgs
+      Prisma.CourseUpdateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -374,14 +374,14 @@ export function useUpdateManyProfessor(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ProfessorUpdateManyArgs,
+    Prisma.CourseUpdateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Professor',
+    'Course',
     'PUT',
-    `${endpoint}/professor/updateMany`,
+    `${endpoint}/course/updateMany`,
     metadata,
     options,
     fetch,
@@ -389,13 +389,13 @@ export function useUpdateManyProfessor(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ProfessorUpdateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ProfessorUpdateManyArgs>,
+    mutateAsync: async <T extends Prisma.CourseUpdateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.CourseUpdateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ProfessorUpdateManyArgs>
+          Prisma.SelectSubset<T, Prisma.CourseUpdateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -410,12 +410,12 @@ export function useUpdateManyProfessor(
   return mutation
 }
 
-export function useUpsertProfessor(
+export function useUpsertCourse(
   options?: Omit<
     UseMutationOptions<
-      Professor | undefined,
+      Course | undefined,
       DefaultError,
-      Prisma.ProfessorUpsertArgs
+      Prisma.CourseUpsertArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -423,14 +423,14 @@ export function useUpsertProfessor(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ProfessorUpsertArgs,
+    Prisma.CourseUpsertArgs,
     DefaultError,
-    Professor,
+    Course,
     true
   >(
-    'Professor',
+    'Course',
     'POST',
-    `${endpoint}/professor/upsert`,
+    `${endpoint}/course/upsert`,
     metadata,
     options,
     fetch,
@@ -438,32 +438,32 @@ export function useUpsertProfessor(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ProfessorUpsertArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ProfessorUpsertArgs>,
+    mutateAsync: async <T extends Prisma.CourseUpsertArgs>(
+      args: Prisma.SelectSubset<T, Prisma.CourseUpsertArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>> | undefined,
+          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ProfessorUpsertArgs>
+          Prisma.SelectSubset<T, Prisma.CourseUpsertArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>>
+        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteProfessor(
+export function useDeleteCourse(
   options?: Omit<
     UseMutationOptions<
-      Professor | undefined,
+      Course | undefined,
       DefaultError,
-      Prisma.ProfessorDeleteArgs
+      Prisma.CourseDeleteArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -471,14 +471,14 @@ export function useDeleteProfessor(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ProfessorDeleteArgs,
+    Prisma.CourseDeleteArgs,
     DefaultError,
-    Professor,
+    Course,
     true
   >(
-    'Professor',
+    'Course',
     'DELETE',
-    `${endpoint}/professor/delete`,
+    `${endpoint}/course/delete`,
     metadata,
     options,
     fetch,
@@ -486,32 +486,32 @@ export function useDeleteProfessor(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ProfessorDeleteArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ProfessorDeleteArgs>,
+    mutateAsync: async <T extends Prisma.CourseDeleteArgs>(
+      args: Prisma.SelectSubset<T, Prisma.CourseDeleteArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>> | undefined,
+          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ProfessorDeleteArgs>
+          Prisma.SelectSubset<T, Prisma.CourseDeleteArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Professor, Prisma.ProfessorGetPayload<T>>
+        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteManyProfessor(
+export function useDeleteManyCourse(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.ProfessorDeleteManyArgs
+      Prisma.CourseDeleteManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -519,14 +519,14 @@ export function useDeleteManyProfessor(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ProfessorDeleteManyArgs,
+    Prisma.CourseDeleteManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Professor',
+    'Course',
     'DELETE',
-    `${endpoint}/professor/deleteMany`,
+    `${endpoint}/course/deleteMany`,
     metadata,
     options,
     fetch,
@@ -534,13 +534,13 @@ export function useDeleteManyProfessor(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ProfessorDeleteManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ProfessorDeleteManyArgs>,
+    mutateAsync: async <T extends Prisma.CourseDeleteManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.CourseDeleteManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ProfessorDeleteManyArgs>
+          Prisma.SelectSubset<T, Prisma.CourseDeleteManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -555,33 +555,33 @@ export function useDeleteManyProfessor(
   return mutation
 }
 
-export function useAggregateProfessor<
-  TArgs extends Prisma.ProfessorAggregateArgs,
-  TQueryFnData = Prisma.GetProfessorAggregateType<TArgs>,
+export function useAggregateCourse<
+  TArgs extends Prisma.CourseAggregateArgs,
+  TQueryFnData = Prisma.GetCourseAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ProfessorAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.CourseAggregateArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/aggregate`,
+    'Course',
+    `${endpoint}/course/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseAggregateProfessor<
-  TArgs extends Prisma.ProfessorAggregateArgs,
-  TQueryFnData = Prisma.GetProfessorAggregateType<TArgs>,
+export function useSuspenseAggregateCourse<
+  TArgs extends Prisma.CourseAggregateArgs,
+  TQueryFnData = Prisma.GetCourseAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ProfessorAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.CourseAggregateArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -590,23 +590,23 @@ export function useSuspenseAggregateProfessor<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/aggregate`,
+    'Course',
+    `${endpoint}/course/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useGroupByProfessor<
-  TArgs extends Prisma.ProfessorGroupByArgs,
+export function useGroupByCourse<
+  TArgs extends Prisma.CourseGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.ProfessorGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.ProfessorGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.CourseGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.CourseGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -659,19 +659,16 @@ export function useGroupByProfessor<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.ProfessorGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.CourseGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.ProfessorGroupByOutputType]: P extends '_count'
+            keyof Prisma.CourseGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.ProfessorGroupByOutputType[P]
+                  Prisma.CourseGroupByOutputType[P]
                 >
-            : Prisma.GetScalarType<
-                TArgs[P],
-                Prisma.ProfessorGroupByOutputType[P]
-              >
+            : Prisma.GetScalarType<TArgs[P], Prisma.CourseGroupByOutputType[P]>
         }
       >
     : InputErrors,
@@ -680,7 +677,7 @@ export function useGroupByProfessor<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.ProfessorGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.CourseGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
@@ -688,23 +685,23 @@ export function useGroupByProfessor<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/groupBy`,
+    'Course',
+    `${endpoint}/course/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseGroupByProfessor<
-  TArgs extends Prisma.ProfessorGroupByArgs,
+export function useSuspenseGroupByCourse<
+  TArgs extends Prisma.CourseGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.ProfessorGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.ProfessorGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.CourseGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.CourseGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -757,19 +754,16 @@ export function useSuspenseGroupByProfessor<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.ProfessorGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.CourseGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.ProfessorGroupByOutputType]: P extends '_count'
+            keyof Prisma.CourseGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.ProfessorGroupByOutputType[P]
+                  Prisma.CourseGroupByOutputType[P]
                 >
-            : Prisma.GetScalarType<
-                TArgs[P],
-                Prisma.ProfessorGroupByOutputType[P]
-              >
+            : Prisma.GetScalarType<TArgs[P], Prisma.CourseGroupByOutputType[P]>
         }
       >
     : InputErrors,
@@ -778,7 +772,7 @@ export function useSuspenseGroupByProfessor<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.ProfessorGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.CourseGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<
@@ -789,55 +783,55 @@ export function useSuspenseGroupByProfessor<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/groupBy`,
+    'Course',
+    `${endpoint}/course/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useCountProfessor<
-  TArgs extends Prisma.ProfessorCountArgs,
+export function useCountCourse<
+  TArgs extends Prisma.CourseCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.ProfessorCountAggregateOutputType
+          Prisma.CourseCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseCountArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/count`,
+    'Course',
+    `${endpoint}/course/count`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseCountProfessor<
-  TArgs extends Prisma.ProfessorCountArgs,
+export function useSuspenseCountCourse<
+  TArgs extends Prisma.CourseCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.ProfessorCountAggregateOutputType
+          Prisma.CourseCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ProfessorCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.CourseCountArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -846,35 +840,23 @@ export function useSuspenseCountProfessor<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Professor',
-    `${endpoint}/professor/count`,
+    'Course',
+    `${endpoint}/course/count`,
     args,
     options,
     fetch,
   )
 }
 
-export function useCheckProfessor<TError = DefaultError>(
-  args: {
-    operation: PolicyCrudKind
-    where?: {
-      id?: string
-      summary?: string
-      specialties?: string
-      image?: string
-      researchAreas?: string
-      officeHours?: string
-      lattes?: string
-      userId?: string
-    }
-  },
+export function useCheckCourse<TError = DefaultError>(
+  args: { operation: PolicyCrudKind; where?: { id?: string; name?: string } },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<boolean, boolean, TError>(
-    'Professor',
-    `${endpoint}/professor/check`,
+    'Course',
+    `${endpoint}/course/check`,
     args,
     options,
     fetch,

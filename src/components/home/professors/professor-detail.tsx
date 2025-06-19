@@ -16,7 +16,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { professorsMock } from './professors-data-mock'
-import { CourseMapper } from '@/utils/mappers/course.mapper'
 import { formatDate } from '@/lib/utils'
 import { useShare } from '@/lib/hooks/share'
 import { useCallback } from 'react'
@@ -86,8 +85,8 @@ export default function ProfessorDetail({ id }: { id: string }) {
               <div>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {professor.courses.map(course => (
-                    <Badge key={course} variant="secondary">
-                      {CourseMapper.getCourseLabel(course)}
+                    <Badge key={course?.name} variant="secondary">
+                      {course.name}
                     </Badge>
                   ))}
                 </div>

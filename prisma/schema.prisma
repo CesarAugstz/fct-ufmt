@@ -12,17 +12,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 enum Role {
   ADMIN
   PROFESSOR
   USER
   ADMIN_PROFESSOR
-}
-
-enum Course {
-  CIENCIA_TECNOLOGIA
-  ENGENHARIA_SOFTWARE
-  CIENCIA_NATURAL_MATEMATICA
 }
 
 enum ProjectStatus {
@@ -39,6 +37,14 @@ model User {
   name      String?
   role      Role       @default(USER)
   professor Professor?
+}
+
+model Course {
+  id         String      @id() @default(ulid())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt()
+  name       String      @unique()
+  professors Professor[]
 }
 
 model Professor {

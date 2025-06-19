@@ -1,11 +1,9 @@
-import { Course } from '@prisma/client'
-
 export interface ProfessorMock {
   id: string
   name: string
   email: string
   summary: string
-  courses: Course[]
+  courses: { name: string }[]
   specialties: string[]
   image?: string
   researchAreas: string[]
@@ -42,7 +40,7 @@ export const professorsMock: ProfessorMock[] = [
     email: 'joao.silva@fct.com',
     summary:
       'Especialista em Engenharia de Software com foco em arquitetura de sistemas distribuídos e computação em nuvem.',
-    courses: ['ENGENHARIA_SOFTWARE'],
+    courses: [{ name: 'ENGENHARIA_SOFTWARE' }],
     specialties: ['Arquitetura de Software', 'Cloud Computing', 'DevOps'],
     image: '/example/profile.jpg',
     researchAreas: ['Sistemas Distribuídos', 'Microserviços', 'Containers'],
@@ -81,7 +79,7 @@ export const professorsMock: ProfessorMock[] = [
     email: 'maria.santos@fct.com',
     summary:
       'Pesquisadora na área de Ciências Naturais com ênfase em Biologia Molecular e Genética.',
-    courses: ['CIENCIA_NATURAL_MATEMATICA'],
+    courses: [{ name: 'CIENCIA_NATURAL_MATEMATICA' }],
     specialties: ['Genética', 'Biologia Molecular', 'Biotecnologia'],
     image: '/example/profile-f.jpg',
     researchAreas: ['Genômica', 'Proteômica', 'Bioinformática'],
@@ -94,7 +92,7 @@ export const professorsMock: ProfessorMock[] = [
     email: 'carlos.oliveira@fct.com',
     summary:
       'Especialista em Ciência e Tecnologia com foco em Física Aplicada e Matemática Computacional.',
-    courses: ['CIENCIA_TECNOLOGIA'],
+    courses: [{ name: 'CIENCIA_TECNOLOGIA' }],
     specialties: [
       'Física Aplicada',
       'Matemática Computacional',

@@ -9,6 +9,10 @@ plugin hooks {
   output = "./src/lib/zenstack-hooks"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -39,10 +43,12 @@ model User extends BaseModel {
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == this)
 }
 
-enum Course {
-  CIENCIA_TECNOLOGIA
-  ENGENHARIA_SOFTWARE
-  CIENCIA_NATURAL_MATEMATICA
+model Course extends BaseModel {
+  name String @unique
+
+  professors Professor[]
+
+  @@allow('all', true)
 }
 
 type Publication {
@@ -51,7 +57,6 @@ type Publication {
   date    DateTime
   link    String?
 }
-
 
 enum ProjectStatus {
   ONGOING

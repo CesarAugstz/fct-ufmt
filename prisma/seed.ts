@@ -4,6 +4,22 @@ import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function main() {
+  const courses = [
+    {
+      name: 'Ciência e Tecnologia',
+    },
+    {
+      name: 'Engenharia de Software',
+    },
+    {
+      name: 'Licenciatura em Ciências Naturais e Matemática',
+    },
+  ]
+
+  await prisma.course.createMany({
+    data: courses,
+  })
+
   await prisma.user.upsert({
     where: {
       email: 'cgl@email.com',

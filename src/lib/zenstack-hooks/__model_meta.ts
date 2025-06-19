@@ -63,6 +63,49 @@ const metadata = {
         },
       },
     },
+    course: {
+      name: 'Course',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        name: {
+          name: 'name',
+          type: 'String',
+        },
+        professors: {
+          name: 'professors',
+          type: 'Professor',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'courses',
+          isRelationOwner: true,
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+        name: {
+          name: 'name',
+          fields: ['name'],
+        },
+      },
+    },
     professor: {
       name: 'Professor',
       fields: {
@@ -85,7 +128,10 @@ const metadata = {
         courses: {
           name: 'courses',
           type: 'Course',
+          isDataModel: true,
           isArray: true,
+          backLink: 'professors',
+          isRelationOwner: true,
         },
         summary: {
           name: 'summary',

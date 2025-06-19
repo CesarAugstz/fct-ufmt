@@ -9,19 +9,20 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { professorsMock } from './professors-data-mock'
-import { CourseMapper } from '@/utils/mappers/course.mapper'
 import { motion } from 'framer-motion'
 import { getAnimationOnViewUp } from '@/utils/animations/on-view-up'
 import { Separator } from '@/components/ui/separator'
 import TabsHeader from '@/components/common/tabs-header'
 import { searchContains } from '@/lib/utils'
-
-const courses = ['Todos', ...CourseMapper.courseOptions.map(c => c.label)]
+import { useFindManyCourse } from '@/lib/zenstack-hooks'
 
 export default function Professors() {
   const [activeTab, setActiveTab] = useState('Todos')
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredProfessors, setFilteredProfessors] = useState(professorsMock)
+  const { data: courses } = useFindManyCourse()
+
+  const coursesTabs = ['Todos', ...(courses?.map(c => c.name) ?? [])]
 
   useEffect(
     function filterProfessors() {
@@ -37,7 +38,7 @@ export default function Professors() {
 
       if (activeTab !== 'Todos') {
         filtered = filtered.filter(prof =>
-          prof.courses.includes(CourseMapper.courseMapReverse[activeTab]),
+          prof.courses.some(c => c.name === activeTab),
         )
       }
       setFilteredProfessors(filtered)
@@ -69,7 +70,7 @@ export default function Professors() {
       >
         <TabsHeader
           onSearchTermChange={setSearchTerm}
-          tabs={courses}
+          tabs={coursesTabs}
           inputPlaceholder="Busque por nome ou curso"
         />
 
@@ -101,8 +102,8 @@ export default function Professors() {
                 <div className="flex-grow">
                   <div className="flex flex-wrap gap-2 mb-3">
                     {professor.courses.map(course => (
-                      <Badge key={course} variant="secondary">
-                        {CourseMapper.getCourseLabel(course)}
+                      <Badge key={course?.name} variant="secondary">
+                        {course.name}
                       </Badge>
                     ))}
                   </div>

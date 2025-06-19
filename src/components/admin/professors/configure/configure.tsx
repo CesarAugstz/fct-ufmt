@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button'
 import { FormProvider, useForm } from 'react-hook-form'
 import { AnimatePresence, motion } from 'framer-motion'
 import AnimatedTextParts from '@/components/common/animated-text-parts'
-import { ProfessorWithUser } from '@/app/admin/(without-sidebar)/professors-configure/page'
+import { ProfessorWithRelations } from '@/app/admin/(without-sidebar)/professors-configure/page'
 import { useOnMount } from '@/lib/hooks/on-mount'
 import { useUpdateProfessor } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
@@ -28,7 +28,7 @@ import { formatFormToBack } from './utils/utils'
 export default function Configure({
   professor,
 }: {
-  professor: ProfessorWithUser
+  professor: ProfessorWithRelations
 }) {
   const tabs = useAtomValue(tabsAtom)
   const [activeTab, setActiveTab] = useAtom(activeTabAtom)
@@ -48,8 +48,8 @@ export default function Configure({
     [setActiveTab],
   )
 
-  const form = useForm<ProfessorWithUser>({
-    values: professor ?? ({} as ProfessorWithUser),
+  const form = useForm<ProfessorWithRelations>({
+    values: professor ?? ({} as ProfessorWithRelations),
   })
 
   setFormMethods(form)

@@ -17,6 +17,7 @@ export default function ProfessorsPage() {
   } = useFindManyProfessor({
     include: {
       user: true,
+      courses: true,
     },
   })
 
