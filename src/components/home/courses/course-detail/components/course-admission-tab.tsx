@@ -106,6 +106,7 @@ export default function CourseAdmissionTab({
                 href={admissionInfo.websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="w-full bg-primary"
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Acessar site de inscrições

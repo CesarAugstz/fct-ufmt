@@ -18,7 +18,7 @@ export default function CourseAboutTab({ courseSlug }: CourseAboutTabProps) {
   }
 
   return (
-    <div className="prose prose-lg max-w-none">
+    <div className="prose dark:prose-invert prose-lg max-w-none">
       <div
         dangerouslySetInnerHTML={{ __html: aboutContent }}
         className="text-foreground leading-relaxed"

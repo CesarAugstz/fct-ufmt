@@ -1,19 +1,19 @@
-import Image from "next/image"
-import Link from "next/link"
-import { 
-  Facebook, 
-  Instagram, 
-  Youtube, 
-  Linkedin, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
-  ArrowRight 
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
+import Image from 'next/image'
+import Link from 'next/link'
+import {
+  Facebook,
+  Instagram,
+  Youtube,
+  Linkedin,
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  ArrowRight,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 
 export function SiteFooter() {
   return (
@@ -51,13 +51,13 @@ function FooterAbout() {
           </div>
         </div>
         <div className="text-lg font-bold">
-          <div>INSTITUTO DE</div>
+          <div>FACULDADE DE</div>
           <div>CIÊNCIA E TECNOLOGIA</div>
         </div>
       </div>
       <p className="text-sm text-white/80 mb-4">
-        A FCT da UFMT é referência em ensino, pesquisa e extensão na área de Tecnologia da
-        Informação.
+        A FCT da UFMT é referência em ensino, pesquisa e extensão na área de
+        Tecnologia da Informação.
       </p>
       <div className="flex space-x-3">
         <SocialButton icon={<Facebook className="h-5 w-5" />} />
@@ -144,7 +144,9 @@ function FooterLinks() {
             placeholder="Seu e-mail"
             className="bg-white/10 border-white/20 text-white placeholder:text-white/50 rounded-l-md"
           />
-          <Button className="bg-[#0088cc] hover:bg-[#0088cc]/90 text-white rounded-l-none">Inscrever</Button>
+          <Button className="bg-[#0088cc] hover:bg-[#0088cc]/90 text-white rounded-l-none">
+            Inscrever
+          </Button>
         </div>
       </div>
     </div>
@@ -159,7 +161,10 @@ interface FooterLinkProps {
 function FooterLink({ href, label }: FooterLinkProps) {
   return (
     <li>
-      <Link href={href} className="text-white/80 hover:text-white transition-colors flex items-center">
+      <Link
+        href={href}
+        className="text-white/80 hover:text-white transition-colors flex items-center"
+      >
         <ArrowRight className="h-3 w-3 mr-2" /> {label}
       </Link>
     </li>

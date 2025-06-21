@@ -31,7 +31,7 @@ export default function CourseDetailPage({ slug }: CourseDetailPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <CourseHeader course={course} />
+      <CourseHeader course={course as any} />
       <CourseTabs courseSlug={slug} />
     </div>
   )

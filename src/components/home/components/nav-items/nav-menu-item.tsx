@@ -8,8 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Section } from '@/data/sections'
 import { useIsMobile } from '@/lib/hooks/is-mobile'
+import { Section } from './nav-items.hook'
 
 interface NavMenuItemProps {
   item: Section

@@ -15,9 +15,11 @@ interface ActionButtonProps extends ButtonProps {
 export function ActionButton({
   mutations,
   children,
+  isLoading: isLoadingProp,
   ...props
 }: ActionButtonProps) {
-  const isLoading = props.isLoading || mutations?.some(mutation => mutation.isPending)
+  const isLoading =
+    isLoadingProp || mutations?.some(mutation => mutation.isPending)
 
   return (
     <Button disabled={isLoading} {...props}>

@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import { z } from 'zod'
 import { useCreateUser } from '@/lib/zenstack-hooks/user'
-import { formatLoginApiError } from '@/lib/formaters/format-login-api-error.formater'
+import { formatLoginApiError } from '@/lib/formatters/format-login-api-error.formatter'
 
 const signupFormSchema = z
   .object({

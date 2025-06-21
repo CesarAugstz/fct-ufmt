@@ -3,7 +3,6 @@ import {
   FormFieldSection,
   useRenderFormSections,
 } from '@/lib/hooks/form/render-form-fields'
-import { useEffect, useState } from 'react'
 
 export default function BasicTab() {
   const sections: FormFieldSection[] = [
@@ -80,20 +79,7 @@ export default function BasicTab() {
     },
   ]
 
-  const [canRender, setCanRender] = useState(false)
-
-  // FIX: something is wrong on formcontext render
-  useEffect(() => {
-    setTimeout(() => {
-      setCanRender(true)
-    }, 100)
-  }, [])
-
   const sectionsComponent = useRenderFormSections(sections)
-
-  if (!canRender) {
-    return null
-  }
 
   return (
     <Card>

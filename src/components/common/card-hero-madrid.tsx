@@ -25,7 +25,7 @@ export default function CardHeroMadrid() {
           <div className="p-6 flex flex-col justify-center">
             <CardHeader className="p-0 pb-4">
               <CardTitle className="text-3xl font-bold text-primary">
-                O Instituto de Ciência e Tecnologia
+                A Faculdade de Ciência e Tecnologia
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 pb-6">

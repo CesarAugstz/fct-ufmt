@@ -17,7 +17,7 @@ import {
 } from '@/types/forms/login-form.types'
 import LoginForm from '@/components/login/form'
 import { ActionButton } from '@/components/ui/action-button'
-import { formatLoginApiError } from '@/lib/formatters/format-login-api-error.formater'
+import { formatLoginApiError } from '@/lib/formatters/format-login-api-error.formatter'
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
