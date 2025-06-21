@@ -5,13 +5,15 @@ import { twMerge } from 'tailwind-merge'
 
 interface Props {
   className?: string
-  onSearchTermChange: (term: string) => void
+  onSearchTermChange?: (term: string) => void
+  showSearch?: boolean
   tabs: string[]
   inputPlaceholder?: string
 }
 
 export default function TabsHeader({
   className,
+  showSearch = true,
   onSearchTermChange,
   tabs,
   inputPlaceholder = 'Buscar',
@@ -20,7 +22,7 @@ export default function TabsHeader({
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
-    onSearchTermChange(e.target.value)
+    onSearchTermChange?.(e.target.value)
   }
 
   return (
@@ -30,12 +32,14 @@ export default function TabsHeader({
         className,
       )}
     >
-      <TextSearchField
-        className="w-full max-w-84"
-        placeholder={inputPlaceholder}
-        value={searchTerm}
-        onChange={onChange}
-      />
+      {showSearch && (
+        <TextSearchField
+          className="w-full max-w-84"
+          placeholder={inputPlaceholder}
+          value={searchTerm}
+          onChange={onChange}
+        />
+      )}
       <TabsList className="h-full w-full flex flex-wrap md:flex-nowrap bg-muted/50 p-1">
         {tabs.map(tab => (
           <TabsTrigger

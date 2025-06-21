@@ -9,18 +9,20 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { NavMenuItem } from './nav-menu-item'
 import Link from 'next/link'
-import { DataSections, Section } from '@/data/sections'
 import {
   Sheet,
   SheetContent,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { VisuallyHidden } from 'radix-ui'
+import { Section, useNavSections } from './nav-items.hook'
+import { useMousePosition } from '@/hooks/use-mouse-position'
+import { useRouter } from 'next/navigation'
 
 export default function NavItems() {
-  const { sections } = DataSections
+  const { sections } = useNavSections()
 
   return (
     <nav className="bg-gradient-to-r from-[#001a35] via-[#002347] to-[#00305e] text-white py-3 sticky top-0 z-50 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.4)] border-b border-blue-900/20">
@@ -99,7 +101,7 @@ function MobileNavItem({
       <li>
         <Link href={section.href ?? '#'} className="flex flex-row items-center">
           {depth !== 0 && (
-            <Dot size={0 ? 18 : 14} className="absolute h-4 w-4" />
+            <Dot size={depth ? 18 : 14} className="absolute h-4 w-4" />
           )}
           <Button
             variant="ghost"
@@ -144,6 +146,44 @@ interface NavDropdownProps {
 
 function NavDropdown({ section }: NavDropdownProps) {
   const hasChildren = section.children && section.children.length > 0
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const divRef = useRef<HTMLDivElement>(null)
+  const dropdownContentRef = useRef<HTMLDivElement>(null)
+  const mousePosition = useMousePosition()
+  const router = useRouter()
+
+  const [isHovered, setIsHovered] = useState(false)
+
+  const getIsHover = useCallback(() => {
+    const isHoverDiv = divRef.current?.contains(
+      document.elementFromPoint(mousePosition.x, mousePosition.y),
+    )
+    const isHoverDropdown = dropdownContentRef.current?.contains(
+      document.elementFromPoint(mousePosition.x, mousePosition.y),
+    )
+
+    return isHoverDiv || isHoverDropdown
+  }, [mousePosition.x, mousePosition.y])
+
+  useEffect(() => {
+    const isHover = getIsHover()
+
+    if (isHover) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+
+      setIsHovered(true)
+    } else {
+      timeoutRef.current = setTimeout(() => {
+        if (!getIsHover()) setIsHovered(false)
+      }, 100)
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [getIsHover, mousePosition])
 
   if (!hasChildren) {
     return (
@@ -160,24 +200,28 @@ function NavDropdown({ section }: NavDropdownProps) {
   const sortedChildren = [...(section.children ?? [])]
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto flex items-center transition-all duration-200 rounded-md text-sm relative after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-0.5 after:bg-blue-300 after:transform after:-translate-x-1/2 group-hover:after:w-2/3 after:transition-all after:duration-300"
+    <div ref={divRef}>
+      <DropdownMenu open={isHovered}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="text-white font-medium tracking-wide hover:text-blue-100 hover:bg-white/10 px-3 py-1.5 h-auto flex items-center transition-all duration-200 rounded-md text-sm relative after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-0.5 after:bg-blue-300 after:transform after:-translate-x-1/2 group-hover:after:w-2/3 after:transition-all after:duration-300"
+            onClick={() => section?.href && router.push(section.href)}
+          >
+            {section.name}{' '}
+            <ChevronDown className="ml-1.5 h-3.5 w-3.5 opacity-70 group-hover:opacity-100 transition-all" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="w-64 rounded-lg border border-blue-100/30 bg-white/98 backdrop-blur-md shadow-[0_10px_40px_-15px_rgba(0,30,80,0.3)] animate-in fade-in-50 zoom-in-95 data-[side=top]:slide-in-from-bottom-2 p-1.5 mt-1"
+          sideOffset={8}
+          ref={dropdownContentRef}
         >
-          {section.name}{' '}
-          <ChevronDown className="ml-1.5 h-3.5 w-3.5 opacity-70 group-hover:opacity-100 transition-all" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-64 rounded-lg border border-blue-100/30 bg-white/98 backdrop-blur-md shadow-[0_10px_40px_-15px_rgba(0,30,80,0.3)] animate-in fade-in-50 zoom-in-95 data-[side=top]:slide-in-from-bottom-2 p-1.5 mt-1"
-        sideOffset={8}
-      >
-        {sortedChildren.map(child => (
-          <NavMenuItem key={child.name} item={child} />
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+          {sortedChildren.map(child => (
+            <NavMenuItem key={child.name} item={child} />
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }

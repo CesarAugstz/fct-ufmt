@@ -20,9 +20,13 @@ import {
   useUpdateCourse,
 } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
+import { CourseNature } from '@prisma/client'
+import { FormSelect } from '@/components/ui/form-fields/form-select'
+import { formatToSlug } from '@/lib/formatters/slug.formatter'
 
 const formSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
+  nature: z.enum([CourseNature.GRADUATION, CourseNature.POST_GRADUATION]),
 })
 
 type CourseFormValues = z.infer<typeof formSchema>
@@ -56,6 +60,7 @@ export default function CourseForm({
     resolver: zodResolver(formSchema),
     values: {
       name: courseData?.name || '',
+      nature: courseData?.nature || CourseNature.GRADUATION,
     },
   })
 
@@ -68,6 +73,8 @@ export default function CourseForm({
           where: { id: courseData.id },
           data: {
             name: values.name,
+            slug: formatToSlug(values.name),
+            nature: values.nature,
           },
         },
         {
@@ -89,6 +96,8 @@ export default function CourseForm({
       {
         data: {
           name: values.name,
+          nature: values.nature,
+          slug: formatToSlug(values.name),
         },
       },
       {
@@ -144,6 +153,21 @@ export default function CourseForm({
               name="name"
               label="Nome"
               placeholder="Digite o nome do curso"
+            />
+
+            <FormSelect
+              name="nature"
+              label="Tipo do Curso"
+              options={[
+                {
+                  value: CourseNature.GRADUATION,
+                  label: 'Graduação',
+                },
+                {
+                  value: CourseNature.POST_GRADUATION,
+                  label: 'Pós-Graduação',
+                },
+              ]}
             />
 
             <div className="flex justify-end space-x-2 pt-4">

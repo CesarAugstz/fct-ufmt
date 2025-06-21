@@ -43,8 +43,16 @@ model User extends BaseModel {
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == this)
 }
 
+enum CourseNature {
+  GRADUATION
+  POST_GRADUATION
+}
+
 model Course extends BaseModel {
   name String @unique
+  nature CourseNature
+  slug String @unique 
+  description String?
 
   professors Professor[]
 

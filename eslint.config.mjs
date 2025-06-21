@@ -1,24 +1,35 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
-import eslintConfigPrettier from 'eslint-config-prettier/flat'
+import js from '@eslint/js'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import eslintPluginPrettier from 'eslint-plugin-prettier'
 import unusedImports from 'eslint-plugin-unused-imports'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
-
-const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
-  eslintConfigPrettier,
+export default tseslint.config(
+  { ignores: ['dist'] },
   {
-    files: ['**/*.ts', '**/*.tsx'],
-    plugins: { 'unused-imports': unusedImports },
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+      'prettier': eslintPluginPrettier,
+      'unused-imports': unusedImports,
+    },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
+      ...reactHooks.configs.recommended.rules,
+      'prettier/prettier': 'error',
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn',
       'unused-imports/no-unused-vars': [
         'warn',
         {
@@ -29,8 +40,5 @@ const eslintConfig = [
         },
       ],
     },
-  },
-]
-
-export default eslintConfig
-
+  }
+)

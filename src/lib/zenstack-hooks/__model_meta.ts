@@ -86,6 +86,19 @@ const metadata = {
           name: 'name',
           type: 'String',
         },
+        nature: {
+          name: 'nature',
+          type: 'CourseNature',
+        },
+        slug: {
+          name: 'slug',
+          type: 'String',
+        },
+        description: {
+          name: 'description',
+          type: 'String',
+          isOptional: true,
+        },
         professors: {
           name: 'professors',
           type: 'Professor',
@@ -103,6 +116,10 @@ const metadata = {
         name: {
           name: 'name',
           fields: ['name'],
+        },
+        slug: {
+          name: 'slug',
+          fields: ['slug'],
         },
       },
     },

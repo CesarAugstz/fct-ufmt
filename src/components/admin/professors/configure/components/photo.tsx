@@ -40,10 +40,8 @@ export default function Photo({ onClickSave, isSubmitting }: Props) {
         maxSizeKB: 600,
         quality: 0.9,
       })
-      console.log('compressed', compressed)
 
       const base64 = compressed.dataUrl
-      console.log('base64', base64)
       formMethods?.setValue('image', base64)
       setProfessor({ ...professor, image: base64 } as typeof professor)
     },

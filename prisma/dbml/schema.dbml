@@ -1,0 +1,67 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  email String [unique, not null]
+  password String [not null]
+  name String
+  role Role [not null, default: 'USER']
+  professor Professor
+}
+
+Table Course {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  nature CourseNature [not null]
+  slug String [unique, not null]
+  description String
+  professors Professor [not null]
+}
+
+Table Professor {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  courses Course [not null]
+  summary String
+  specialties String[] [not null]
+  image String
+  researchAreas String[] [not null]
+  officeHours String
+  lattes String
+  publications Json [not null]
+  researchProjects Json [not null]
+  extensionProjects Json [not null]
+  userId String [unique, not null]
+  user User [not null]
+}
+
+Table CourseToProfessor {
+  professorsId String [ref: > Professor.id]
+  coursesId String [ref: > Course.id]
+}
+
+Enum Role {
+  ADMIN
+  PROFESSOR
+  USER
+  ADMIN_PROFESSOR
+}
+
+Enum CourseNature {
+  GRADUATION
+  POST_GRADUATION
+}
+
+Enum ProjectStatus {
+  ONGOING
+  FINISHED
+}
+
+Ref: Professor.userId - User.id [delete: Cascade]

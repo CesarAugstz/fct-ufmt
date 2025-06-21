@@ -847,9 +847,19 @@ export function useSuspenseCountCourse<
     fetch,
   )
 }
+import type { CourseNature } from '@zenstackhq/runtime/models'
 
 export function useCheckCourse<TError = DefaultError>(
-  args: { operation: PolicyCrudKind; where?: { id?: string; name?: string } },
+  args: {
+    operation: PolicyCrudKind
+    where?: {
+      id?: string
+      name?: string
+      nature?: CourseNature
+      slug?: string
+      description?: string
+    }
+  },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
     ExtraQueryOptions,
 ) {

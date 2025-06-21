@@ -23,6 +23,11 @@ enum Role {
   ADMIN_PROFESSOR
 }
 
+enum CourseNature {
+  GRADUATION
+  POST_GRADUATION
+}
+
 enum ProjectStatus {
   ONGOING
   FINISHED
@@ -40,11 +45,14 @@ model User {
 }
 
 model Course {
-  id         String      @id() @default(ulid())
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt()
-  name       String      @unique()
-  professors Professor[]
+  id          String       @id() @default(ulid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt()
+  name        String       @unique()
+  nature      CourseNature
+  slug        String       @unique()
+  description String?
+  professors  Professor[]
 }
 
 model Professor {

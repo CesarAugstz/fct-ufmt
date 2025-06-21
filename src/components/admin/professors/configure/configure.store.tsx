@@ -68,7 +68,7 @@ export const completitionStatusAtom = atom(get => {
     () => professor?.user?.name,
     () => professor?.user?.email,
     () => professor?.summary,
-    () => professor?.courses.length ?? 0 > 0,
+    () => professor?.courses?.length ?? 0 > 0,
     () => professor?.specialties.length ?? 0 > 0,
     () => professor?.image,
     () => professor?.researchAreas.length ?? 0 > 0,

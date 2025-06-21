@@ -11,13 +11,13 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { signIn } from 'next-auth/react'
 import { useAuthStore } from '@/store/auth-store'
-import { formatLoginApiError } from '@/lib/formaters/format-login-api-error.formater'
 import {
   loginFormSchema,
   LoginFormValues,
 } from '@/types/forms/login-form.types'
 import LoginForm from '@/components/login/form'
 import { ActionButton } from '@/components/ui/action-button'
+import { formatLoginApiError } from '@/lib/formatters/format-login-api-error.formater'
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)

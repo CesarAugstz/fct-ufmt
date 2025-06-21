@@ -15,24 +15,40 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { professorsMock } from './professors-data-mock'
 import { formatDate } from '@/lib/utils'
 import { useShare } from '@/lib/hooks/share'
 import { useCallback } from 'react'
+import { useFindUniqueProfessor } from '@/lib/zenstack-hooks'
+import LoadingSpinner from '@/components/common/loading-spinner'
 
 export default function ProfessorDetail({ id }: { id: string }) {
-  const professor = professorsMock.find(p => p.id === id)
+  const { data: professor, isLoading } = useFindUniqueProfessor({
+    where: { id },
+    include: {
+      user: true,
+      courses: true,
+    },
+  })
+
   const { share } = useShare()
 
   const handleShare = useCallback(async () => {
     const shareUrl = window.location.href
 
     await share({
-      title: professor?.name || 'Professor FCT',
+      title: professor?.user?.name || 'Professor FCT',
       text: professor?.summary || '',
       url: shareUrl,
     })
-  }, [professor?.name, professor?.summary, share])
+  }, [professor?.summary, professor?.user?.name, share])
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <LoadingSpinner className="h-8 w-8" />
+      </div>
+    )
+  }
 
   if (!professor) {
     return (
@@ -73,7 +89,7 @@ export default function ProfessorDetail({ id }: { id: string }) {
                 {professor.image ? (
                   <Image
                     src={professor.image}
-                    alt={professor.name}
+                    alt={professor?.user?.name ?? 'Professor'}
                     fill
                     className="object-cover"
                     priority
@@ -91,11 +107,11 @@ export default function ProfessorDetail({ id }: { id: string }) {
                   ))}
                 </div>
                 <h1 className="text-4xl font-bold tracking-tight text-primary">
-                  {professor.name}
+                  {professor?.user.name}
                 </h1>
                 <div className="mt-2 flex items-center gap-2 text-muted-foreground">
                   <Mail className="h-4 w-4" />
-                  {professor.email}
+                  {professor?.user.email}
                 </div>
               </div>
             </div>
@@ -119,7 +135,7 @@ export default function ProfessorDetail({ id }: { id: string }) {
                 ))}
               </div>
 
-              {professor.publications?.length && (
+              {professor.publications?.length > 0 && (
                 <>
                   <h2>Publicações Recentes</h2>
                   <div className="space-y-4 not-prose">
@@ -165,12 +181,12 @@ export default function ProfessorDetail({ id }: { id: string }) {
                             <h3 className="font-semibold">{project.title}</h3>
                             <Badge
                               variant={
-                                project.status === 'ongoing'
+                                project.status === 'ONGOING'
                                   ? 'default'
                                   : 'secondary'
                               }
                             >
-                              {project.status === 'ongoing'
+                              {project.status === 'ONGOING'
                                 ? 'Em andamento'
                                 : 'Concluído'}
                             </Badge>
@@ -207,12 +223,12 @@ export default function ProfessorDetail({ id }: { id: string }) {
                             <h3 className="font-semibold">{project.title}</h3>
                             <Badge
                               variant={
-                                project.status === 'ongoing'
+                                project.status === 'ONGOING'
                                   ? 'default'
                                   : 'secondary'
                               }
                             >
-                              {project.status === 'ongoing'
+                              {project.status === 'ONGOING'
                                 ? 'Em andamento'
                                 : 'Concluído'}
                             </Badge>
@@ -273,7 +289,7 @@ export default function ProfessorDetail({ id }: { id: string }) {
 
             <Button className="w-full" asChild>
               <a
-                href={professor.lattes}
+                href={professor.lattes || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
               >

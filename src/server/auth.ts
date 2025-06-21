@@ -118,7 +118,6 @@ export const getServerAuthSession = () => getServerSession(authOptions)
 
 export const getCurrentUser = async () => {
   const session = await getServerAuthSession()
-  console.log('session', session)
   const userId = session?.user?.id
 
   if (!userId) return null

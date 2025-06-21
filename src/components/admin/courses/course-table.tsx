@@ -70,7 +70,7 @@ export default function CourseTable({
         <TableHeader>
           <TableRow>
             <TableHead>Nome</TableHead>
-            <TableHead>Professores</TableHead>
+            <TableHead>Tipo do Curso</TableHead>
             <TableHead>Última atualização</TableHead>
             <TableHead className="w-[50px]"></TableHead>
           </TableRow>
@@ -90,19 +90,11 @@ export default function CourseTable({
               <TableRow key={course.id}>
                 <TableCell className="font-medium">{course.name}</TableCell>
                 <TableCell>
-                  <div className="flex flex-wrap gap-1">
-                    {course.professors.length === 0 ? (
-                      <span className="text-muted-foreground text-sm">
-                        Nenhum professor
-                      </span>
-                    ) : (
-                      course.professors.map(professor => (
-                        <Badge key={professor.id} variant="secondary">
-                          {professor.user.name || professor.user.email}
-                        </Badge>
-                      ))
-                    )}
-                  </div>
+                  <Badge variant="secondary">
+                    {course.nature === 'GRADUATION'
+                      ? 'Graduação'
+                      : 'Pós-Graduação'}
+                  </Badge>
                 </TableCell>
                 <TableCell>{dayJs(course.updatedAt).fromNow()}</TableCell>
                 <TableCell>
