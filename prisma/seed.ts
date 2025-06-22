@@ -1,6 +1,8 @@
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 import { CourseNature, PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
+import { generateProfessorData } from './professor-generator'
+import { getRandomProfessorImage } from './mock-images'
 
 const prisma = new PrismaClient()
 
@@ -8,6 +10,7 @@ const shouldClean = process.argv.includes('--clean')
 
 async function cleanDatabase() {
   console.log('🧹 Cleaning database...')
+  await prisma.professor.deleteMany()
   await prisma.user.deleteMany()
   await prisma.course.deleteMany()
   console.log('✅ Database cleaned')
@@ -51,6 +54,43 @@ async function main() {
       },
     })
   }
+
+  console.log('🧑‍🏫 Creating professors...')
+
+  for (const course of courses) {
+    const createdCourse = await prisma.course.findUnique({
+      where: { name: course.name },
+    })
+
+    if (!createdCourse) continue
+
+    for (let i = 0; i < 10; i++) {
+      const professorData = generateProfessorData(course.name)
+      const image = getRandomProfessorImage()
+
+      try {
+        await prisma.user.create({
+          data: {
+            ...professorData.user,
+            password: bcrypt.hashSync(professorData.user.password),
+            professor: {
+              create: {
+                ...professorData.professor,
+                image,
+                courses: {
+                  connect: { id: createdCourse.id },
+                },
+              },
+            },
+          },
+        })
+      } catch {
+        console.log(`⚠️ Professor already exists: ${professorData.user.email}`)
+      }
+    }
+  }
+
+  console.log('✅ Professors created')
 
   await prisma.user.upsert({
     where: {

@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, Course } from '@zenstackhq/runtime/models'
+import type { Prisma, FaqItem } from '@zenstackhq/runtime/models'
 import type {
   UseMutationOptions,
   UseQueryOptions,
@@ -37,12 +37,12 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from '@tanstack/react-query'
 
-export function useCreateCourse(
+export function useCreateFaqItem(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      FaqItem | undefined,
       DefaultError,
-      Prisma.CourseCreateArgs
+      Prisma.FaqItemCreateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -50,14 +50,14 @@ export function useCreateCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseCreateArgs,
+    Prisma.FaqItemCreateArgs,
     DefaultError,
-    Course,
+    FaqItem,
     true
   >(
-    'Course',
+    'FaqItem',
     'POST',
-    `${endpoint}/course/create`,
+    `${endpoint}/faqItem/create`,
     metadata,
     options,
     fetch,
@@ -65,32 +65,32 @@ export function useCreateCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseCreateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseCreateArgs>,
+    mutateAsync: async <T extends Prisma.FaqItemCreateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.FaqItemCreateArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseCreateArgs>
+          Prisma.SelectSubset<T, Prisma.FaqItemCreateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useCreateManyCourse(
+export function useCreateManyFaqItem(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.CourseCreateManyArgs
+      Prisma.FaqItemCreateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -98,14 +98,14 @@ export function useCreateManyCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseCreateManyArgs,
+    Prisma.FaqItemCreateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Course',
+    'FaqItem',
     'POST',
-    `${endpoint}/course/createMany`,
+    `${endpoint}/faqItem/createMany`,
     metadata,
     options,
     fetch,
@@ -113,13 +113,13 @@ export function useCreateManyCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseCreateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseCreateManyArgs>,
+    mutateAsync: async <T extends Prisma.FaqItemCreateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.FaqItemCreateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseCreateManyArgs>
+          Prisma.SelectSubset<T, Prisma.FaqItemCreateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -134,35 +134,35 @@ export function useCreateManyCourse(
   return mutation
 }
 
-export function useFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
+export function useFindManyFaqItem<
+  TArgs extends Prisma.FaqItemFindManyArgs,
   TQueryFnData = Array<
-    Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'FaqItem',
+    `${endpoint}/faqItem/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useInfiniteFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
-  TQueryFnData = Array<Prisma.CourseGetPayload<TArgs>>,
+export function useInfiniteFindManyFaqItem<
+  TArgs extends Prisma.FaqItemFindManyArgs,
+  TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
   options?: Omit<
     UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -171,23 +171,23 @@ export function useInfiniteFindManyCourse<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'FaqItem',
+    `${endpoint}/faqItem/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
+export function useSuspenseFindManyFaqItem<
+  TArgs extends Prisma.FaqItemFindManyArgs,
   TQueryFnData = Array<
-    Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -196,21 +196,21 @@ export function useSuspenseFindManyCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'FaqItem',
+    `${endpoint}/faqItem/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseInfiniteFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
-  TQueryFnData = Array<Prisma.CourseGetPayload<TArgs>>,
+export function useSuspenseInfiniteFindManyFaqItem<
+  TArgs extends Prisma.FaqItemFindManyArgs,
+  TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
   options?: Omit<
     UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -219,41 +219,41 @@ export function useSuspenseInfiniteFindManyCourse<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'FaqItem',
+    `${endpoint}/faqItem/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindUniqueCourse<
-  TArgs extends Prisma.CourseFindUniqueArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindUniqueFaqItem<
+  TArgs extends Prisma.FaqItemFindUniqueArgs,
+  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindUniqueArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findUnique`,
+    'FaqItem',
+    `${endpoint}/faqItem/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindUniqueCourse<
-  TArgs extends Prisma.CourseFindUniqueArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindUniqueFaqItem<
+  TArgs extends Prisma.FaqItemFindUniqueArgs,
+  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindUniqueArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -262,41 +262,41 @@ export function useSuspenseFindUniqueCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findUnique`,
+    'FaqItem',
+    `${endpoint}/faqItem/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindFirstCourse<
-  TArgs extends Prisma.CourseFindFirstArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindFirstFaqItem<
+  TArgs extends Prisma.FaqItemFindFirstArgs,
+  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindFirstArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findFirst`,
+    'FaqItem',
+    `${endpoint}/faqItem/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindFirstCourse<
-  TArgs extends Prisma.CourseFindFirstArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindFirstFaqItem<
+  TArgs extends Prisma.FaqItemFindFirstArgs,
+  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindFirstArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -305,20 +305,20 @@ export function useSuspenseFindFirstCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findFirst`,
+    'FaqItem',
+    `${endpoint}/faqItem/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useUpdateCourse(
+export function useUpdateFaqItem(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      FaqItem | undefined,
       DefaultError,
-      Prisma.CourseUpdateArgs
+      Prisma.FaqItemUpdateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -326,14 +326,14 @@ export function useUpdateCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseUpdateArgs,
+    Prisma.FaqItemUpdateArgs,
     DefaultError,
-    Course,
+    FaqItem,
     true
   >(
-    'Course',
+    'FaqItem',
     'PUT',
-    `${endpoint}/course/update`,
+    `${endpoint}/faqItem/update`,
     metadata,
     options,
     fetch,
@@ -341,32 +341,32 @@ export function useUpdateCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseUpdateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseUpdateArgs>,
+    mutateAsync: async <T extends Prisma.FaqItemUpdateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.FaqItemUpdateArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseUpdateArgs>
+          Prisma.SelectSubset<T, Prisma.FaqItemUpdateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useUpdateManyCourse(
+export function useUpdateManyFaqItem(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.CourseUpdateManyArgs
+      Prisma.FaqItemUpdateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -374,14 +374,14 @@ export function useUpdateManyCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseUpdateManyArgs,
+    Prisma.FaqItemUpdateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Course',
+    'FaqItem',
     'PUT',
-    `${endpoint}/course/updateMany`,
+    `${endpoint}/faqItem/updateMany`,
     metadata,
     options,
     fetch,
@@ -389,13 +389,13 @@ export function useUpdateManyCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseUpdateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseUpdateManyArgs>,
+    mutateAsync: async <T extends Prisma.FaqItemUpdateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.FaqItemUpdateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseUpdateManyArgs>
+          Prisma.SelectSubset<T, Prisma.FaqItemUpdateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -410,12 +410,12 @@ export function useUpdateManyCourse(
   return mutation
 }
 
-export function useUpsertCourse(
+export function useUpsertFaqItem(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      FaqItem | undefined,
       DefaultError,
-      Prisma.CourseUpsertArgs
+      Prisma.FaqItemUpsertArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -423,14 +423,14 @@ export function useUpsertCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseUpsertArgs,
+    Prisma.FaqItemUpsertArgs,
     DefaultError,
-    Course,
+    FaqItem,
     true
   >(
-    'Course',
+    'FaqItem',
     'POST',
-    `${endpoint}/course/upsert`,
+    `${endpoint}/faqItem/upsert`,
     metadata,
     options,
     fetch,
@@ -438,32 +438,32 @@ export function useUpsertCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseUpsertArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseUpsertArgs>,
+    mutateAsync: async <T extends Prisma.FaqItemUpsertArgs>(
+      args: Prisma.SelectSubset<T, Prisma.FaqItemUpsertArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseUpsertArgs>
+          Prisma.SelectSubset<T, Prisma.FaqItemUpsertArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteCourse(
+export function useDeleteFaqItem(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      FaqItem | undefined,
       DefaultError,
-      Prisma.CourseDeleteArgs
+      Prisma.FaqItemDeleteArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -471,14 +471,14 @@ export function useDeleteCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseDeleteArgs,
+    Prisma.FaqItemDeleteArgs,
     DefaultError,
-    Course,
+    FaqItem,
     true
   >(
-    'Course',
+    'FaqItem',
     'DELETE',
-    `${endpoint}/course/delete`,
+    `${endpoint}/faqItem/delete`,
     metadata,
     options,
     fetch,
@@ -486,32 +486,32 @@ export function useDeleteCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseDeleteArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseDeleteArgs>,
+    mutateAsync: async <T extends Prisma.FaqItemDeleteArgs>(
+      args: Prisma.SelectSubset<T, Prisma.FaqItemDeleteArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseDeleteArgs>
+          Prisma.SelectSubset<T, Prisma.FaqItemDeleteArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteManyCourse(
+export function useDeleteManyFaqItem(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.CourseDeleteManyArgs
+      Prisma.FaqItemDeleteManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -519,14 +519,14 @@ export function useDeleteManyCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseDeleteManyArgs,
+    Prisma.FaqItemDeleteManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Course',
+    'FaqItem',
     'DELETE',
-    `${endpoint}/course/deleteMany`,
+    `${endpoint}/faqItem/deleteMany`,
     metadata,
     options,
     fetch,
@@ -534,13 +534,13 @@ export function useDeleteManyCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseDeleteManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseDeleteManyArgs>,
+    mutateAsync: async <T extends Prisma.FaqItemDeleteManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.FaqItemDeleteManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseDeleteManyArgs>
+          Prisma.SelectSubset<T, Prisma.FaqItemDeleteManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -555,33 +555,33 @@ export function useDeleteManyCourse(
   return mutation
 }
 
-export function useAggregateCourse<
-  TArgs extends Prisma.CourseAggregateArgs,
-  TQueryFnData = Prisma.GetCourseAggregateType<TArgs>,
+export function useAggregateFaqItem<
+  TArgs extends Prisma.FaqItemAggregateArgs,
+  TQueryFnData = Prisma.GetFaqItemAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemAggregateArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/aggregate`,
+    'FaqItem',
+    `${endpoint}/faqItem/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseAggregateCourse<
-  TArgs extends Prisma.CourseAggregateArgs,
-  TQueryFnData = Prisma.GetCourseAggregateType<TArgs>,
+export function useSuspenseAggregateFaqItem<
+  TArgs extends Prisma.FaqItemAggregateArgs,
+  TQueryFnData = Prisma.GetFaqItemAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemAggregateArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -590,23 +590,23 @@ export function useSuspenseAggregateCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/aggregate`,
+    'FaqItem',
+    `${endpoint}/faqItem/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useGroupByCourse<
-  TArgs extends Prisma.CourseGroupByArgs,
+export function useGroupByFaqItem<
+  TArgs extends Prisma.FaqItemGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.CourseGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.CourseGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.FaqItemGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.FaqItemGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -659,16 +659,16 @@ export function useGroupByCourse<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.CourseGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.FaqItemGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.CourseGroupByOutputType]: P extends '_count'
+            keyof Prisma.FaqItemGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.CourseGroupByOutputType[P]
+                  Prisma.FaqItemGroupByOutputType[P]
                 >
-            : Prisma.GetScalarType<TArgs[P], Prisma.CourseGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.FaqItemGroupByOutputType[P]>
         }
       >
     : InputErrors,
@@ -677,7 +677,7 @@ export function useGroupByCourse<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.CourseGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.FaqItemGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
@@ -685,23 +685,23 @@ export function useGroupByCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/groupBy`,
+    'FaqItem',
+    `${endpoint}/faqItem/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseGroupByCourse<
-  TArgs extends Prisma.CourseGroupByArgs,
+export function useSuspenseGroupByFaqItem<
+  TArgs extends Prisma.FaqItemGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.CourseGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.CourseGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.FaqItemGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.FaqItemGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -754,16 +754,16 @@ export function useSuspenseGroupByCourse<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.CourseGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.FaqItemGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.CourseGroupByOutputType]: P extends '_count'
+            keyof Prisma.FaqItemGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.CourseGroupByOutputType[P]
+                  Prisma.FaqItemGroupByOutputType[P]
                 >
-            : Prisma.GetScalarType<TArgs[P], Prisma.CourseGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.FaqItemGroupByOutputType[P]>
         }
       >
     : InputErrors,
@@ -772,7 +772,7 @@ export function useSuspenseGroupByCourse<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.CourseGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.FaqItemGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<
@@ -783,55 +783,55 @@ export function useSuspenseGroupByCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/groupBy`,
+    'FaqItem',
+    `${endpoint}/faqItem/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useCountCourse<
-  TArgs extends Prisma.CourseCountArgs,
+export function useCountFaqItem<
+  TArgs extends Prisma.FaqItemCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.CourseCountAggregateOutputType
+          Prisma.FaqItemCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemCountArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/count`,
+    'FaqItem',
+    `${endpoint}/faqItem/count`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseCountCourse<
-  TArgs extends Prisma.CourseCountArgs,
+export function useSuspenseCountFaqItem<
+  TArgs extends Prisma.FaqItemCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.CourseCountAggregateOutputType
+          Prisma.FaqItemCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemCountArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -840,25 +840,27 @@ export function useSuspenseCountCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/count`,
+    'FaqItem',
+    `${endpoint}/faqItem/count`,
     args,
     options,
     fetch,
   )
 }
-import type { CourseNature } from '@zenstackhq/runtime/models'
+import type { FaqNature } from '@zenstackhq/runtime/models'
 
-export function useCheckCourse<TError = DefaultError>(
+export function useCheckFaqItem<TError = DefaultError>(
   args: {
     operation: PolicyCrudKind
     where?: {
       id?: string
-      name?: string
-      nature?: CourseNature
+      title?: string
       slug?: string
-      description?: string
-      aboutContent?: string
+      nature?: FaqNature
+      order?: number
+      published?: boolean
+      content?: string
+      categoryId?: string
     }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
@@ -866,8 +868,8 @@ export function useCheckCourse<TError = DefaultError>(
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<boolean, boolean, TError>(
-    'Course',
-    `${endpoint}/course/check`,
+    'FaqItem',
+    `${endpoint}/faqItem/check`,
     args,
     options,
     fetch,

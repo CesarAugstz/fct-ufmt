@@ -42,7 +42,9 @@ export default function CourseTabs({ courseSlug }: CourseTabsProps) {
   const handleTabChange = useCallback(
     (tab: string) => {
       setActiveTab(tab)
-      router.push(`/home/courses/${courseSlug}?tab=${tab}`, { scroll: false })
+      router.replace(`/home/courses/${courseSlug}?tab=${tab}`, {
+        scroll: false,
+      })
     },
     [courseSlug, router],
   )

@@ -8,6 +8,7 @@ import {
   FormDescription,
 } from '@/components/ui/form'
 import { TextAreaField } from './text-area-field'
+import { useMemo } from 'react'
 
 export interface FormTextareaProps {
   name: string
@@ -16,6 +17,8 @@ export interface FormTextareaProps {
   placeholder?: string
   description?: string
   required?: boolean
+  rows?: number
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both'
 }
 
 export function FormTextarea({
@@ -25,8 +28,25 @@ export function FormTextarea({
   description,
   className,
   required = false,
+  rows,
+  resize,
 }: FormTextareaProps) {
   const { control } = useFormContext()
+
+  const textAreaClassName = useMemo(() => {
+    switch (resize) {
+      case 'none':
+        return 'resize-none'
+      case 'vertical':
+        return 'resize-y'
+      case 'horizontal':
+        return 'resize-x'
+      case 'both':
+        return 'resize'
+      default:
+        return ''
+    }
+  }, [resize])
 
   return (
     <FormField
@@ -41,7 +61,9 @@ export function FormTextarea({
           <FormControl>
             <TextAreaField
               placeholder={placeholder}
+              rows={rows}
               {...field}
+              className={textAreaClassName}
               value={field.value || ''}
             />
           </FormControl>

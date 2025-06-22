@@ -7,40 +7,35 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form'
-import { TextField } from './text-field'
+import { Input } from '@/components/ui/input'
 
-export interface FormTextProps {
+export interface FormNumberProps {
   name: string
   label?: string
-  className?: string
-  customLabel?: React.ReactNode
   placeholder?: string
   description?: string
-  endAdornment?: React.ReactNode
+  className?: string
   required?: boolean
-  type?: 'text' | 'password'
-  showPasswordToggle?: boolean
+  min?: number
+  max?: number
+  step?: number
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  formatter?: (value: string) => string
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
-  onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
-export function FormText({
+export function FormNumber({
   name,
   label,
   placeholder,
-  className,
   description,
-  customLabel,
-  onChange,
-  formatter,
-  onBlur,
-  onEnter,
-  type = 'text',
+  className,
   required = false,
-  showPasswordToggle = false,
-}: FormTextProps) {
+  min,
+  max,
+  step,
+  onChange,
+  onBlur,
+}: FormNumberProps) {
   const { control } = useFormContext()
 
   return (
@@ -50,33 +45,26 @@ export function FormText({
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel>
-            {customLabel}
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </FormLabel>
           <FormControl>
-            <TextField
-              showPasswordToggle={showPasswordToggle}
+            <Input
+              type="number"
               placeholder={placeholder}
+              min={min}
+              max={max}
+              step={step}
               {...field}
+              value={field.value || ''}
               onBlur={onBlur}
-              type={type}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  onEnter?.(e)
-                }
-              }}
               onChange={e => {
-                const value = e.target.value
-                const formattedValue = formatter ? formatter(value) : value
-                e.target.value = formattedValue
-                field.onChange(e)
+                const value = e.target.valueAsNumber
+                field.onChange(isNaN(value) ? undefined : value)
                 onChange?.(e)
               }}
             />
           </FormControl>
-
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>

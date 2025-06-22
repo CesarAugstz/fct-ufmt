@@ -21,7 +21,9 @@ Table Course {
   nature CourseNature [not null]
   slug String [unique, not null]
   description String
+  aboutContent String
   professors Professor [not null]
+  faqCategories FaqCategory [not null]
 }
 
 Table Professor {
@@ -40,6 +42,36 @@ Table Professor {
   extensionProjects Json [not null]
   userId String [unique, not null]
   user User [not null]
+}
+
+Table FaqCategory {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  description String
+  order Int [not null, default: 0]
+  courseId String [not null]
+  course Course [not null]
+  faqItems FaqItem [not null]
+}
+
+Table FaqItem {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  slug String [not null]
+  nature FaqNature [not null, default: 'SIMPLE']
+  order Int [not null, default: 0]
+  published Boolean [not null, default: false]
+  content String
+  categoryId String [not null]
+  category FaqCategory [not null]
+
+  indexes {
+    (categoryId, slug) [unique]
+  }
 }
 
 Table CourseToProfessor {
@@ -64,4 +96,13 @@ Enum ProjectStatus {
   FINISHED
 }
 
+Enum FaqNature {
+  SIMPLE
+  PAGE
+}
+
 Ref: Professor.userId - User.id [delete: Cascade]
+
+Ref: FaqCategory.courseId > Course.id [delete: Cascade]
+
+Ref: FaqItem.categoryId > FaqCategory.id [delete: Cascade]

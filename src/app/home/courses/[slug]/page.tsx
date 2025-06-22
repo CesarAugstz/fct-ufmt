@@ -1,4 +1,4 @@
-import { CourseDetailPage } from '@/components/home/courses/course-detail'
+import CourseDetailPage from '@/components/home/courses/course-detail/course-detail-page'
 
 export default async function CoursePage({
   params,

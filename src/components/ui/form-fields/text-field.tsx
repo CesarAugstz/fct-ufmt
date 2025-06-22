@@ -9,32 +9,36 @@ interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   helperText?: string | React.ReactNode
 }
 
-export function TextField({ placeholder, showPasswordToggle, ...props }: TextFieldProps) {
+export function TextField({
+  placeholder,
+  showPasswordToggle,
+  ...props
+}: TextFieldProps) {
   const [showPassword, setShowPassword] = useState(false)
-  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
-  
-  const type = showPasswordToggle 
-    ? (showPassword ? 'text' : 'password') 
+
+  const type = showPasswordToggle
+    ? showPassword
+      ? 'text'
+      : 'password'
     : props.type
-  
+
   return (
     <div className="relative">
-      <Input 
-        placeholder={placeholder} 
-        {...props} 
-        type={type} 
+      <Input
+        placeholder={placeholder}
+        {...props}
+        type={type}
         className={showPasswordToggle ? 'pr-10' : undefined}
       />
 
       {props.helperText && (
-        <p className="mt-1 text-xs text-muted-foreground">
-          {props.helperText}
-        </p>
+        <p className="mt-1 text-xs text-muted-foreground">{props.helperText}</p>
       )}
-      
+
       {showPasswordToggle && (
         <Button
           type="button"

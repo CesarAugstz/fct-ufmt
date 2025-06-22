@@ -1,13 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
-import { Book, Mail, ArrowRight, User as UserIcon } from 'lucide-react'
+import { Book, Mail, ArrowRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { getAnimationOnViewUp } from '@/utils/animations/on-view-up'
 import { Course, Professor, User } from '@zenstackhq/runtime/models'
+import ProfileImage from '@/components/common/profile-image'
 
 type ProfessorWithRelations = Professor & {
   user: User
@@ -29,18 +29,11 @@ export default function ProfessorCard({
       {...getAnimationOnViewUp(index, 'y', false)}
     >
       <div className="flex justify-center">
-        <div className="rounded-full flex relative w-48 h-48 overflow-hidden flex-shrink-0">
-          {professor.image ? (
-            <Image
-              src={professor.image ?? '/example/profile.jpg'}
-              alt={professor.user?.name || 'Professor'}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <UserIcon className="h-full w-full text-muted-foreground opacity-50 rounded-full" />
-          )}
-        </div>
+        <ProfileImage
+          alt={professor.user.name || ''}
+          src={professor.image || undefined}
+          className="w-48 h-48 hover:scale-105 transition-transform duration-300"
+        />
       </div>
 
       <div className="flex-grow">

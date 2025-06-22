@@ -33,6 +33,11 @@ enum ProjectStatus {
   FINISHED
 }
 
+enum FaqNature {
+  SIMPLE
+  PAGE
+}
+
 model User {
   id        String     @id() @default(ulid())
   createdAt DateTime   @default(now())
@@ -45,14 +50,16 @@ model User {
 }
 
 model Course {
-  id          String       @id() @default(ulid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
-  name        String       @unique()
-  nature      CourseNature
-  slug        String       @unique()
-  description String?
-  professors  Professor[]
+  id            String        @id() @default(ulid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt()
+  name          String        @unique()
+  nature        CourseNature
+  slug          String        @unique()
+  description   String?
+  aboutContent  String?       @db.Text()
+  professors    Professor[]
+  faqCategories FaqCategory[]
 }
 
 model Professor {
@@ -71,4 +78,32 @@ model Professor {
   extensionProjects Json
   userId            String   @unique()
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FaqCategory {
+  id          String    @id() @default(ulid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String
+  description String?
+  order       Int       @default(0)
+  courseId    String
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  faqItems    FaqItem[]
+}
+
+model FaqItem {
+  id         String      @id() @default(ulid())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt()
+  title      String
+  slug       String
+  nature     FaqNature   @default(SIMPLE)
+  order      Int         @default(0)
+  published  Boolean     @default(false)
+  content    String?
+  categoryId String
+  category   FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, slug])
 }

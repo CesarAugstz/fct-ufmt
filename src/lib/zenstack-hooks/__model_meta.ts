@@ -99,6 +99,11 @@ const metadata = {
           type: 'String',
           isOptional: true,
         },
+        aboutContent: {
+          name: 'aboutContent',
+          type: 'String',
+          isOptional: true,
+        },
         professors: {
           name: 'professors',
           type: 'Professor',
@@ -106,6 +111,13 @@ const metadata = {
           isArray: true,
           backLink: 'courses',
           isRelationOwner: true,
+        },
+        faqCategories: {
+          name: 'faqCategories',
+          type: 'FaqCategory',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'course',
         },
       },
       uniqueConstraints: {
@@ -210,6 +222,7 @@ const metadata = {
           isDataModel: true,
           backLink: 'professor',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'userId' },
         },
       },
@@ -221,6 +234,143 @@ const metadata = {
         userId: {
           name: 'userId',
           fields: ['userId'],
+        },
+      },
+    },
+    faqCategory: {
+      name: 'FaqCategory',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        name: {
+          name: 'name',
+          type: 'String',
+        },
+        description: {
+          name: 'description',
+          type: 'String',
+          isOptional: true,
+        },
+        order: {
+          name: 'order',
+          type: 'Int',
+          attributes: [{ name: '@default', args: [{ value: 0 }] }],
+        },
+        courseId: {
+          name: 'courseId',
+          type: 'String',
+          isForeignKey: true,
+          relationField: 'course',
+        },
+        course: {
+          name: 'course',
+          type: 'Course',
+          isDataModel: true,
+          backLink: 'faqCategories',
+          isRelationOwner: true,
+          onDeleteAction: 'Cascade',
+          foreignKeyMapping: { id: 'courseId' },
+        },
+        faqItems: {
+          name: 'faqItems',
+          type: 'FaqItem',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'category',
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+      },
+    },
+    faqItem: {
+      name: 'FaqItem',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        title: {
+          name: 'title',
+          type: 'String',
+        },
+        slug: {
+          name: 'slug',
+          type: 'String',
+        },
+        nature: {
+          name: 'nature',
+          type: 'FaqNature',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        order: {
+          name: 'order',
+          type: 'Int',
+          attributes: [{ name: '@default', args: [{ value: 0 }] }],
+        },
+        published: {
+          name: 'published',
+          type: 'Boolean',
+          attributes: [{ name: '@default', args: [{ value: false }] }],
+        },
+        content: {
+          name: 'content',
+          type: 'String',
+          isOptional: true,
+        },
+        categoryId: {
+          name: 'categoryId',
+          type: 'String',
+          isForeignKey: true,
+          relationField: 'category',
+        },
+        category: {
+          name: 'category',
+          type: 'FaqCategory',
+          isDataModel: true,
+          backLink: 'faqItems',
+          isRelationOwner: true,
+          onDeleteAction: 'Cascade',
+          foreignKeyMapping: { id: 'categoryId' },
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+        categoryId_slug: {
+          name: 'categoryId_slug',
+          fields: ['categoryId', 'slug'],
         },
       },
     },
@@ -306,6 +456,8 @@ const metadata = {
   },
   deleteCascade: {
     user: ['Professor'],
+    course: ['FaqCategory'],
+    faqCategory: ['FaqItem'],
   },
   authModel: 'User',
 }

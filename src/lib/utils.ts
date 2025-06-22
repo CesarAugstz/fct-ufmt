@@ -1,3 +1,4 @@
+import { dayJs } from '@/utils/dayjs'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -20,9 +21,11 @@ export function searchContains(searchTerm: string, searchIn: string): boolean {
 }
 
 export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(new Date(date))
+  if (!date) return ''
+  const dayjsDate = dayJs(date)
+  if (!dayjsDate.isValid()) {
+    console.error('Invalid date:', date)
+    return ''
+  }
+  return dayjsDate.format('DD/MM/YYYY')
 }

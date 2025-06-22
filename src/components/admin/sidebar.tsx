@@ -45,6 +45,10 @@ export default function Sidebar() {
     },
   ] as const
 
+  const activeRoute = routes.findLast(route =>
+    pathname.includes(route.path),
+  )?.path
+
   return (
     <div className="flex flex-col w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700">
       <div className="py-4 px-3 border-b border-slate-200 dark:border-slate-700">
@@ -60,13 +64,8 @@ export default function Sidebar() {
             <Link href={route.disabled ? '#' : route.path} key={route.path}>
               <Button
                 disabled={route?.disabled}
-                variant="ghost"
-                className={cn(
-                  'w-full justify-start cursor-pointer',
-                  pathname === route.path
-                    ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white'
-                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white',
-                )}
+                variant={activeRoute === route.path ? 'outline' : 'ghost'}
+                className={cn('w-full justify-start cursor-pointer')}
               >
                 {route.icon}
                 {route.name}

@@ -8,6 +8,8 @@
 export * from './user'
 export * from './course'
 export * from './professor'
+export * from './faq-category'
+export * from './faq-item'
 export { getQueryKey } from '@zenstackhq/tanstack-query/runtime-v5'
 export { Provider } from '@zenstackhq/tanstack-query/runtime-v5/react'
 export { default as metadata } from './__model_meta'

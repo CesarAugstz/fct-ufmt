@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import CourseTable from './course-table'
+import CourseCards from './course-cards'
 import CourseForm from './course-form'
 import { BaseCard } from '@/components/ui/base-card'
 import { useFindManyCourse } from '@/lib/zenstack-hooks'
@@ -48,7 +48,7 @@ export default function Course() {
         onUpdate={refetch}
         loading={isLoading}
       >
-        <CourseTable
+        <CourseCards
           courses={courses || []}
           onRefresh={refetch}
           onClickEdit={handleEditClick}

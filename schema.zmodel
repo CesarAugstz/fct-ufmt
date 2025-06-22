@@ -53,8 +53,10 @@ model Course extends BaseModel {
   nature CourseNature
   slug String @unique 
   description String?
+  aboutContent String? @db.Text
 
   professors Professor[]
+  faqCategories FaqCategory[]
 
   @@allow('all', true)
 }
@@ -107,4 +109,39 @@ model Professor extends BaseModel {
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == user)
 }
 
+enum FaqNature {
+  SIMPLE
+  PAGE
+}
 
+model FaqCategory extends BaseModel {
+  name        String
+  description String?
+  order       Int      @default(0)
+  
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  faqItems    FaqItem[]
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth().role == 'ADMIN')
+}
+
+model FaqItem extends BaseModel {
+  title       String
+  slug        String
+  nature      FaqNature  @default(SIMPLE)
+  order       Int      @default(0)
+  published   Boolean  @default(false)
+  
+  content     String?
+  
+  categoryId  String
+  category    FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([categoryId, slug])
+  @@allow('read', published || auth().role == 'ADMIN')
+  @@allow('create', auth() != null)
+  @@allow('update,delete', auth().role == 'ADMIN')
+}

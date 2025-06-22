@@ -35,9 +35,9 @@ export default function Photo({ onClickSave, isSubmitting }: Props) {
       if (!file) return
 
       const compressed = await compress(file, {
-        maxHeight: 500,
-        maxWidth: 500,
-        maxSizeKB: 600,
+        maxHeight: 800,
+        maxWidth: 800,
+        maxSizeKB: 800,
         quality: 0.9,
       })
 
