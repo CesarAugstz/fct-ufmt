@@ -26,7 +26,7 @@ export default function CourseFaqTab() {
     null,
   )
 
-  const course = {}
+  const course = {} as any
 
   const handleAddCategory = () => {
     setEditingCategory(null)
@@ -83,7 +83,7 @@ export default function CourseFaqTab() {
             </div>
           ) : (
             <div className="space-y-4">
-              {course?.faqCategories?.map(category => (
+              {course?.faqCategories?.map((category: any) => (
                 <Card key={category.id}>
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start">
@@ -127,8 +127,8 @@ export default function CourseFaqTab() {
                     ) : (
                       <Accordion type="single" collapsible className="w-full">
                         {category.faqItems
-                          .sort((a, b) => a.order - b.order)
-                          .map(item => (
+                          .sort((a: any, b: any) => a.order - b.order)
+                          .map((item: any) => (
                             <AccordionItem key={item.id} value={item.id}>
                               <AccordionTrigger className="text-left">
                                 <div className="flex justify-between items-center w-full mr-4">

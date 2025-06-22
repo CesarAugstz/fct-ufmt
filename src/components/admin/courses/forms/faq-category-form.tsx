@@ -26,7 +26,7 @@ import { FaqCategory } from '@zenstackhq/runtime/models'
 const formSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
   description: z.string().optional(),
-  order: z.number().min(0, 'Ordem deve ser um número positivo').default(0),
+  order: z.number().min(0, 'Ordem deve ser um número positivo'),
 })
 
 type CategoryFormValues = z.infer<typeof formSchema>

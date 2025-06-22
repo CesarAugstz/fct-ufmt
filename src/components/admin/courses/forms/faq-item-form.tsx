@@ -27,9 +27,9 @@ import { FaqNature } from '@prisma/client'
 const formSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
   content: z.string().optional(),
-  nature: z.enum([FaqNature.SIMPLE, FaqNature.PAGE]).default(FaqNature.SIMPLE),
-  order: z.number().min(0, 'Ordem deve ser um número positivo').default(0),
-  published: z.boolean().default(false),
+  nature: z.enum([FaqNature.SIMPLE, FaqNature.PAGE]),
+  order: z.number().min(0, 'Ordem deve ser um número positivo'),
+  published: z.boolean(),
 })
 
 type ItemFormValues = z.infer<typeof formSchema>

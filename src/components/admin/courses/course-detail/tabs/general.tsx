@@ -13,7 +13,7 @@ import { useToast } from '@/lib/hooks/toast'
 import { CourseNature } from '@prisma/client'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 
-import { FormMarkdown } from '@/components/ui/form-fields'
+import { FormMarkdown, FormBlockTextImage } from '@/components/ui/form-fields'
 import { useAtomValue } from 'jotai'
 import { courseSlugAtom } from '../../store/course.store'
 import { useRouter } from 'next/navigation'
@@ -24,6 +24,20 @@ const formSchema = z.object({
   nature: z.enum([CourseNature.GRADUATION, CourseNature.POST_GRADUATION]),
   description: z.string().min(20),
   aboutContent: z.string().optional(),
+  contentBlocks: z
+    .array(
+      z.object({
+        id: z.string(),
+        type: z.enum(['text', 'image']),
+        content: z.string().optional(),
+        file: z.any().optional(),
+        url: z.string().optional(),
+        caption: z.string().optional(),
+        size: z.enum(['small', 'medium', 'large', 'full']).optional(),
+        alignment: z.enum(['left', 'center', 'right']).optional(),
+      }),
+    )
+    .optional(),
 })
 
 type CourseFormValues = z.infer<typeof formSchema>
@@ -56,6 +70,7 @@ export default function CourseGeneralTab() {
       nature: course?.nature || CourseNature.GRADUATION,
       description: course?.description || '',
       aboutContent: course?.aboutContent || '',
+      contentBlocks: [{ id: '1', type: 'text', content: '' }],
     },
   })
 
@@ -134,6 +149,12 @@ export default function CourseGeneralTab() {
                 placeholder="Digite o conteúdo sobre o curso"
                 rows={10}
                 preview={true}
+              />
+
+              <FormBlockTextImage
+                className="md:col-span-3"
+                name="contentBlocks"
+                label="Conteúdo em Blocos"
               />
             </div>
 
