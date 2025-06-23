@@ -8,6 +8,7 @@ import {
   FormDescription,
 } from '@/components/ui/form'
 import { TextField } from './text-field'
+import { twMerge } from 'tailwind-merge'
 
 export interface FormTextProps {
   name: string
@@ -24,6 +25,7 @@ export interface FormTextProps {
   formatter?: (value: string) => string
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
   onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  span?: number
 }
 
 export function FormText({
@@ -40,6 +42,7 @@ export function FormText({
   type = 'text',
   required = false,
   showPasswordToggle = false,
+  span,
 }: FormTextProps) {
   const { control } = useFormContext()
 
@@ -48,7 +51,9 @@ export function FormText({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={className}>
+        <FormItem
+          className={twMerge(className, span ? `col-span-${span}` : '')}
+        >
           <FormLabel>
             {customLabel}
             {label}

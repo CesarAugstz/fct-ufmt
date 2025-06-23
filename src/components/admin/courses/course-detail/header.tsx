@@ -24,7 +24,7 @@ export default function Header() {
   )
 
   const goBack = useCallback(() => {
-    router.back()
+    router.push('/admin/courses')
   }, [router])
 
   if (!slug) {

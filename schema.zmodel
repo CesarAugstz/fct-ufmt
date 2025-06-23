@@ -53,8 +53,8 @@ model Course extends BaseModel {
   nature CourseNature
   slug String @unique 
   description String?
-  aboutContent String? @db.Text
 
+  aboutContentBlocks ContentBlock[]
   professors Professor[]
   faqCategories FaqCategory[]
 
@@ -144,4 +144,51 @@ model FaqItem extends BaseModel {
   @@allow('read', published || auth().role == 'ADMIN')
   @@allow('create', auth() != null)
   @@allow('update,delete', auth().role == 'ADMIN')
+}
+
+enum ContentNature {
+  TEXT
+  IMAGE
+}
+
+enum Alignment {
+  LEFT
+  CENTER
+  RIGHT
+}
+
+enum BlockSize {
+  SMALL
+  MEDIUM
+  LARGE
+  FULL
+}
+
+model ContentBlock extends BaseModel {
+  nature       ContentNature
+  content    String? @db.Text
+  caption    String?
+  size       BlockSize?
+  alignment  Alignment?
+  order      Int      @default(0)
+
+  courseId   String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  fileId     String?  @unique
+  file       Attachment?    @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth().role == 'ADMIN')
+}
+
+model Attachment extends BaseModel {
+  name     String
+  dataUrl  String
+  mimeType String
+  size     Int
+
+  contentBlocks ContentBlock? 
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth().role == 'ADMIN')
 }

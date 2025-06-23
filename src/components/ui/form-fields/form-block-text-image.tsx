@@ -7,7 +7,14 @@ import {
   FormMessage,
   FormControl,
 } from '@/components/ui/form'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { Info } from 'lucide-react'
 import { BlockTextImageField } from './block-text-image-field'
+import { twMerge } from 'tailwind-merge'
 
 interface FormBlockTextImageProps<
   TFieldValues extends FieldValues,
@@ -17,6 +24,7 @@ interface FormBlockTextImageProps<
   label?: string
   required?: boolean
   className?: string
+  span?: number
 }
 
 export function FormBlockTextImage<
@@ -27,6 +35,7 @@ export function FormBlockTextImage<
   label,
   required,
   className,
+  span,
 }: FormBlockTextImageProps<TFieldValues, TName>) {
   const { field } = useController({
     name,
@@ -36,11 +45,31 @@ export function FormBlockTextImage<
   })
 
   return (
-    <FormItem className={className}>
+    <FormItem className={twMerge(className, span ? `col-span-${span}` : '')}>
       {label && (
-        <FormLabel>
-          {label} {required && <span className="text-destructive">*</span>}
-        </FormLabel>
+        <div className="flex items-center gap-2">
+          <FormLabel>
+            {label} {required && <span className="text-destructive">*</span>}
+          </FormLabel>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="p-1 rounded-md hover:bg-muted transition-colors"
+              >
+                <Info className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="max-w-xs">
+              <p className="text-sm">
+                Este campo permite combinar blocos de <strong>texto</strong> e{' '}
+                <strong>imagens</strong>. Use os botões para adicionar, mover e
+                organizar o conteúdo. Blocos de texto suportam formatação
+                Markdown.
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
       )}
       <FormControl>
         <BlockTextImageField

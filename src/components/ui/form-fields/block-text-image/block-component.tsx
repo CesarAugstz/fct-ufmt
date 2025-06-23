@@ -1,17 +1,18 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { Trash2, Type, Image, ChevronUp, ChevronDown } from 'lucide-react'
 import { TextBlockComponent } from './text-block'
 import { ImageBlockComponent } from './image-block'
-import type { Block } from './types'
+import type { Block, ImageBlock, TextBlock } from './types'
+import { ContentNature } from '@prisma/client'
 
 interface BlockComponentProps {
   block: Block
@@ -19,7 +20,7 @@ interface BlockComponentProps {
   totalBlocks: number
   onUpdate: (id: string, updates: Partial<Block>) => void
   onDelete: (id: string) => void
-  onAddBlock: (type: 'text' | 'image', index: number) => void
+  onAddBlock: (nature: ContentNature, index: number) => void
   onMoveUp: (index: number) => void
   onMoveDown: (index: number) => void
 }
@@ -35,12 +36,12 @@ export function BlockComponent({
   onMoveDown,
 }: BlockComponentProps) {
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-muted-foreground">
-          Bloco {index + 1} - {block.type === 'text' ? 'Texto' : 'Imagem'}
+    <div className="group relative border border-border/30 rounded-md p-3 hover:border-border transition-colors">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          {block.nature === 'TEXT' ? 'Texto' : 'Imagem'} {index + 1}
         </span>
-        <div className="flex gap-1">
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -48,14 +49,14 @@ export function BlockComponent({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => onAddBlock('text', index)}
-                  className="h-8 w-8 p-0"
+                  onClick={() => onAddBlock(ContentNature.TEXT, index)}
+                  className="h-6 w-6 p-0"
                 >
-                  <Type className="h-4 w-4" />
+                  <Type className="h-3 w-3" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Adicionar bloco de texto acima</p>
+                <p>Adicionar texto acima</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -67,14 +68,14 @@ export function BlockComponent({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => onAddBlock('image', index)}
-                  className="h-8 w-8 p-0"
+                  onClick={() => onAddBlock(ContentNature.IMAGE, index)}
+                  className="h-6 w-6 p-0"
                 >
-                  <Image className="h-4 w-4" />
+                  <Image className="h-3 w-3" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Adicionar bloco de imagem acima</p>
+                <p>Adicionar imagem acima</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -88,9 +89,9 @@ export function BlockComponent({
                   size="sm"
                   onClick={() => onMoveUp(index)}
                   disabled={index === 0}
-                  className="h-8 w-8 p-0"
+                  className="h-6 w-6 p-0"
                 >
-                  <ChevronUp className="h-4 w-4" />
+                  <ChevronUp className="h-3 w-3" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -108,9 +109,9 @@ export function BlockComponent({
                   size="sm"
                   onClick={() => onMoveDown(index)}
                   disabled={index === totalBlocks - 1}
-                  className="h-8 w-8 p-0"
+                  className="h-6 w-6 p-0"
                 >
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-3 w-3" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -127,9 +128,9 @@ export function BlockComponent({
                   variant="ghost"
                   size="sm"
                   onClick={() => onDelete(block.id)}
-                  className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                  className="h-6 w-6 p-0 text-destructive hover:text-destructive"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3 w-3" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -140,15 +141,18 @@ export function BlockComponent({
         </div>
       </div>
 
-      <Card className="relative hover:border-primary/30 transition-colors">
-        <CardContent className="p-4">
-          {block.type === 'text' ? (
-            <TextBlockComponent block={block} onUpdate={onUpdate} />
-          ) : (
-            <ImageBlockComponent block={block} onUpdate={onUpdate} />
-          )}
-        </CardContent>
-      </Card>
+      <div>
+        {block.nature === 'TEXT' ? (
+          <TextBlockComponent block={block as TextBlock} onUpdate={onUpdate} />
+        ) : (
+          <ErrorBoundary>
+            <ImageBlockComponent
+              block={block as ImageBlock}
+              onUpdate={onUpdate}
+            />
+          </ErrorBoundary>
+        )}
+      </div>
     </div>
   )
 }

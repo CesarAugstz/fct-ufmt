@@ -99,10 +99,12 @@ const metadata = {
           type: 'String',
           isOptional: true,
         },
-        aboutContent: {
-          name: 'aboutContent',
-          type: 'String',
-          isOptional: true,
+        aboutContentBlocks: {
+          name: 'aboutContentBlocks',
+          type: 'ContentBlock',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'course',
         },
         professors: {
           name: 'professors',
@@ -374,6 +376,148 @@ const metadata = {
         },
       },
     },
+    contentBlock: {
+      name: 'ContentBlock',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        nature: {
+          name: 'nature',
+          type: 'ContentNature',
+        },
+        content: {
+          name: 'content',
+          type: 'String',
+          isOptional: true,
+        },
+        caption: {
+          name: 'caption',
+          type: 'String',
+          isOptional: true,
+        },
+        size: {
+          name: 'size',
+          type: 'BlockSize',
+          isOptional: true,
+        },
+        alignment: {
+          name: 'alignment',
+          type: 'Alignment',
+          isOptional: true,
+        },
+        order: {
+          name: 'order',
+          type: 'Int',
+          attributes: [{ name: '@default', args: [{ value: 0 }] }],
+        },
+        courseId: {
+          name: 'courseId',
+          type: 'String',
+          isForeignKey: true,
+          relationField: 'course',
+        },
+        course: {
+          name: 'course',
+          type: 'Course',
+          isDataModel: true,
+          backLink: 'aboutContentBlocks',
+          isRelationOwner: true,
+          onDeleteAction: 'Cascade',
+          foreignKeyMapping: { id: 'courseId' },
+        },
+        fileId: {
+          name: 'fileId',
+          type: 'String',
+          isOptional: true,
+          isForeignKey: true,
+          relationField: 'file',
+        },
+        file: {
+          name: 'file',
+          type: 'Attachment',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'contentBlocks',
+          isRelationOwner: true,
+          onDeleteAction: 'Cascade',
+          foreignKeyMapping: { id: 'fileId' },
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+        fileId: {
+          name: 'fileId',
+          fields: ['fileId'],
+        },
+      },
+    },
+    attachment: {
+      name: 'Attachment',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        name: {
+          name: 'name',
+          type: 'String',
+        },
+        dataUrl: {
+          name: 'dataUrl',
+          type: 'String',
+        },
+        mimeType: {
+          name: 'mimeType',
+          type: 'String',
+        },
+        size: {
+          name: 'size',
+          type: 'Int',
+        },
+        contentBlocks: {
+          name: 'contentBlocks',
+          type: 'ContentBlock',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'file',
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+      },
+    },
   },
   typeDefs: {
     publication: {
@@ -456,8 +600,9 @@ const metadata = {
   },
   deleteCascade: {
     user: ['Professor'],
-    course: ['FaqCategory'],
+    course: ['FaqCategory', 'ContentBlock'],
     faqCategory: ['FaqItem'],
+    attachment: ['ContentBlock'],
   },
   authModel: 'User',
 }

@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/form'
 import { TextAreaField } from './text-area-field'
 import { useMemo } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 export interface FormTextareaProps {
   name: string
@@ -19,6 +20,7 @@ export interface FormTextareaProps {
   required?: boolean
   rows?: number
   resize?: 'none' | 'vertical' | 'horizontal' | 'both'
+  span?: number
 }
 
 export function FormTextarea({
@@ -30,6 +32,7 @@ export function FormTextarea({
   required = false,
   rows,
   resize,
+  span,
 }: FormTextareaProps) {
   const { control } = useFormContext()
 
@@ -53,7 +56,9 @@ export function FormTextarea({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={className}>
+        <FormItem
+          className={twMerge(className, span ? `col-span-${span}` : '')}
+        >
           <FormLabel>
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}

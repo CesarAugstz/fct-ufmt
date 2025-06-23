@@ -1,5 +1,5 @@
 import LoadingSpinner from '@/components/common/loading-spinner'
-import { useMarkdown } from '@/lib/hooks/markdown'
+import { BlockContentRenderer } from '@/components/common/block-content-renderer'
 import { useFindUniqueCourse } from '@/lib/zenstack-hooks'
 
 interface CourseAboutTabProps {
@@ -9,14 +9,15 @@ interface CourseAboutTabProps {
 export default function CourseAboutTab({ courseSlug }: CourseAboutTabProps) {
   const { data: course, isLoading } = useFindUniqueCourse({
     where: { slug: courseSlug },
-    select: { aboutContent: true },
+    select: {
+      aboutContentBlocks: {
+        include: { file: true },
+        orderBy: { order: 'asc' },
+      },
+    },
   })
 
-  const { markdownContent, loading, error } = useMarkdown(
-    course?.aboutContent || '',
-  )
-
-  if (isLoading || loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
         <LoadingSpinner className="h-8 w-8" />
@@ -24,7 +25,7 @@ export default function CourseAboutTab({ courseSlug }: CourseAboutTabProps) {
     )
   }
 
-  if (!course?.aboutContent) {
+  if (!course?.aboutContentBlocks?.length) {
     return (
       <div className="text-center py-8">
         <p className="text-muted-foreground">
@@ -34,11 +35,21 @@ export default function CourseAboutTab({ courseSlug }: CourseAboutTabProps) {
     )
   }
 
-  if (error) throw error
+  const transformedBlocks = course.aboutContentBlocks.map(block => ({
+    id: block.id,
+    nature: block.nature,
+    content: block.content,
+    caption: block.caption,
+    size: block.size,
+    alignment: block.alignment,
+    order: block.order,
+    file: block.file,
+  }))
 
   return (
-    <div className="prose dark:prose-invert prose-lg max-w-none">
-      {markdownContent}
-    </div>
+    <BlockContentRenderer
+      blocks={transformedBlocks}
+      className="prose dark:prose-invert prose-lg max-w-none"
+    />
   )
 }

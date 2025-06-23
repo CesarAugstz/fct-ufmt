@@ -38,6 +38,24 @@ enum FaqNature {
   PAGE
 }
 
+enum ContentNature {
+  TEXT
+  IMAGE
+}
+
+enum Alignment {
+  LEFT
+  CENTER
+  RIGHT
+}
+
+enum BlockSize {
+  SMALL
+  MEDIUM
+  LARGE
+  FULL
+}
+
 model User {
   id        String     @id() @default(ulid())
   createdAt DateTime   @default(now())
@@ -50,16 +68,16 @@ model User {
 }
 
 model Course {
-  id            String        @id() @default(ulid())
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt()
-  name          String        @unique()
-  nature        CourseNature
-  slug          String        @unique()
-  description   String?
-  aboutContent  String?       @db.Text()
-  professors    Professor[]
-  faqCategories FaqCategory[]
+  id                 String         @id() @default(ulid())
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt()
+  name               String         @unique()
+  nature             CourseNature
+  slug               String         @unique()
+  description        String?
+  aboutContentBlocks ContentBlock[]
+  professors         Professor[]
+  faqCategories      FaqCategory[]
 }
 
 model Professor {
@@ -106,4 +124,31 @@ model FaqItem {
   category   FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, slug])
+}
+
+model ContentBlock {
+  id        String        @id() @default(ulid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt()
+  nature    ContentNature
+  content   String?       @db.Text()
+  caption   String?
+  size      BlockSize?
+  alignment Alignment?
+  order     Int           @default(0)
+  courseId  String
+  course    Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  fileId    String?       @unique()
+  file      Attachment?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+}
+
+model Attachment {
+  id            String        @id() @default(ulid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt()
+  name          String
+  dataUrl       String
+  mimeType      String
+  size          Int
+  contentBlocks ContentBlock?
 }

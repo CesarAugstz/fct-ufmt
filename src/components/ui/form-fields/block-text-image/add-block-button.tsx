@@ -1,60 +1,34 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import ToolTipMadrid from '@/components/common/tooltip-madrid'
+import { ContentNature } from '@prisma/client'
+
 import { Plus, Type, Image } from 'lucide-react'
 
 interface AddBlockButtonProps {
-  onAdd: (type: 'text' | 'image') => void
+  onAdd: (type: ContentNature) => void
 }
 
 export function AddBlockButton({ onAdd }: AddBlockButtonProps) {
   return (
     <div className="flex gap-2 justify-center">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onAdd('text')}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              <Type className="h-4 w-4" />
-              Adicionar Texto
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Adiciona um novo bloco de texto ao final</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <ToolTipMadrid
+        onClick={() => onAdd(ContentNature.TEXT)}
+        content="Adiciona um novo bloco de texto"
+      >
+        <Plus className="h-3 w-3" />
+        <Type className="h-3 w-3" />
+        Texto
+      </ToolTipMadrid>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onAdd('image')}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              <Image className="h-4 w-4" />
-              Adicionar Imagem
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Adiciona um novo bloco de imagem ao final</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <ToolTipMadrid
+        onClick={() => onAdd(ContentNature.IMAGE)}
+        content="Adiciona um novo bloco de imagem"
+      >
+        <Plus className="h-3 w-3" />
+        <Image className="h-3 w-3" />
+        Imagem
+      </ToolTipMadrid>
     </div>
   )
 }

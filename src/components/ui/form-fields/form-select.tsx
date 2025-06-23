@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/form'
 import { SelectField } from './select-field'
 import { SelectItem } from '@/components/ui/select'
+import { twMerge } from 'tailwind-merge'
 
 interface Option {
   value: string
@@ -25,6 +26,8 @@ export interface FormSelectProps {
   onValueChange?: (value: string) => void
   includeEmpty?: boolean
   emptyLabel?: string
+  span?: number
+  className?: string
 }
 
 export function FormSelect({
@@ -37,6 +40,8 @@ export function FormSelect({
   onValueChange,
   includeEmpty = false,
   emptyLabel = 'None',
+  span,
+  className,
 }: FormSelectProps) {
   const { control } = useFormContext()
 
@@ -45,7 +50,9 @@ export function FormSelect({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem
+          className={twMerge(className, span ? `col-span-${span}` : '')}
+        >
           <FormLabel>
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}

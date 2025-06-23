@@ -17,7 +17,7 @@ export function TextBlockComponent({
   onUpdate,
 }: TextBlockComponentProps) {
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit')
-  const { markdownContent, loading, error } = useMarkdown(block.content)
+  const { markdownContent, loading, error } = useMarkdown(block.content ?? '')
 
   return (
     <div className="space-y-2">
@@ -39,7 +39,7 @@ export function TextBlockComponent({
         <TabsContent value="edit" className="mt-2">
           <Textarea
             placeholder="Escreva seu conteúdo em Markdown..."
-            value={block.content}
+            value={block.content ?? ''}
             onChange={e => onUpdate(block.id, { content: e.target.value })}
             className="font-mono min-h-[200px]"
           />

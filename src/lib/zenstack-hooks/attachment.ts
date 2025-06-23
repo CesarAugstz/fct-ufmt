@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, Course } from '@zenstackhq/runtime/models'
+import type { Prisma, Attachment } from '@zenstackhq/runtime/models'
 import type {
   UseMutationOptions,
   UseQueryOptions,
@@ -37,12 +37,12 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from '@tanstack/react-query'
 
-export function useCreateCourse(
+export function useCreateAttachment(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      Attachment | undefined,
       DefaultError,
-      Prisma.CourseCreateArgs
+      Prisma.AttachmentCreateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -50,14 +50,14 @@ export function useCreateCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseCreateArgs,
+    Prisma.AttachmentCreateArgs,
     DefaultError,
-    Course,
+    Attachment,
     true
   >(
-    'Course',
+    'Attachment',
     'POST',
-    `${endpoint}/course/create`,
+    `${endpoint}/attachment/create`,
     metadata,
     options,
     fetch,
@@ -65,32 +65,33 @@ export function useCreateCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseCreateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseCreateArgs>,
+    mutateAsync: async <T extends Prisma.AttachmentCreateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.AttachmentCreateArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
+          | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseCreateArgs>
+          Prisma.SelectSubset<T, Prisma.AttachmentCreateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useCreateManyCourse(
+export function useCreateManyAttachment(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.CourseCreateManyArgs
+      Prisma.AttachmentCreateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -98,14 +99,14 @@ export function useCreateManyCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseCreateManyArgs,
+    Prisma.AttachmentCreateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Course',
+    'Attachment',
     'POST',
-    `${endpoint}/course/createMany`,
+    `${endpoint}/attachment/createMany`,
     metadata,
     options,
     fetch,
@@ -113,13 +114,13 @@ export function useCreateManyCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseCreateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseCreateManyArgs>,
+    mutateAsync: async <T extends Prisma.AttachmentCreateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.AttachmentCreateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseCreateManyArgs>
+          Prisma.SelectSubset<T, Prisma.AttachmentCreateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -134,35 +135,35 @@ export function useCreateManyCourse(
   return mutation
 }
 
-export function useFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
+export function useFindManyAttachment<
+  TArgs extends Prisma.AttachmentFindManyArgs,
   TQueryFnData = Array<
-    Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.AttachmentGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindManyArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'Attachment',
+    `${endpoint}/attachment/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useInfiniteFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
-  TQueryFnData = Array<Prisma.CourseGetPayload<TArgs>>,
+export function useInfiniteFindManyAttachment<
+  TArgs extends Prisma.AttachmentFindManyArgs,
+  TQueryFnData = Array<Prisma.AttachmentGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindManyArgs>,
   options?: Omit<
     UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -171,23 +172,23 @@ export function useInfiniteFindManyCourse<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'Attachment',
+    `${endpoint}/attachment/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
+export function useSuspenseFindManyAttachment<
+  TArgs extends Prisma.AttachmentFindManyArgs,
   TQueryFnData = Array<
-    Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.AttachmentGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindManyArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -196,21 +197,21 @@ export function useSuspenseFindManyCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'Attachment',
+    `${endpoint}/attachment/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseInfiniteFindManyCourse<
-  TArgs extends Prisma.CourseFindManyArgs,
-  TQueryFnData = Array<Prisma.CourseGetPayload<TArgs>>,
+export function useSuspenseInfiniteFindManyAttachment<
+  TArgs extends Prisma.AttachmentFindManyArgs,
+  TQueryFnData = Array<Prisma.AttachmentGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindManyArgs>,
   options?: Omit<
     UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -219,41 +220,41 @@ export function useSuspenseInfiniteFindManyCourse<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findMany`,
+    'Attachment',
+    `${endpoint}/attachment/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindUniqueCourse<
-  TArgs extends Prisma.CourseFindUniqueArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindUniqueAttachment<
+  TArgs extends Prisma.AttachmentFindUniqueArgs,
+  TQueryFnData = Prisma.AttachmentGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindUniqueArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findUnique`,
+    'Attachment',
+    `${endpoint}/attachment/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindUniqueCourse<
-  TArgs extends Prisma.CourseFindUniqueArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindUniqueAttachment<
+  TArgs extends Prisma.AttachmentFindUniqueArgs,
+  TQueryFnData = Prisma.AttachmentGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindUniqueArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -262,41 +263,41 @@ export function useSuspenseFindUniqueCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findUnique`,
+    'Attachment',
+    `${endpoint}/attachment/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindFirstCourse<
-  TArgs extends Prisma.CourseFindFirstArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindFirstAttachment<
+  TArgs extends Prisma.AttachmentFindFirstArgs,
+  TQueryFnData = Prisma.AttachmentGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindFirstArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findFirst`,
+    'Attachment',
+    `${endpoint}/attachment/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindFirstCourse<
-  TArgs extends Prisma.CourseFindFirstArgs,
-  TQueryFnData = Prisma.CourseGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindFirstAttachment<
+  TArgs extends Prisma.AttachmentFindFirstArgs,
+  TQueryFnData = Prisma.AttachmentGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentFindFirstArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -305,20 +306,20 @@ export function useSuspenseFindFirstCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/findFirst`,
+    'Attachment',
+    `${endpoint}/attachment/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useUpdateCourse(
+export function useUpdateAttachment(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      Attachment | undefined,
       DefaultError,
-      Prisma.CourseUpdateArgs
+      Prisma.AttachmentUpdateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -326,14 +327,14 @@ export function useUpdateCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseUpdateArgs,
+    Prisma.AttachmentUpdateArgs,
     DefaultError,
-    Course,
+    Attachment,
     true
   >(
-    'Course',
+    'Attachment',
     'PUT',
-    `${endpoint}/course/update`,
+    `${endpoint}/attachment/update`,
     metadata,
     options,
     fetch,
@@ -341,32 +342,33 @@ export function useUpdateCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseUpdateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseUpdateArgs>,
+    mutateAsync: async <T extends Prisma.AttachmentUpdateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.AttachmentUpdateArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
+          | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseUpdateArgs>
+          Prisma.SelectSubset<T, Prisma.AttachmentUpdateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useUpdateManyCourse(
+export function useUpdateManyAttachment(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.CourseUpdateManyArgs
+      Prisma.AttachmentUpdateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -374,14 +376,14 @@ export function useUpdateManyCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseUpdateManyArgs,
+    Prisma.AttachmentUpdateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Course',
+    'Attachment',
     'PUT',
-    `${endpoint}/course/updateMany`,
+    `${endpoint}/attachment/updateMany`,
     metadata,
     options,
     fetch,
@@ -389,13 +391,13 @@ export function useUpdateManyCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseUpdateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseUpdateManyArgs>,
+    mutateAsync: async <T extends Prisma.AttachmentUpdateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.AttachmentUpdateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseUpdateManyArgs>
+          Prisma.SelectSubset<T, Prisma.AttachmentUpdateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -410,12 +412,12 @@ export function useUpdateManyCourse(
   return mutation
 }
 
-export function useUpsertCourse(
+export function useUpsertAttachment(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      Attachment | undefined,
       DefaultError,
-      Prisma.CourseUpsertArgs
+      Prisma.AttachmentUpsertArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -423,14 +425,14 @@ export function useUpsertCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseUpsertArgs,
+    Prisma.AttachmentUpsertArgs,
     DefaultError,
-    Course,
+    Attachment,
     true
   >(
-    'Course',
+    'Attachment',
     'POST',
-    `${endpoint}/course/upsert`,
+    `${endpoint}/attachment/upsert`,
     metadata,
     options,
     fetch,
@@ -438,32 +440,33 @@ export function useUpsertCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseUpsertArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseUpsertArgs>,
+    mutateAsync: async <T extends Prisma.AttachmentUpsertArgs>(
+      args: Prisma.SelectSubset<T, Prisma.AttachmentUpsertArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
+          | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseUpsertArgs>
+          Prisma.SelectSubset<T, Prisma.AttachmentUpsertArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteCourse(
+export function useDeleteAttachment(
   options?: Omit<
     UseMutationOptions<
-      Course | undefined,
+      Attachment | undefined,
       DefaultError,
-      Prisma.CourseDeleteArgs
+      Prisma.AttachmentDeleteArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -471,14 +474,14 @@ export function useDeleteCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseDeleteArgs,
+    Prisma.AttachmentDeleteArgs,
     DefaultError,
-    Course,
+    Attachment,
     true
   >(
-    'Course',
+    'Attachment',
     'DELETE',
-    `${endpoint}/course/delete`,
+    `${endpoint}/attachment/delete`,
     metadata,
     options,
     fetch,
@@ -486,32 +489,33 @@ export function useDeleteCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseDeleteArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseDeleteArgs>,
+    mutateAsync: async <T extends Prisma.AttachmentDeleteArgs>(
+      args: Prisma.SelectSubset<T, Prisma.AttachmentDeleteArgs>,
       options?: Omit<
         UseMutationOptions<
-          CheckSelect<T, Course, Prisma.CourseGetPayload<T>> | undefined,
+          | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
+          | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseDeleteArgs>
+          Prisma.SelectSubset<T, Prisma.AttachmentDeleteArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, Course, Prisma.CourseGetPayload<T>>
+        | CheckSelect<T, Attachment, Prisma.AttachmentGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteManyCourse(
+export function useDeleteManyAttachment(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.CourseDeleteManyArgs
+      Prisma.AttachmentDeleteManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -519,14 +523,14 @@ export function useDeleteManyCourse(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.CourseDeleteManyArgs,
+    Prisma.AttachmentDeleteManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'Course',
+    'Attachment',
     'DELETE',
-    `${endpoint}/course/deleteMany`,
+    `${endpoint}/attachment/deleteMany`,
     metadata,
     options,
     fetch,
@@ -534,13 +538,13 @@ export function useDeleteManyCourse(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.CourseDeleteManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.CourseDeleteManyArgs>,
+    mutateAsync: async <T extends Prisma.AttachmentDeleteManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.AttachmentDeleteManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.CourseDeleteManyArgs>
+          Prisma.SelectSubset<T, Prisma.AttachmentDeleteManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -555,33 +559,33 @@ export function useDeleteManyCourse(
   return mutation
 }
 
-export function useAggregateCourse<
-  TArgs extends Prisma.CourseAggregateArgs,
-  TQueryFnData = Prisma.GetCourseAggregateType<TArgs>,
+export function useAggregateAttachment<
+  TArgs extends Prisma.AttachmentAggregateArgs,
+  TQueryFnData = Prisma.GetAttachmentAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.AttachmentAggregateArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/aggregate`,
+    'Attachment',
+    `${endpoint}/attachment/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseAggregateCourse<
-  TArgs extends Prisma.CourseAggregateArgs,
-  TQueryFnData = Prisma.GetCourseAggregateType<TArgs>,
+export function useSuspenseAggregateAttachment<
+  TArgs extends Prisma.AttachmentAggregateArgs,
+  TQueryFnData = Prisma.GetAttachmentAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.CourseAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.AttachmentAggregateArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -590,23 +594,23 @@ export function useSuspenseAggregateCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/aggregate`,
+    'Attachment',
+    `${endpoint}/attachment/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useGroupByCourse<
-  TArgs extends Prisma.CourseGroupByArgs,
+export function useGroupByAttachment<
+  TArgs extends Prisma.AttachmentGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.CourseGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.CourseGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.AttachmentGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.AttachmentGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -659,16 +663,19 @@ export function useGroupByCourse<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.CourseGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.AttachmentGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.CourseGroupByOutputType]: P extends '_count'
+            keyof Prisma.AttachmentGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.CourseGroupByOutputType[P]
+                  Prisma.AttachmentGroupByOutputType[P]
                 >
-            : Prisma.GetScalarType<TArgs[P], Prisma.CourseGroupByOutputType[P]>
+            : Prisma.GetScalarType<
+                TArgs[P],
+                Prisma.AttachmentGroupByOutputType[P]
+              >
         }
       >
     : InputErrors,
@@ -677,7 +684,7 @@ export function useGroupByCourse<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.CourseGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.AttachmentGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
@@ -685,23 +692,23 @@ export function useGroupByCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/groupBy`,
+    'Attachment',
+    `${endpoint}/attachment/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseGroupByCourse<
-  TArgs extends Prisma.CourseGroupByArgs,
+export function useSuspenseGroupByAttachment<
+  TArgs extends Prisma.AttachmentGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.CourseGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.CourseGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.AttachmentGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.AttachmentGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -754,16 +761,19 @@ export function useSuspenseGroupByCourse<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.CourseGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.AttachmentGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.CourseGroupByOutputType]: P extends '_count'
+            keyof Prisma.AttachmentGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.CourseGroupByOutputType[P]
+                  Prisma.AttachmentGroupByOutputType[P]
                 >
-            : Prisma.GetScalarType<TArgs[P], Prisma.CourseGroupByOutputType[P]>
+            : Prisma.GetScalarType<
+                TArgs[P],
+                Prisma.AttachmentGroupByOutputType[P]
+              >
         }
       >
     : InputErrors,
@@ -772,7 +782,7 @@ export function useSuspenseGroupByCourse<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.CourseGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.AttachmentGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<
@@ -783,55 +793,55 @@ export function useSuspenseGroupByCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/groupBy`,
+    'Attachment',
+    `${endpoint}/attachment/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useCountCourse<
-  TArgs extends Prisma.CourseCountArgs,
+export function useCountAttachment<
+  TArgs extends Prisma.AttachmentCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.CourseCountAggregateOutputType
+          Prisma.AttachmentCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentCountArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/count`,
+    'Attachment',
+    `${endpoint}/attachment/count`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseCountCourse<
-  TArgs extends Prisma.CourseCountArgs,
+export function useSuspenseCountAttachment<
+  TArgs extends Prisma.AttachmentCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.CourseCountAggregateOutputType
+          Prisma.AttachmentCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.CourseCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.AttachmentCountArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -840,24 +850,23 @@ export function useSuspenseCountCourse<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'Course',
-    `${endpoint}/course/count`,
+    'Attachment',
+    `${endpoint}/attachment/count`,
     args,
     options,
     fetch,
   )
 }
-import type { CourseNature } from '@zenstackhq/runtime/models'
 
-export function useCheckCourse<TError = DefaultError>(
+export function useCheckAttachment<TError = DefaultError>(
   args: {
     operation: PolicyCrudKind
     where?: {
       id?: string
       name?: string
-      nature?: CourseNature
-      slug?: string
-      description?: string
+      dataUrl?: string
+      mimeType?: string
+      size?: number
     }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
@@ -865,8 +874,8 @@ export function useCheckCourse<TError = DefaultError>(
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<boolean, boolean, TError>(
-    'Course',
-    `${endpoint}/course/check`,
+    'Attachment',
+    `${endpoint}/attachment/check`,
     args,
     options,
     fetch,

@@ -1,14 +1,19 @@
 import { PrismaClient } from '@prisma/client'
-import { getCurrentUser } from './auth'
-import { enhance } from '@zenstackhq/runtime'
 
-const createPrismaClient = () =>
-  new PrismaClient({
+const createPrismaClient = () => {
+  const prisma = new PrismaClient({
     log:
       process.env.NODE_ENV === 'development'
         ? ['query', 'error', 'warn', 'info']
         : ['error'],
   })
+  prisma.$on('query' as never, (e: any) => {
+    console.log('Query: ' + e.query)
+    console.log('Params: ' + e.params)
+    console.log('Duration: ' + e.duration + 'ms')
+  })
+  return prisma
+}
 
 const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined
@@ -17,5 +22,3 @@ const globalForPrisma = globalThis as unknown as {
 export const db = globalForPrisma.prisma ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
-
-

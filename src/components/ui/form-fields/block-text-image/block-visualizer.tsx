@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Eye, EyeOff } from 'lucide-react'
-import { useMarkdown } from '@/lib/hooks/markdown'
+import { Badge } from '@/components/ui/badge'
+import { Eye, EyeOff, FileText, Image as ImageIcon } from 'lucide-react'
+import { BlockContentRenderer } from '@/components/common/block-content-renderer'
 import type { Block } from './types'
 
 interface BlockVisualizerProps {
@@ -14,120 +14,69 @@ interface BlockVisualizerProps {
 export function BlockVisualizer({ blocks }: BlockVisualizerProps) {
   const [isVisible, setIsVisible] = useState(false)
 
-  const renderBlock = (block: Block) => {
-    if (block.type === 'text') {
-      return <TextPreview key={block.id} content={block.content} />
-    }
-
-    return <ImagePreview key={block.id} block={block} />
-  }
-
   if (!blocks.length) {
     return null
   }
 
+  const textBlocks = blocks.filter(block => block.nature === 'TEXT').length
+  const imageBlocks = blocks.filter(block => block.nature === 'IMAGE').length
+
   return (
-    <Card className="mt-6">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lg">Visualização dos Blocos</CardTitle>
+    <div className="bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <span className="text-sm font-medium text-foreground">
+              Visualização Final
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {textBlocks > 0 && (
+              <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                <FileText className="h-3 w-3 mr-1" />
+                {textBlocks} texto{textBlocks > 1 ? 's' : ''}
+              </Badge>
+            )}
+            {imageBlocks > 0 && (
+              <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                <ImageIcon className="h-3 w-3 mr-1" />
+                {imageBlocks} imagem{imageBlocks > 1 ? 's' : ''}
+              </Badge>
+            )}
+          </div>
+        </div>
         <Button
           type="button"
-          variant="ghost"
+          variant={isVisible ? 'default' : 'outline'}
           size="sm"
           onClick={() => setIsVisible(!isVisible)}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 text-sm"
         >
           {isVisible ? (
             <>
               <EyeOff className="h-4 w-4" />
-              Ocultar
+              Ocultar Preview
             </>
           ) : (
             <>
               <Eye className="h-4 w-4" />
-              Visualizar
+              Ver Preview
             </>
           )}
         </Button>
-      </CardHeader>
-      {isVisible && (
-        <CardContent>
-          <div className="space-y-6">
-            {blocks.map(block => renderBlock(block))}
-          </div>
-        </CardContent>
-      )}
-    </Card>
-  )
-}
-
-function TextPreview({ content }: { content: string }) {
-  const { markdownContent, loading, error } = useMarkdown(content)
-
-  return (
-    <div className="space-y-2">
-      <div className="prose prose-slate prose-sm dark:prose-invert max-w-none">
-        {loading && <div className="text-muted-foreground">Carregando...</div>}
-        {!!error && (
-          <div className="text-destructive">Erro ao renderizar markdown</div>
-        )}
-        {!loading && !error && !content?.trim() && (
-          <div className="text-muted-foreground italic">
-            Nenhum conteúdo de texto
-          </div>
-        )}
-        {!loading && !error && content?.trim() && markdownContent}
       </div>
-    </div>
-  )
-}
-
-function ImagePreview({ block }: { block: Extract<Block, { type: 'image' }> }) {
-  const getImageSizeClass = () => {
-    switch (block.size || 'medium') {
-      case 'small':
-        return 'max-w-xs'
-      case 'medium':
-        return 'max-w-md'
-      case 'large':
-        return 'max-w-lg'
-      case 'full':
-        return 'w-full'
-      default:
-        return 'max-w-md'
-    }
-  }
-
-  const getImageAlignmentClass = () => {
-    switch (block.alignment || 'center') {
-      case 'left':
-        return 'mr-auto'
-      case 'center':
-        return 'mx-auto'
-      case 'right':
-        return 'ml-auto'
-      default:
-        return 'mx-auto'
-    }
-  }
-
-  return (
-    <div className="space-y-2">
-      {block.url ? (
-        <div className="space-y-2">
-          <img
-            src={block.url}
-            alt={block.caption}
-            className={`h-auto rounded-lg border ${getImageSizeClass()} ${getImageAlignmentClass()}`}
-          />
-          {block.caption && (
-            <p className="text-sm text-muted-foreground italic">
-              {block.caption}
-            </p>
-          )}
+      {isVisible && (
+        <div className="bg-background border border-border rounded-lg p-4 shadow-sm">
+          <BlockContentRenderer blocks={blocks} />
         </div>
-      ) : (
-        <div className="text-muted-foreground italic">Nenhuma imagem</div>
+      )}
+      {!isVisible && (
+        <div className="text-center py-3">
+          <p className="text-sm text-muted-foreground">
+            Clique em "Ver Preview" para visualizar como o conteúdo será exibido
+          </p>
+        </div>
       )}
     </div>
   )

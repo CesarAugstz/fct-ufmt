@@ -1,5 +1,5 @@
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
-import { CourseNature, PrismaClient } from '@prisma/client'
+import { CourseNature, Prisma, PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { generateProfessorData } from './professor-generator'
 import { getRandomProfessorImage } from './mock-images'
@@ -19,13 +19,29 @@ async function cleanDatabase() {
 async function main() {
   if (shouldClean) await cleanDatabase()
 
-  const courses = [
+  const courses: Prisma.CourseCreateInput[] = [
     {
       name: 'Ciência e Tecnologia',
       nature: CourseNature.GRADUATION,
       slug: formatToSlug('Ciência e Tecnologia'),
       description:
         'O curso de Ciência e Tecnologia visa formar profissionais capacitados para atuar em diversas áreas da ciência e tecnologia, com foco em resolução de problemas e inovação.',
+      aboutContentBlocks: {
+        createMany: {
+          data: [
+            {
+              nature: 'TEXT',
+              content:
+                'O curso de Ciência e Tecnologia visa formar profissionais capacitados para atuar em diversas áreas da ciência e tecnologia, com foco em resolução de problemas e inovação.',
+            },
+            {
+              nature: 'TEXT',
+              content:
+                'O curso de Ciência e Tecnologia visa formar profissionais capacitados para atuar em diversas áreas da ciência e tecnologia, com foco em resolução de problemas e inovação.',
+            },
+          ],
+        },
+      },
     },
     {
       name: 'Engenharia de Software',

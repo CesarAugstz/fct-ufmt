@@ -19,6 +19,10 @@ import {
 } from '@/components/ui/popover'
 import { Upload, X, Settings } from 'lucide-react'
 import type { ImageBlock, Block } from './types'
+import { ulid } from 'ulidx'
+import { useImageCompressor } from '@/lib/hooks/image-compressor'
+import { Alignment, BlockSize } from '@prisma/client'
+import LoadingSpinner from '@/components/common/loading-spinner'
 
 interface ImageBlockComponentProps {
   block: ImageBlock
@@ -29,40 +33,54 @@ export function ImageBlockComponent({
   block,
   onUpdate,
 }: ImageBlockComponentProps) {
+  const { compress, isCompressing, error } = useImageCompressor()
+
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
       if (!file) return
 
-      const url = URL.createObjectURL(file)
-      onUpdate(block.id, { file, url })
+      const compressed = await compress(file, {
+        maxSizeKB: 4000,
+        maxWidth: 1920,
+        maxHeight: 1080,
+      })
+
+      if (!compressed) throw new Error('Failed to compress image')
+
+      const attachment: ImageBlock['file'] = {
+        id: ulid(),
+        dataUrl: compressed.dataUrl,
+        name: file.name,
+        mimeType: file.type,
+        size: file.size,
+      }
+
+      onUpdate(block.id, { file: attachment })
     },
-    [block.id, onUpdate],
+    [block.id, compress, onUpdate],
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] },
     maxFiles: 1,
-    maxSize: 5 * 1024 * 1024,
+    maxSize: 30 * 1024 * 1024,
   })
 
   const removeImage = () => {
-    if (block.url) {
-      URL.revokeObjectURL(block.url)
-    }
-    onUpdate(block.id, { file: null, url: null })
+    onUpdate(block.id, { file: null })
   }
 
   const getImageSizeClass = () => {
     switch (block.size || 'medium') {
-      case 'small':
+      case BlockSize.SMALL:
         return 'max-w-xs'
-      case 'medium':
+      case BlockSize.MEDIUM:
         return 'max-w-md'
-      case 'large':
+      case BlockSize.LARGE:
         return 'max-w-lg'
-      case 'full':
+      case BlockSize.FULL:
         return 'w-full'
       default:
         return 'max-w-md'
@@ -71,20 +89,33 @@ export function ImageBlockComponent({
 
   const getImageAlignmentClass = () => {
     switch (block.alignment || 'center') {
-      case 'left':
+      case Alignment.LEFT:
         return 'mr-auto'
-      case 'center':
+      case Alignment.CENTER:
         return 'mx-auto'
-      case 'right':
+      case Alignment.RIGHT:
         return 'ml-auto'
       default:
         return 'mx-auto'
     }
   }
 
+  if (error) {
+    throw error
+  }
+
+  if (isCompressing) {
+    return (
+      <div className="flex justify-center items-center h-48">
+        Comprimindo imagem...
+        <LoadingSpinner size="lg" />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
-      {block.url ? (
+      {block.file ? (
         <div className="space-y-3">
           <div className="relative inline-block">
             <div className="absolute top-2 right-2 flex gap-1 z-10">
@@ -107,11 +138,7 @@ export function ImageBlockComponent({
                         value={block.size || 'medium'}
                         onValueChange={value =>
                           onUpdate(block.id, {
-                            size: value as
-                              | 'small'
-                              | 'medium'
-                              | 'large'
-                              | 'full',
+                            size: value as BlockSize,
                           })
                         }
                       >
@@ -119,20 +146,28 @@ export function ImageBlockComponent({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="small">Pequeno</SelectItem>
-                          <SelectItem value="medium">Médio</SelectItem>
-                          <SelectItem value="large">Grande</SelectItem>
-                          <SelectItem value="full">Largura Total</SelectItem>
+                          <SelectItem value={BlockSize.SMALL}>
+                            Pequeno
+                          </SelectItem>
+                          <SelectItem value={BlockSize.MEDIUM}>
+                            Médio
+                          </SelectItem>
+                          <SelectItem value={BlockSize.LARGE}>
+                            Grande
+                          </SelectItem>
+                          <SelectItem value={BlockSize.FULL}>
+                            Largura Total
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
                       <Label>Alinhamento</Label>
                       <Select
-                        value={block.alignment || 'center'}
+                        value={block.alignment || Alignment.CENTER}
                         onValueChange={value =>
                           onUpdate(block.id, {
-                            alignment: value as 'left' | 'center' | 'right',
+                            alignment: value as Alignment,
                           })
                         }
                       >
@@ -140,9 +175,15 @@ export function ImageBlockComponent({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="left">Esquerda</SelectItem>
-                          <SelectItem value="center">Centro</SelectItem>
-                          <SelectItem value="right">Direita</SelectItem>
+                          <SelectItem value={Alignment.LEFT}>
+                            Esquerda
+                          </SelectItem>
+                          <SelectItem value={Alignment.CENTER}>
+                            Centro
+                          </SelectItem>
+                          <SelectItem value={Alignment.RIGHT}>
+                            Direita
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -160,7 +201,7 @@ export function ImageBlockComponent({
               </Button>
             </div>
             <img
-              src={block.url}
+              src={block.file.dataUrl}
               alt={block.caption || 'Uploaded image'}
               className={`h-auto rounded-lg border ${getImageSizeClass()} ${getImageAlignmentClass()}`}
             />
@@ -170,7 +211,7 @@ export function ImageBlockComponent({
             <Input
               id={`caption-${block.id}`}
               placeholder="Digite uma legenda para a imagem..."
-              value={block.caption}
+              value={block.caption || ''}
               onChange={e => onUpdate(block.id, { caption: e.target.value })}
             />
           </div>

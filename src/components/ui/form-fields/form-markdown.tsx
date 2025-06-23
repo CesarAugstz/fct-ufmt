@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/tooltip'
 import { Info } from 'lucide-react'
 import { TextMarkdownField } from './text-markdown-field'
+import { twMerge } from 'tailwind-merge'
 
 export interface FormMarkdownProps {
   name: string
@@ -24,6 +25,7 @@ export interface FormMarkdownProps {
   required?: boolean
   rows?: number
   preview?: boolean
+  span?: number
 }
 
 export function FormMarkdown({
@@ -35,6 +37,7 @@ export function FormMarkdown({
   required = false,
   rows,
   preview = true,
+  span,
 }: FormMarkdownProps) {
   const { control } = useFormContext()
 
@@ -43,7 +46,9 @@ export function FormMarkdown({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={className}>
+        <FormItem
+          className={twMerge(className, span ? `col-span-${span}` : '')}
+        >
           <div className="flex items-center gap-2">
             <FormLabel>
               {label}

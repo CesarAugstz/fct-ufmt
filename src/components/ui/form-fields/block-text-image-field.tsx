@@ -6,6 +6,8 @@ import { BlockVisualizer } from './block-text-image/block-visualizer'
 import type { Block, TextBlock, ImageBlock } from './block-text-image/types'
 export type { Block, TextBlock, ImageBlock }
 import { ulid } from 'ulidx'
+import { Alignment, BlockSize, ContentNature } from '@prisma/client'
+import { useCallback } from 'react'
 
 interface BlockTextImageFieldProps {
   blocks: Block[]
@@ -18,18 +20,17 @@ export function BlockTextImageField({
 }: BlockTextImageFieldProps) {
   const generateId = () => ulid()
 
-  const addBlock = (type: 'text' | 'image', index?: number) => {
+  const addBlock = (nature: ContentNature, index?: number) => {
     const newBlock: Block =
-      type === 'text'
-        ? ({ id: generateId(), type: 'text', content: '' } as TextBlock)
+      nature === 'TEXT'
+        ? ({ id: generateId(), nature, content: '' } as TextBlock)
         : ({
+            nature,
             id: generateId(),
-            type: 'image',
             file: null,
-            url: null,
             caption: '',
-            size: 'medium',
-            alignment: 'center',
+            size: BlockSize.MEDIUM,
+            alignment: Alignment.CENTER,
           } as ImageBlock)
 
     let newBlocks: Block[]
@@ -39,19 +40,23 @@ export function BlockTextImageField({
     } else {
       newBlocks = [...blocks, newBlock]
     }
+    newBlocks.forEach((block, index) => (block.order = index))
 
     onChange(newBlocks)
   }
 
   const updateBlock = (id: string, updates: Partial<Block>) => {
+    console.log('update block', id, updates, blocks)
     const newBlocks = blocks.map(block =>
       block.id === id ? { ...block, ...updates } : block,
     ) as Block[]
+    console.log('new blocks', newBlocks)
     onChange(newBlocks)
   }
 
   const deleteBlock = (id: string) => {
     const newBlocks = blocks.filter(block => block.id !== id)
+    newBlocks.forEach((block, index) => (block.order = index))
     onChange(newBlocks)
   }
 
@@ -61,21 +66,26 @@ export function BlockTextImageField({
     const newBlocks = [...blocks]
     const [block] = newBlocks.splice(index, 1)
     newBlocks.splice(index - 1, 0, block)
+    newBlocks.forEach((block, index) => (block.order = index))
     onChange(newBlocks)
   }
 
-  const moveBlockDown = (index: number) => {
-    if (index === blocks.length - 1) return
+  const moveBlockDown = useCallback(
+    (index: number) => {
+      if (index === blocks.length - 1) return
 
-    const newBlocks = [...blocks]
-    const [block] = newBlocks.splice(index, 1)
-    newBlocks.splice(index + 1, 0, block)
-    onChange(newBlocks)
-  }
+      const newBlocks = [...blocks]
+      const [block] = newBlocks.splice(index, 1)
+      newBlocks.splice(index + 1, 0, block)
+      newBlocks.forEach((block, index) => (block.order = index))
+      onChange(newBlocks)
+    },
+    [blocks, onChange],
+  )
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-4">
+    <div className="relative border border-input rounded-md bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:border-transparent transition-all">
+      <div className="p-3 space-y-2">
         {blocks.map((block, index) => (
           <BlockComponent
             key={block.id}
@@ -91,9 +101,15 @@ export function BlockTextImageField({
         ))}
       </div>
 
-      <AddBlockButton onAdd={type => addBlock(type)} />
+      <div className="border-t border-border/50 p-2">
+        <AddBlockButton onAdd={type => addBlock(type)} />
+      </div>
 
-      <BlockVisualizer blocks={blocks} />
+      {blocks.length > 0 && (
+        <div className="border-t border-border/50">
+          <BlockVisualizer blocks={blocks} />
+        </div>
+      )}
     </div>
   )
 }
