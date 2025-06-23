@@ -16,14 +16,14 @@ export default async function AdminLayout({
   if (user.role === Role.PROFESSOR) redirect('/admin/professors-configure')
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-4 bg-slate-50 dark:bg-slate-900">
+      <Header />
+      <main className=" pt-20 pb-4 px-4 md:pl-72">
+        <div className="fixed top-22 right-4 left-72 bottom-4 overflow-y-scroll bg-muted/30 rounded-xl p-1">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   )
 }

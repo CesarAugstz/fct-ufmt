@@ -61,15 +61,15 @@ export function BaseCard({
   className = '',
 }: BaseCardProps) {
   return (
-    <Card className={twMerge('m-6', className)}>
+    <Card className={twMerge('w-full h-full overflow-y-scroll', className)}>
       {!hideHeader && (
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-wrap gap-2 flex-row items-center justify-between">
           <div>
             <CardTitle>{title}</CardTitle>
             {description && <CardDescription>{description}</CardDescription>}
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             {onUpdate && (
               <Button
                 variant="secondary"

@@ -134,7 +134,7 @@ export default function CourseCards({
                   {course.description}
                 </p>
               )}
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center justify-between text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Users className="h-4 w-4" />
                   <span>{course.professors.length} professores</span>

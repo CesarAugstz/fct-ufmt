@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Settings, Users, House, Library } from 'lucide-react'
+import { Settings, Users, House, Library, Menu } from 'lucide-react'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { useState } from 'react'
 
 interface Route {
   name: string
@@ -13,59 +14,62 @@ interface Route {
   disabled?: boolean
 }
 
-export default function Sidebar() {
-  const pathname = usePathname()
+const routes: Route[] = [
+  {
+    name: 'Tela Inicial',
+    path: '/admin',
+    icon: <House className="mr-2 h-5 w-5" />,
+  },
+  {
+    name: 'Docentes',
+    path: '/admin/professors',
+    icon: <Users className="mr-2 h-5 w-5" />,
+  },
+  {
+    name: 'Usuários',
+    path: '/admin/users',
+    icon: <Users className="mr-2 h-5 w-5" />,
+  },
+  {
+    name: 'Cursos',
+    path: '/admin/courses',
+    icon: <Library className="mr-2 h-5 w-5" />,
+  },
+  {
+    name: 'Configurações',
+    path: '/admin/settings',
+    icon: <Settings className="mr-2 h-5 w-5" />,
+    disabled: true,
+  },
+] as const
 
-  const routes: Route[] = [
-    {
-      name: 'Tela Inicial',
-      path: '/admin',
-      icon: <House className="mr-2 h-5 w-5" />,
-    },
-    {
-      name: 'Docentes',
-      path: '/admin/professors',
-      icon: <Users className="mr-2 h-5 w-5" />,
-    },
-    {
-      name: 'Usuários',
-      path: '/admin/users',
-      icon: <Users className="mr-2 h-5 w-5" />,
-    },
-    {
-      name: 'Cursos',
-      path: '/admin/courses',
-      icon: <Library className="mr-2 h-5 w-5" />,
-    },
-    {
-      name: 'Configurações',
-      path: '/admin/settings',
-      icon: <Settings className="mr-2 h-5 w-5" />,
-      disabled: true,
-    },
-  ] as const
+function SidebarContent({ onClick }: { onClick?: () => void }) {
+  const pathname = usePathname()
 
   const activeRoute = routes.findLast(route =>
     pathname.includes(route.path),
   )?.path
 
   return (
-    <div className="flex flex-col w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700">
-      <div className="py-4 px-3 border-b border-slate-200 dark:border-slate-700">
+    <div className="flex flex-col h-full">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-center">
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white">
-            FCT
-          </h1>
+          <h1 className="text-2xl font-bold text-foreground">FCT</h1>
         </div>
       </div>
-      <div className="py-4 flex flex-col flex-1 overflow-y-auto">
-        <nav className="px-3 space-y-1">
+
+      <div className="flex-1 p-4">
+        <nav className="space-y-2">
           {routes.map(route => (
-            <Link href={route.disabled ? '#' : route.path} key={route.path}>
+            <Link
+              onClick={() => onClick?.()}
+              href={route.disabled ? '#' : route.path}
+              key={route.path}
+            >
               <Button
                 disabled={route?.disabled}
-                variant={activeRoute === route.path ? 'outline' : 'ghost'}
-                className={cn('w-full justify-start cursor-pointer')}
+                variant={activeRoute === route.path ? 'default' : 'ghost'}
+                className="w-full justify-start"
               >
                 {route.icon}
                 {route.name}
@@ -74,6 +78,31 @@ export default function Sidebar() {
           ))}
         </nav>
       </div>
+    </div>
+  )
+}
+
+export function MobileSidebar() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="p-0 w-64">
+        <SidebarContent onClick={() => setOpen(false)} />
+      </SheetContent>
+    </Sheet>
+  )
+}
+
+export default function Sidebar() {
+  return (
+    <div className="hidden md:flex fixed left-4 top-4 bottom-4 w-64 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border border-border rounded-xl shadow-lg z-40">
+      <SidebarContent />
     </div>
   )
 }

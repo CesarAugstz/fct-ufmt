@@ -169,6 +169,7 @@ export const useImageCompressor = () => {
           ? err
           : new Error('Unknown error during compression')
       setError(error)
+      throw error
     } finally {
       setIsCompressing(false)
     }
