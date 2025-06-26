@@ -5,873 +5,331 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, FaqItem } from '@zenstackhq/runtime/models'
-import type {
-  UseMutationOptions,
-  UseQueryOptions,
-  UseInfiniteQueryOptions,
-  InfiniteData,
-} from '@tanstack/react-query'
-import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react'
-import {
-  useModelQuery,
-  useInfiniteModelQuery,
-  useModelMutation,
-} from '@zenstackhq/tanstack-query/runtime-v5/react'
-import type {
-  PickEnumerable,
-  CheckSelect,
-  QueryError,
-  ExtraQueryOptions,
-  ExtraMutationOptions,
-} from '@zenstackhq/tanstack-query/runtime-v5'
+import type { Prisma, FaqItem } from "@zenstackhq/runtime/models";
+import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
+import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/react';
+import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime-v5/react';
+import type { PickEnumerable, CheckSelect, QueryError, ExtraQueryOptions, ExtraMutationOptions } from '@zenstackhq/tanstack-query/runtime-v5';
 import type { PolicyCrudKind } from '@zenstackhq/runtime'
-import metadata from './__model_meta'
-type DefaultError = QueryError
-import {
-  useSuspenseModelQuery,
-  useSuspenseInfiniteModelQuery,
-} from '@zenstackhq/tanstack-query/runtime-v5/react'
-import type {
-  UseSuspenseQueryOptions,
-  UseSuspenseInfiniteQueryOptions,
-} from '@tanstack/react-query'
+import metadata from './__model_meta';
+type DefaultError = QueryError;
+import { useSuspenseModelQuery, useSuspenseInfiniteModelQuery } from '@zenstackhq/tanstack-query/runtime-v5/react';
+import type { UseSuspenseQueryOptions, UseSuspenseInfiniteQueryOptions } from '@tanstack/react-query';
 
-export function useCreateFaqItem(
-  options?: Omit<
-    UseMutationOptions<
-      FaqItem | undefined,
-      DefaultError,
-      Prisma.FaqItemCreateArgs
-    > &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.FaqItemCreateArgs,
-    DefaultError,
-    FaqItem,
-    true
-  >(
-    'FaqItem',
-    'POST',
-    `${endpoint}/faqItem/create`,
-    metadata,
-    options,
-    fetch,
-    true,
-  )
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.FaqItemCreateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.FaqItemCreateArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.FaqItemCreateArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
-        | undefined
-    },
-  }
-  return mutation
+export function useCreateFaqItem(options?: Omit<(UseMutationOptions<(FaqItem | undefined), DefaultError, Prisma.FaqItemCreateArgs> & ExtraMutationOptions), 'mutationFn'>) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation =
+        useModelMutation<Prisma.FaqItemCreateArgs, DefaultError, FaqItem, true>('FaqItem', 'POST', `${endpoint}/faqItem/create`, metadata, options, fetch, true)
+        ;
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.FaqItemCreateArgs>(
+            args: Prisma.SelectSubset<T, Prisma.FaqItemCreateArgs>,
+            options?: Omit<(UseMutationOptions<(CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined), DefaultError, Prisma.SelectSubset<T, Prisma.FaqItemCreateArgs>> & ExtraMutationOptions), 'mutationFn'>
+        ) => {
+            return (await _mutation.mutateAsync(
+                args,
+                options as any
+            )) as (CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined);
+        },
+    };
+    return mutation;
 }
 
-export function useCreateManyFaqItem(
-  options?: Omit<
-    UseMutationOptions<
-      Prisma.BatchPayload,
-      DefaultError,
-      Prisma.FaqItemCreateManyArgs
-    > &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.FaqItemCreateManyArgs,
-    DefaultError,
-    Prisma.BatchPayload,
-    false
-  >(
-    'FaqItem',
-    'POST',
-    `${endpoint}/faqItem/createMany`,
-    metadata,
-    options,
-    fetch,
-    false,
-  )
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.FaqItemCreateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.FaqItemCreateManyArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          Prisma.BatchPayload,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.FaqItemCreateManyArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(
-        args,
-        options as any,
-      )) as Prisma.BatchPayload
-    },
-  }
-  return mutation
+export function useCreateManyFaqItem(options?: Omit<(UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.FaqItemCreateManyArgs> & ExtraMutationOptions), 'mutationFn'>) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation =
+        useModelMutation<Prisma.FaqItemCreateManyArgs, DefaultError, Prisma.BatchPayload, false>('FaqItem', 'POST', `${endpoint}/faqItem/createMany`, metadata, options, fetch, false)
+        ;
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.FaqItemCreateManyArgs>(
+            args: Prisma.SelectSubset<T, Prisma.FaqItemCreateManyArgs>,
+            options?: Omit<(UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.SelectSubset<T, Prisma.FaqItemCreateManyArgs>> & ExtraMutationOptions), 'mutationFn'>
+        ) => {
+            return (await _mutation.mutateAsync(
+                args,
+                options as any
+            )) as Prisma.BatchPayload;
+        },
+    };
+    return mutation;
 }
 
-export function useFindManyFaqItem<
-  TArgs extends Prisma.FaqItemFindManyArgs,
-  TQueryFnData = Array<
-    Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }
-  >,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findMany`,
-    args,
-    options,
-    fetch,
-  )
+export function useFindManyFaqItem<TArgs extends Prisma.FaqItemFindManyArgs, TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }>, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findMany`, args, options, fetch);
 }
 
-export function useInfiniteFindManyFaqItem<
-  TArgs extends Prisma.FaqItemFindManyArgs,
-  TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs>>,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
-  options?: Omit<
-    UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
-    'queryKey' | 'initialPageParam'
-  >,
-) {
-  options = options ?? { getNextPageParam: () => null }
-  const { endpoint, fetch } = getHooksContext()
-  return useInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findMany`,
-    args,
-    options,
-    fetch,
-  )
+export function useInfiniteFindManyFaqItem<TArgs extends Prisma.FaqItemFindManyArgs, TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs>>, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>, options?: Omit<UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>, 'queryKey' | 'initialPageParam'>) {
+    options = options ?? { getNextPageParam: () => null };
+    const { endpoint, fetch } = getHooksContext();
+    return useInfiniteModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findMany`, args, options, fetch);
 }
 
-export function useSuspenseFindManyFaqItem<
-  TArgs extends Prisma.FaqItemFindManyArgs,
-  TQueryFnData = Array<
-    Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }
-  >,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
-  options?: Omit<
-    UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
-    'queryKey'
-  > &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findMany`,
-    args,
-    options,
-    fetch,
-  )
+export function useSuspenseFindManyFaqItem<TArgs extends Prisma.FaqItemFindManyArgs, TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }>, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findMany`, args, options, fetch);
 }
 
-export function useSuspenseInfiniteFindManyFaqItem<
-  TArgs extends Prisma.FaqItemFindManyArgs,
-  TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs>>,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>,
-  options?: Omit<
-    UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
-    'queryKey' | 'initialPageParam'
-  >,
-) {
-  options = options ?? { getNextPageParam: () => null }
-  const { endpoint, fetch } = getHooksContext()
-  return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findMany`,
-    args,
-    options,
-    fetch,
-  )
+export function useSuspenseInfiniteFindManyFaqItem<TArgs extends Prisma.FaqItemFindManyArgs, TQueryFnData = Array<Prisma.FaqItemGetPayload<TArgs>>, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindManyArgs>, options?: Omit<UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>, 'queryKey' | 'initialPageParam'>) {
+    options = options ?? { getNextPageParam: () => null };
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findMany`, args, options, fetch);
 }
 
-export function useFindUniqueFaqItem<
-  TArgs extends Prisma.FaqItemFindUniqueArgs,
-  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindUniqueArgs>,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findUnique`,
-    args,
-    options,
-    fetch,
-  )
+export function useFindUniqueFaqItem<TArgs extends Prisma.FaqItemFindUniqueArgs, TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindUniqueArgs>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findUnique`, args, options, fetch);
 }
 
-export function useSuspenseFindUniqueFaqItem<
-  TArgs extends Prisma.FaqItemFindUniqueArgs,
-  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindUniqueArgs>,
-  options?: Omit<
-    UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
-    'queryKey'
-  > &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findUnique`,
-    args,
-    options,
-    fetch,
-  )
+export function useSuspenseFindUniqueFaqItem<TArgs extends Prisma.FaqItemFindUniqueArgs, TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindUniqueArgs>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findUnique`, args, options, fetch);
 }
 
-export function useFindFirstFaqItem<
-  TArgs extends Prisma.FaqItemFindFirstArgs,
-  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindFirstArgs>,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findFirst`,
-    args,
-    options,
-    fetch,
-  )
+export function useFindFirstFaqItem<TArgs extends Prisma.FaqItemFindFirstArgs, TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindFirstArgs>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findFirst`, args, options, fetch);
 }
 
-export function useSuspenseFindFirstFaqItem<
-  TArgs extends Prisma.FaqItemFindFirstArgs,
-  TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean },
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindFirstArgs>,
-  options?: Omit<
-    UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
-    'queryKey'
-  > &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/findFirst`,
-    args,
-    options,
-    fetch,
-  )
+export function useSuspenseFindFirstFaqItem<TArgs extends Prisma.FaqItemFindFirstArgs, TQueryFnData = Prisma.FaqItemGetPayload<TArgs> & { $optimistic?: boolean }, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemFindFirstArgs>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/findFirst`, args, options, fetch);
 }
 
-export function useUpdateFaqItem(
-  options?: Omit<
-    UseMutationOptions<
-      FaqItem | undefined,
-      DefaultError,
-      Prisma.FaqItemUpdateArgs
-    > &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.FaqItemUpdateArgs,
-    DefaultError,
-    FaqItem,
-    true
-  >(
-    'FaqItem',
-    'PUT',
-    `${endpoint}/faqItem/update`,
-    metadata,
-    options,
-    fetch,
-    true,
-  )
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.FaqItemUpdateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.FaqItemUpdateArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.FaqItemUpdateArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
-        | undefined
-    },
-  }
-  return mutation
+export function useUpdateFaqItem(options?: Omit<(UseMutationOptions<(FaqItem | undefined), DefaultError, Prisma.FaqItemUpdateArgs> & ExtraMutationOptions), 'mutationFn'>) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation =
+        useModelMutation<Prisma.FaqItemUpdateArgs, DefaultError, FaqItem, true>('FaqItem', 'PUT', `${endpoint}/faqItem/update`, metadata, options, fetch, true)
+        ;
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.FaqItemUpdateArgs>(
+            args: Prisma.SelectSubset<T, Prisma.FaqItemUpdateArgs>,
+            options?: Omit<(UseMutationOptions<(CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined), DefaultError, Prisma.SelectSubset<T, Prisma.FaqItemUpdateArgs>> & ExtraMutationOptions), 'mutationFn'>
+        ) => {
+            return (await _mutation.mutateAsync(
+                args,
+                options as any
+            )) as (CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined);
+        },
+    };
+    return mutation;
 }
 
-export function useUpdateManyFaqItem(
-  options?: Omit<
-    UseMutationOptions<
-      Prisma.BatchPayload,
-      DefaultError,
-      Prisma.FaqItemUpdateManyArgs
-    > &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.FaqItemUpdateManyArgs,
-    DefaultError,
-    Prisma.BatchPayload,
-    false
-  >(
-    'FaqItem',
-    'PUT',
-    `${endpoint}/faqItem/updateMany`,
-    metadata,
-    options,
-    fetch,
-    false,
-  )
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.FaqItemUpdateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.FaqItemUpdateManyArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          Prisma.BatchPayload,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.FaqItemUpdateManyArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(
-        args,
-        options as any,
-      )) as Prisma.BatchPayload
-    },
-  }
-  return mutation
+export function useUpdateManyFaqItem(options?: Omit<(UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.FaqItemUpdateManyArgs> & ExtraMutationOptions), 'mutationFn'>) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation =
+        useModelMutation<Prisma.FaqItemUpdateManyArgs, DefaultError, Prisma.BatchPayload, false>('FaqItem', 'PUT', `${endpoint}/faqItem/updateMany`, metadata, options, fetch, false)
+        ;
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.FaqItemUpdateManyArgs>(
+            args: Prisma.SelectSubset<T, Prisma.FaqItemUpdateManyArgs>,
+            options?: Omit<(UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.SelectSubset<T, Prisma.FaqItemUpdateManyArgs>> & ExtraMutationOptions), 'mutationFn'>
+        ) => {
+            return (await _mutation.mutateAsync(
+                args,
+                options as any
+            )) as Prisma.BatchPayload;
+        },
+    };
+    return mutation;
 }
 
-export function useUpsertFaqItem(
-  options?: Omit<
-    UseMutationOptions<
-      FaqItem | undefined,
-      DefaultError,
-      Prisma.FaqItemUpsertArgs
-    > &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.FaqItemUpsertArgs,
-    DefaultError,
-    FaqItem,
-    true
-  >(
-    'FaqItem',
-    'POST',
-    `${endpoint}/faqItem/upsert`,
-    metadata,
-    options,
-    fetch,
-    true,
-  )
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.FaqItemUpsertArgs>(
-      args: Prisma.SelectSubset<T, Prisma.FaqItemUpsertArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.FaqItemUpsertArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
-        | undefined
-    },
-  }
-  return mutation
+export function useUpsertFaqItem(options?: Omit<(UseMutationOptions<(FaqItem | undefined), DefaultError, Prisma.FaqItemUpsertArgs> & ExtraMutationOptions), 'mutationFn'>) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation =
+        useModelMutation<Prisma.FaqItemUpsertArgs, DefaultError, FaqItem, true>('FaqItem', 'POST', `${endpoint}/faqItem/upsert`, metadata, options, fetch, true)
+        ;
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.FaqItemUpsertArgs>(
+            args: Prisma.SelectSubset<T, Prisma.FaqItemUpsertArgs>,
+            options?: Omit<(UseMutationOptions<(CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined), DefaultError, Prisma.SelectSubset<T, Prisma.FaqItemUpsertArgs>> & ExtraMutationOptions), 'mutationFn'>
+        ) => {
+            return (await _mutation.mutateAsync(
+                args,
+                options as any
+            )) as (CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined);
+        },
+    };
+    return mutation;
 }
 
-export function useDeleteFaqItem(
-  options?: Omit<
-    UseMutationOptions<
-      FaqItem | undefined,
-      DefaultError,
-      Prisma.FaqItemDeleteArgs
-    > &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.FaqItemDeleteArgs,
-    DefaultError,
-    FaqItem,
-    true
-  >(
-    'FaqItem',
-    'DELETE',
-    `${endpoint}/faqItem/delete`,
-    metadata,
-    options,
-    fetch,
-    true,
-  )
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.FaqItemDeleteArgs>(
-      args: Prisma.SelectSubset<T, Prisma.FaqItemDeleteArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.FaqItemDeleteArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>>
-        | undefined
-    },
-  }
-  return mutation
+export function useDeleteFaqItem(options?: Omit<(UseMutationOptions<(FaqItem | undefined), DefaultError, Prisma.FaqItemDeleteArgs> & ExtraMutationOptions), 'mutationFn'>) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation =
+        useModelMutation<Prisma.FaqItemDeleteArgs, DefaultError, FaqItem, true>('FaqItem', 'DELETE', `${endpoint}/faqItem/delete`, metadata, options, fetch, true)
+        ;
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.FaqItemDeleteArgs>(
+            args: Prisma.SelectSubset<T, Prisma.FaqItemDeleteArgs>,
+            options?: Omit<(UseMutationOptions<(CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined), DefaultError, Prisma.SelectSubset<T, Prisma.FaqItemDeleteArgs>> & ExtraMutationOptions), 'mutationFn'>
+        ) => {
+            return (await _mutation.mutateAsync(
+                args,
+                options as any
+            )) as (CheckSelect<T, FaqItem, Prisma.FaqItemGetPayload<T>> | undefined);
+        },
+    };
+    return mutation;
 }
 
-export function useDeleteManyFaqItem(
-  options?: Omit<
-    UseMutationOptions<
-      Prisma.BatchPayload,
-      DefaultError,
-      Prisma.FaqItemDeleteManyArgs
-    > &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.FaqItemDeleteManyArgs,
-    DefaultError,
-    Prisma.BatchPayload,
-    false
-  >(
-    'FaqItem',
-    'DELETE',
-    `${endpoint}/faqItem/deleteMany`,
-    metadata,
-    options,
-    fetch,
-    false,
-  )
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.FaqItemDeleteManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.FaqItemDeleteManyArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          Prisma.BatchPayload,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.FaqItemDeleteManyArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(
-        args,
-        options as any,
-      )) as Prisma.BatchPayload
-    },
-  }
-  return mutation
+export function useDeleteManyFaqItem(options?: Omit<(UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.FaqItemDeleteManyArgs> & ExtraMutationOptions), 'mutationFn'>) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation =
+        useModelMutation<Prisma.FaqItemDeleteManyArgs, DefaultError, Prisma.BatchPayload, false>('FaqItem', 'DELETE', `${endpoint}/faqItem/deleteMany`, metadata, options, fetch, false)
+        ;
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.FaqItemDeleteManyArgs>(
+            args: Prisma.SelectSubset<T, Prisma.FaqItemDeleteManyArgs>,
+            options?: Omit<(UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.SelectSubset<T, Prisma.FaqItemDeleteManyArgs>> & ExtraMutationOptions), 'mutationFn'>
+        ) => {
+            return (await _mutation.mutateAsync(
+                args,
+                options as any
+            )) as Prisma.BatchPayload;
+        },
+    };
+    return mutation;
 }
 
-export function useAggregateFaqItem<
-  TArgs extends Prisma.FaqItemAggregateArgs,
-  TQueryFnData = Prisma.GetFaqItemAggregateType<TArgs>,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemAggregateArgs>,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/aggregate`,
-    args,
-    options,
-    fetch,
-  )
+export function useAggregateFaqItem<TArgs extends Prisma.FaqItemAggregateArgs, TQueryFnData = Prisma.GetFaqItemAggregateType<TArgs>, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.FaqItemAggregateArgs>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/aggregate`, args, options, fetch);
 }
 
-export function useSuspenseAggregateFaqItem<
-  TArgs extends Prisma.FaqItemAggregateArgs,
-  TQueryFnData = Prisma.GetFaqItemAggregateType<TArgs>,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args: Prisma.SelectSubset<TArgs, Prisma.FaqItemAggregateArgs>,
-  options?: Omit<
-    UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
-    'queryKey'
-  > &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/aggregate`,
-    args,
-    options,
-    fetch,
-  )
+export function useSuspenseAggregateFaqItem<TArgs extends Prisma.FaqItemAggregateArgs, TQueryFnData = Prisma.GetFaqItemAggregateType<TArgs>, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.FaqItemAggregateArgs>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/aggregate`, args, options, fetch);
 }
 
-export function useGroupByFaqItem<
-  TArgs extends Prisma.FaqItemGroupByArgs,
-  HasSelectOrTake extends Prisma.Or<
-    Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
-    Prisma.Extends<'take', Prisma.Keys<TArgs>>
-  >,
-  OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.FaqItemGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.FaqItemGroupByArgs['orderBy'] },
-  OrderFields extends Prisma.ExcludeUnderscoreKeys<
-    Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
-  >,
-  ByFields extends Prisma.MaybeTupleToUnion<TArgs['by']>,
-  ByValid extends Prisma.Has<ByFields, OrderFields>,
-  HavingFields extends Prisma.GetHavingFields<TArgs['having']>,
-  HavingValid extends Prisma.Has<ByFields, HavingFields>,
-  ByEmpty extends TArgs['by'] extends never[] ? Prisma.True : Prisma.False,
-  InputErrors extends ByEmpty extends Prisma.True
+export function useGroupByFaqItem<TArgs extends Prisma.FaqItemGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<TArgs>>, Prisma.Extends<'take', Prisma.Keys<TArgs>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? { orderBy: Prisma.FaqItemGroupByArgs['orderBy'] } : { orderBy?: Prisma.FaqItemGroupByArgs['orderBy'] }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<TArgs['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<TArgs['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends TArgs['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True
     ? `Error: "by" must not be empty.`
     : HavingValid extends Prisma.False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-              ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-              : [
-                  Error,
-                  'Field ',
-                  P,
-                  ` in "having" needs to be provided in "by"`,
-                ]
-        }[HavingFields]
-      : 'take' extends Prisma.Keys<TArgs>
-        ? 'orderBy' extends Prisma.Keys<TArgs>
-          ? ByValid extends Prisma.True
-            ? {}
-            : {
-                [P in OrderFields]: P extends ByFields
-                  ? never
-                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-              }[OrderFields]
-          : 'Error: If you provide "take", you also need to provide "orderBy"'
-        : 'skip' extends Prisma.Keys<TArgs>
-          ? 'orderBy' extends Prisma.Keys<TArgs>
-            ? ByValid extends Prisma.True
-              ? {}
-              : {
-                  [P in OrderFields]: P extends ByFields
-                    ? never
-                    : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                }[OrderFields]
-            : 'Error: If you provide "skip", you also need to provide "orderBy"'
-          : ByValid extends Prisma.True
-            ? {}
-            : {
-                [P in OrderFields]: P extends ByFields
-                  ? never
-                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-              }[OrderFields],
-  TQueryFnData = {} extends InputErrors
-    ? Array<
-        PickEnumerable<Prisma.FaqItemGroupByOutputType, TArgs['by']> & {
-          [P in keyof TArgs &
-            keyof Prisma.FaqItemGroupByOutputType]: P extends '_count'
+    ? {
+        [P in HavingFields]: P extends ByFields
+        ? never
+        : P extends string
+        ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+        : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`,
+        ]
+    }[HavingFields]
+    : 'take' extends Prisma.Keys<TArgs>
+    ? 'orderBy' extends Prisma.Keys<TArgs>
+    ? ByValid extends Prisma.True
+    ? {}
+    : {
+        [P in OrderFields]: P extends ByFields
+        ? never
+        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+    }[OrderFields]
+    : 'Error: If you provide "take", you also need to provide "orderBy"'
+    : 'skip' extends Prisma.Keys<TArgs>
+    ? 'orderBy' extends Prisma.Keys<TArgs>
+    ? ByValid extends Prisma.True
+    ? {}
+    : {
+        [P in OrderFields]: P extends ByFields
+        ? never
+        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+    }[OrderFields]
+    : 'Error: If you provide "skip", you also need to provide "orderBy"'
+    : ByValid extends Prisma.True
+    ? {}
+    : {
+        [P in OrderFields]: P extends ByFields
+        ? never
+        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+    }[OrderFields], TQueryFnData = {} extends InputErrors ?
+    Array<PickEnumerable<Prisma.FaqItemGroupByOutputType, TArgs['by']> &
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.FaqItemGroupByOutputType))]: P extends '_count'
             ? TArgs[P] extends boolean
-              ? number
-              : Prisma.GetScalarType<
-                  TArgs[P],
-                  Prisma.FaqItemGroupByOutputType[P]
-                >
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.FaqItemGroupByOutputType[P]>
             : Prisma.GetScalarType<TArgs[P], Prisma.FaqItemGroupByOutputType[P]>
         }
-      >
-    : InputErrors,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args: Prisma.SelectSubset<
-    TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.FaqItemGroupByArgs, OrderByArg> &
-      InputErrors
-  >,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/groupBy`,
-    args,
-    options,
-    fetch,
-  )
+    > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.FaqItemGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/groupBy`, args, options, fetch);
 }
 
-export function useSuspenseGroupByFaqItem<
-  TArgs extends Prisma.FaqItemGroupByArgs,
-  HasSelectOrTake extends Prisma.Or<
-    Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
-    Prisma.Extends<'take', Prisma.Keys<TArgs>>
-  >,
-  OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.FaqItemGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.FaqItemGroupByArgs['orderBy'] },
-  OrderFields extends Prisma.ExcludeUnderscoreKeys<
-    Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
-  >,
-  ByFields extends Prisma.MaybeTupleToUnion<TArgs['by']>,
-  ByValid extends Prisma.Has<ByFields, OrderFields>,
-  HavingFields extends Prisma.GetHavingFields<TArgs['having']>,
-  HavingValid extends Prisma.Has<ByFields, HavingFields>,
-  ByEmpty extends TArgs['by'] extends never[] ? Prisma.True : Prisma.False,
-  InputErrors extends ByEmpty extends Prisma.True
+export function useSuspenseGroupByFaqItem<TArgs extends Prisma.FaqItemGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<TArgs>>, Prisma.Extends<'take', Prisma.Keys<TArgs>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? { orderBy: Prisma.FaqItemGroupByArgs['orderBy'] } : { orderBy?: Prisma.FaqItemGroupByArgs['orderBy'] }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<TArgs['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<TArgs['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends TArgs['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True
     ? `Error: "by" must not be empty.`
     : HavingValid extends Prisma.False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-              ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-              : [
-                  Error,
-                  'Field ',
-                  P,
-                  ` in "having" needs to be provided in "by"`,
-                ]
-        }[HavingFields]
-      : 'take' extends Prisma.Keys<TArgs>
-        ? 'orderBy' extends Prisma.Keys<TArgs>
-          ? ByValid extends Prisma.True
-            ? {}
-            : {
-                [P in OrderFields]: P extends ByFields
-                  ? never
-                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-              }[OrderFields]
-          : 'Error: If you provide "take", you also need to provide "orderBy"'
-        : 'skip' extends Prisma.Keys<TArgs>
-          ? 'orderBy' extends Prisma.Keys<TArgs>
-            ? ByValid extends Prisma.True
-              ? {}
-              : {
-                  [P in OrderFields]: P extends ByFields
-                    ? never
-                    : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                }[OrderFields]
-            : 'Error: If you provide "skip", you also need to provide "orderBy"'
-          : ByValid extends Prisma.True
-            ? {}
-            : {
-                [P in OrderFields]: P extends ByFields
-                  ? never
-                  : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-              }[OrderFields],
-  TQueryFnData = {} extends InputErrors
-    ? Array<
-        PickEnumerable<Prisma.FaqItemGroupByOutputType, TArgs['by']> & {
-          [P in keyof TArgs &
-            keyof Prisma.FaqItemGroupByOutputType]: P extends '_count'
+    ? {
+        [P in HavingFields]: P extends ByFields
+        ? never
+        : P extends string
+        ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+        : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`,
+        ]
+    }[HavingFields]
+    : 'take' extends Prisma.Keys<TArgs>
+    ? 'orderBy' extends Prisma.Keys<TArgs>
+    ? ByValid extends Prisma.True
+    ? {}
+    : {
+        [P in OrderFields]: P extends ByFields
+        ? never
+        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+    }[OrderFields]
+    : 'Error: If you provide "take", you also need to provide "orderBy"'
+    : 'skip' extends Prisma.Keys<TArgs>
+    ? 'orderBy' extends Prisma.Keys<TArgs>
+    ? ByValid extends Prisma.True
+    ? {}
+    : {
+        [P in OrderFields]: P extends ByFields
+        ? never
+        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+    }[OrderFields]
+    : 'Error: If you provide "skip", you also need to provide "orderBy"'
+    : ByValid extends Prisma.True
+    ? {}
+    : {
+        [P in OrderFields]: P extends ByFields
+        ? never
+        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+    }[OrderFields], TQueryFnData = {} extends InputErrors ?
+    Array<PickEnumerable<Prisma.FaqItemGroupByOutputType, TArgs['by']> &
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.FaqItemGroupByOutputType))]: P extends '_count'
             ? TArgs[P] extends boolean
-              ? number
-              : Prisma.GetScalarType<
-                  TArgs[P],
-                  Prisma.FaqItemGroupByOutputType[P]
-                >
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.FaqItemGroupByOutputType[P]>
             : Prisma.GetScalarType<TArgs[P], Prisma.FaqItemGroupByOutputType[P]>
         }
-      >
-    : InputErrors,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args: Prisma.SelectSubset<
-    TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.FaqItemGroupByArgs, OrderByArg> &
-      InputErrors
-  >,
-  options?: Omit<
-    UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
-    'queryKey'
-  > &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/groupBy`,
-    args,
-    options,
-    fetch,
-  )
+    > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.FaqItemGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/groupBy`, args, options, fetch);
 }
 
-export function useCountFaqItem<
-  TArgs extends Prisma.FaqItemCountArgs,
-  TQueryFnData = TArgs extends { select: any }
-    ? TArgs['select'] extends true
-      ? number
-      : Prisma.GetScalarType<
-          TArgs['select'],
-          Prisma.FaqItemCountAggregateOutputType
-        >
-    : number,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemCountArgs>,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/count`,
-    args,
-    options,
-    fetch,
-  )
+export function useCountFaqItem<TArgs extends Prisma.FaqItemCountArgs, TQueryFnData = TArgs extends { select: any; } ? TArgs['select'] extends true ? number : Prisma.GetScalarType<TArgs['select'], Prisma.FaqItemCountAggregateOutputType> : number, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemCountArgs>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/count`, args, options, fetch);
 }
 
-export function useSuspenseCountFaqItem<
-  TArgs extends Prisma.FaqItemCountArgs,
-  TQueryFnData = TArgs extends { select: any }
-    ? TArgs['select'] extends true
-      ? number
-      : Prisma.GetScalarType<
-          TArgs['select'],
-          Prisma.FaqItemCountAggregateOutputType
-        >
-    : number,
-  TData = TQueryFnData,
-  TError = DefaultError,
->(
-  args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemCountArgs>,
-  options?: Omit<
-    UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
-    'queryKey'
-  > &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/count`,
-    args,
-    options,
-    fetch,
-  )
+export function useSuspenseCountFaqItem<TArgs extends Prisma.FaqItemCountArgs, TQueryFnData = TArgs extends { select: any; } ? TArgs['select'] extends true ? number : Prisma.GetScalarType<TArgs['select'], Prisma.FaqItemCountAggregateOutputType> : number, TData = TQueryFnData, TError = DefaultError>(args?: Prisma.SelectSubset<TArgs, Prisma.FaqItemCountArgs>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useSuspenseModelQuery<TQueryFnData, TData, TError>('FaqItem', `${endpoint}/faqItem/count`, args, options, fetch);
 }
-import type { FaqNature } from '@zenstackhq/runtime/models'
+import type { FaqNature } from '@zenstackhq/runtime/models';
 
-export function useCheckFaqItem<TError = DefaultError>(
-  args: {
-    operation: PolicyCrudKind
-    where?: {
-      id?: string
-      title?: string
-      slug?: string
-      nature?: FaqNature
-      order?: number
-      published?: boolean
-      content?: string
-      categoryId?: string
-    }
-  },
-  options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
-    ExtraQueryOptions,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  return useModelQuery<boolean, boolean, TError>(
-    'FaqItem',
-    `${endpoint}/faqItem/check`,
-    args,
-    options,
-    fetch,
-  )
+export function useCheckFaqItem<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; title?: string; slug?: string; nature?: FaqNature; order?: number; published?: boolean; content?: string; categoryId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+    const { endpoint, fetch } = getHooksContext();
+    return useModelQuery<boolean, boolean, TError>('FaqItem', `${endpoint}/faqItem/check`, args, options, fetch);
 }
