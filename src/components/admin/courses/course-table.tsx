@@ -23,6 +23,7 @@ import { useDeleteCourse } from '@/lib/zenstack-hooks'
 import { dayJs } from '@/utils/dayjs'
 import { Course, Professor, User } from '@zenstackhq/runtime/models'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { revalidateCourses } from '@/lib/cache-revalidation'
 
 type CourseWithRelations = Course & {
   professors: (Professor & { user: User })[]
@@ -54,7 +55,8 @@ export default function CourseTable({
       deleteCourse(
         { where: { id: courseToDelete } },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
+            await revalidateCourses()
             onRefresh()
             setDeleteDialogOpen(false)
             setCourseToDelete(null)

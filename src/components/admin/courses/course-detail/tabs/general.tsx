@@ -22,6 +22,7 @@ import {
   CourseNature,
 } from '@prisma/client'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
+import { revalidateCourses } from '@/lib/cache-revalidation'
 
 import { FormBlockTextImage } from '@/components/ui/form-fields'
 import { useAtomValue } from 'jotai'
@@ -169,7 +170,8 @@ export default function CourseGeneralTab() {
         },
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await revalidateCourses()
           if (slug !== formatToSlug(values.name)) {
             toast.success('Curso atualizado com sucesso! Redirecionando...')
             router.replace(`/admin/courses/${formatToSlug(values.name)}`)

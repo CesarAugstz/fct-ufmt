@@ -6,9 +6,11 @@ import { ThemeToggle } from '@/components/common/theme-toggle'
 import UserDropdown from './user-dropdown/user-dropdown'
 import { MobileSidebar } from '../sidebar'
 
-export default function Header() {
+export default function Header({ withSidebar = true }) {
   return (
-    <header className="fixed top-4 left-4 right-4 md:left-72 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border border-border rounded-xl shadow-lg z-30 py-3 px-4">
+    <header
+      className={`fixed top-4 left-4 right-4 ${withSidebar ? 'md:left-72' : ''} bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border border-border rounded-xl shadow-lg z-30 py-3 px-4`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <MobileSidebar />

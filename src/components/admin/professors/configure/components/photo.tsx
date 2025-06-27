@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { ActionButton } from '@/components/ui/action-button'
 import { useCallback, useRef } from 'react'
 import { useImageCompressor } from '@/lib/hooks/image-compressor'
+import { ulid } from 'ulidx'
 
 interface Props {
   onClickSave: () => void
@@ -41,9 +42,16 @@ export default function Photo({ onClickSave, isSubmitting }: Props) {
         quality: 0.9,
       })
 
-      const base64 = compressed.dataUrl
-      formMethods?.setValue('image', base64)
-      setProfessor({ ...professor, image: base64 } as typeof professor)
+      const attachment = {
+        id: ulid(),
+        dataUrl: compressed.dataUrl,
+        name: file.name,
+        mimeType: file.type,
+        size: file.size,
+      }
+
+      formMethods?.setValue('image', attachment)
+      setProfessor({ ...professor, image: attachment } as typeof professor)
     },
     [compress, formMethods, professor, setProfessor],
   )
@@ -54,7 +62,8 @@ export default function Photo({ onClickSave, isSubmitting }: Props) {
         <div className="absolute -bottom-12 left-6 md:left-8">
           <ProfileImage
             alt={initials}
-            src={professor?.image ?? undefined}
+            imageId={professor?.imageId}
+            src={professor?.image?.dataUrl}
             className="w-[120px] h-[120px]"
           />
         </div>

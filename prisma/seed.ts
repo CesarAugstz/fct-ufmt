@@ -59,52 +59,71 @@ async function main() {
     },
   ]
 
-  for (const course of courses) {
-    await prisma.course.upsert({
-      where: {
-        name: course.name,
-      },
-      update: {},
-      create: {
-        ...course,
-      },
-    })
-  }
+  await prisma.$transaction(
+    courses.map(course =>
+      prisma.course.upsert({
+        where: {
+          name: course.name,
+        },
+        update: {},
+        create: {
+          ...course,
+        },
+      }),
+    ),
+  )
 
   console.log('🧑‍🏫 Creating professors...')
+
+  const professorsPromises: Promise<void>[] = []
 
   for (const course of courses) {
     const createdCourse = await prisma.course.findUnique({
       where: { name: course.name },
     })
 
-    if (!createdCourse) continue
+    if (!createdCourse) return undefined
 
     for (let i = 0; i < 40; i++) {
       const professorData = generateProfessorData(course.name)
-      const image = getRandomProfessorImage()
+      const image = getRandomProfessorImage() as string
 
-      try {
-        await prisma.user.create({
-          data: {
-            ...professorData.user,
-            password: bcrypt.hashSync(professorData.user.password),
-            professor: {
-              create: {
-                ...professorData.professor,
-                image,
-                courses: {
-                  connect: { id: createdCourse.id },
+      professorsPromises.push(
+        (async () => {
+          try {
+            await prisma.user.create({
+              data: {
+                ...professorData.user,
+                password: bcrypt.hashSync(professorData.user.password),
+                professor: {
+                  create: {
+                    ...professorData.professor,
+                    image: {
+                      create: {
+                        dataUrl: image,
+                        name: 'profile.jpg',
+                        mimeType: 'image/jpeg',
+                        size: 1000,
+                      },
+                    },
+                    courses: {
+                      connect: { id: createdCourse.id },
+                    },
+                  },
                 },
               },
-            },
-          },
-        })
-      } catch {
-        console.log(`⚠️ Professor already exists: ${professorData.user.email}`)
-      }
+            })
+          } catch {
+            console.log(
+              `⚠️ Professor already exists: ${professorData.user.email}`,
+            )
+          }
+        })(),
+      )
     }
   }
+
+  await Promise.all(professorsPromises)
 
   console.log('✅ Professors created')
 

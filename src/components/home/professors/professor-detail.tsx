@@ -8,10 +8,8 @@ import {
   Share2,
   Clock,
   Beaker,
-  User,
 } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -20,6 +18,7 @@ import { useShare } from '@/lib/hooks/share'
 import { useCallback } from 'react'
 import { useFindUniqueProfessor } from '@/lib/zenstack-hooks'
 import LoadingSpinner from '@/components/common/loading-spinner'
+import ProfileImage from '@/components/common/profile-image'
 
 export default function ProfessorDetail({ id }: { id: string }) {
   const { data: professor, isLoading } = useFindUniqueProfessor({
@@ -86,17 +85,11 @@ export default function ProfessorDetail({ id }: { id: string }) {
           <div className="space-y-8">
             <div className="flex ">
               <div className="relative mr-4 self-center size-[100px] sm:h-28 sm:w-28 overflow-hidden rounded-full">
-                {professor.image ? (
-                  <Image
-                    src={professor.image}
-                    alt={professor?.user?.name ?? 'Professor'}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  <User className="h-full w-full text-gray-400 opacity-50 rounded-full" />
-                )}
+                <ProfileImage
+                  imageId={professor.imageId}
+                  alt={professor.user.name || ''}
+                  className="h-24 w-24 sm:h-28 sm:w-28"
+                />
               </div>
               <div>
                 <div className="flex flex-wrap gap-2 mb-3">

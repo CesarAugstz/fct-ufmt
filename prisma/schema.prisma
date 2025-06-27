@@ -81,21 +81,22 @@ model Course {
 }
 
 model Professor {
-  id                String   @id() @default(ulid())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt()
+  id                String      @id() @default(ulid())
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt()
   courses           Course[]
   summary           String?
   specialties       String[]
-  image             String?
   researchAreas     String[]
   officeHours       String?
   lattes            String?
   publications      Json
   researchProjects  Json
   extensionProjects Json
-  userId            String   @unique()
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageId           String?     @unique()
+  image             Attachment? @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  userId            String      @unique()
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model FaqCategory {
@@ -151,4 +152,5 @@ model Attachment {
   mimeType      String
   size          Int
   contentBlocks ContentBlock?
+  professor     Professor?
 }

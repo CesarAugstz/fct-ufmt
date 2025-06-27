@@ -21,7 +21,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import AnimatedTextParts from '@/components/common/animated-text-parts'
 import { ProfessorWithRelations } from '@/app/admin/(without-sidebar)/professors-configure/page'
 import { useOnMount } from '@/lib/hooks/on-mount'
-import { useUpdateProfessor } from '@/lib/zenstack-hooks'
+import { useDeleteAttachment, useUpdateProfessor } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
 import { formatFormToBack } from './utils/utils'
 
@@ -40,6 +40,8 @@ export default function Configure({
   const updateProfessorMutation = useUpdateProfessor()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const toast = useToast()
+
+  const { mutateAsync: deleteAttachment } = useDeleteAttachment()
 
   const onTabChange = useCallback(
     (tab: string) => {
@@ -94,7 +96,22 @@ export default function Configure({
 
       await updateProfessorMutation.mutateAsync({
         where: { id: values.id },
-        data: formattedValues,
+        data: {
+          ...formattedValues,
+          ...(values.image
+            ? {
+                image: {
+                  upsert: {
+                    where: { id: values.image.id },
+                    create: {
+                      ...values.image,
+                      contentBlocks: undefined,
+                    },
+                  },
+                },
+              }
+            : { image: undefined }),
+        },
       })
       toast.success('Informações atualizadas com sucesso')
     } catch (error) {

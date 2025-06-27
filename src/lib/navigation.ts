@@ -1,5 +1,6 @@
-import { useFindManyCourse } from '@/lib/zenstack-hooks'
+import { db } from '@/server/db'
 import { CourseNature } from '@prisma/client'
+import { unstable_cache } from 'next/cache'
 
 export type Section = {
   name: string
@@ -7,8 +8,17 @@ export type Section = {
   href?: string
 }
 
-export function useNavSections() {
-  const { data: courses } = useFindManyCourse()
+async function getNavigationSectionsUncached(): Promise<Section[]> {
+  const courses = await db.course.findMany({
+    select: {
+      name: true,
+      slug: true,
+      nature: true,
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  })
 
   const graduationCourses = courses
     ?.filter(c => c.nature === CourseNature.GRADUATION)
@@ -69,7 +79,14 @@ export function useNavSections() {
     },
   ]
 
-  return {
-    sections,
-  }
+  return sections
 }
+
+export const getNavigationSections = unstable_cache(
+  getNavigationSectionsUncached,
+  ['navigation-sections'],
+  {
+    revalidate: 3600, // Cache for 1 hour
+    tags: ['navigation', 'courses'],
+  },
+)

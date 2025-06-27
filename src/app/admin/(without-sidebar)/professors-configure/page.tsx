@@ -1,6 +1,7 @@
 import Configure from '@/components/admin/professors/configure/configure'
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
+import { Prisma } from '@prisma/client'
 import { Course, Professor } from '@zenstackhq/runtime/models'
 import { redirect } from 'next/navigation'
 
@@ -28,4 +29,5 @@ export type ProfessorWithRelations = Professor & {
     name: string
   }
   courses: Course[]
+  image?: Prisma.AttachmentCreateInput
 }

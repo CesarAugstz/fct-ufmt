@@ -22,6 +22,7 @@ export default function CourseProfessorsTab({
     include: {
       user: true,
       courses: true,
+      image: { select: { id: true } },
     },
   })
 

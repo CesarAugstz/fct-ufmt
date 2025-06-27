@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useIsMobile } from '@/lib/hooks/is-mobile'
-import { Section } from './nav-items.hook'
+import { Section } from '@/lib/navigation'
 
 interface NavMenuItemProps {
   item: Section

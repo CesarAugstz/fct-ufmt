@@ -32,6 +32,7 @@ export default function CourseProfessorsTab() {
       include: {
         user: { select: { name: true, email: true } },
         courses: { select: { name: true } },
+        image: { select: { id: true } },
       },
     },
     { enabled: !!slug },
@@ -94,7 +95,7 @@ export default function CourseProfessorsTab() {
                   <div className="flex items-center space-x-3">
                     <ProfileImage
                       alt={professor.user.name || ''}
-                      src={professor.image || undefined}
+                      imageId={professor.imageId}
                       className="w-12 h-12"
                     />
                     <div>

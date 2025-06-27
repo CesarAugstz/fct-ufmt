@@ -31,7 +31,7 @@ export default function ProfessorCard({
       <div className="flex justify-center">
         <ProfileImage
           alt={professor.user.name || ''}
-          src={professor.image || undefined}
+          imageId={professor.imageId}
           className="w-48 h-48 hover:scale-105 transition-transform duration-300"
         />
       </div>

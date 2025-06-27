@@ -219,7 +219,7 @@ export default function AddProfessorsDialog({
                   />
                   <ProfileImage
                     alt={professor.user.name || ''}
-                    src={professor.image || undefined}
+                    imageId={professor.imageId}
                     className="w-10 h-10"
                   />
                   <div className="flex-1">

@@ -17,6 +17,7 @@ export default function Professors() {
     include: {
       user: true,
       courses: true,
+      image: { select: { id: true } },
     },
   })
 

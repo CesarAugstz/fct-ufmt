@@ -1,9 +1,13 @@
 import { NavbarGov } from '@/components/home/components/navbar-gov'
 import { Header } from '@/components/home/components/header'
-import  NavItems  from '@/components/home/components/nav-items/nav-items'
+import NavItems from '@/components/home/components/nav-items/nav-items'
 import { SiteFooter } from '@/components/home/components/site-footer'
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <div className="min-h-screen flex flex-col">
       <NavbarGov />

@@ -23,6 +23,7 @@ import { useToast } from '@/lib/hooks/toast'
 import { CourseNature } from '@prisma/client'
 import { FormSelect } from '@/components/ui/form-fields/form-select'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
+import { revalidateCourses } from '@/lib/cache-revalidation'
 
 const formSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
@@ -78,7 +79,8 @@ export default function CourseForm({
           },
         },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
+            await revalidateCourses()
             setIsSubmitting(false)
             onSuccess()
             toast.success('Curso atualizado com sucesso!')
@@ -101,7 +103,8 @@ export default function CourseForm({
         },
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await revalidateCourses()
           setIsSubmitting(false)
           onSuccess()
           methods.reset()

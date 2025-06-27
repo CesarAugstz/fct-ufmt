@@ -94,13 +94,15 @@ model Professor extends BaseModel {
 
   summary           String?
   specialties       String[]
-  image             String?
   researchAreas     String[]
   officeHours       String?
   lattes            String?
   publications      Publication[]      @json
   researchProjects  ResearchProject[]  @json
   extensionProjects ExtensionProject[] @json 
+
+  imageId           String?            @unique
+  image             Attachment? @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
   userId            String             @unique
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -188,7 +190,8 @@ model Attachment extends BaseModel {
   size     Int
 
   contentBlocks ContentBlock? 
+  professor Professor?
 
   @@allow('read', true)
-  @@allow('create,update,delete', auth().role == 'ADMIN')
+  @@allow('create,update,delete', auth().role == 'ADMIN' || auth() == professor.user)
 }
