@@ -1,6 +1,5 @@
 import { db } from '@/server/db'
 import { CourseNature } from '@prisma/client'
-import { unstable_cache } from 'next/cache'
 
 export type Section = {
   name: string
@@ -30,7 +29,7 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
 
   const sections: Section[] = [
     {
-      name: 'O Instituto',
+      name: 'A Faculdade',
       href: '/home',
       children: [
         { name: 'História' },
@@ -82,11 +81,4 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
   return sections
 }
 
-export const getNavigationSections = unstable_cache(
-  getNavigationSectionsUncached,
-  ['navigation-sections'],
-  {
-    revalidate: 3600, // Cache for 1 hour
-    tags: ['navigation', 'courses'],
-  },
-)
+export const getNavigationSections = getNavigationSectionsUncached
