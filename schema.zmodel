@@ -38,6 +38,7 @@ model User extends BaseModel {
   role      Role       @default(USER)
 
   professor Professor?
+  logEntries LogEntry[]
 
   @@allow('create,read', true)
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == this)
@@ -194,4 +195,25 @@ model Attachment extends BaseModel {
 
   @@allow('read', true)
   @@allow('create,update,delete', auth().role == 'ADMIN' || auth() == professor.user)
+}
+
+model LogEntry extends BaseModel {
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  endpoint String
+  method   String 
+  body     String?
+  params   String?
+  response String?
+  ip       String?
+  userAgent String?
+  isError  Boolean @default(false)
+  error    String?
+
+  @@allow('all', auth().role == 'ADMIN')
+  @@index([userId, createdAt])
+  @@index([endpoint, createdAt])
+  @@index([method, createdAt])
+  @@index([isError, createdAt])
 }

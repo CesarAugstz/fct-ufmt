@@ -57,14 +57,15 @@ enum BlockSize {
 }
 
 model User {
-  id        String     @id() @default(ulid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt()
-  email     String     @unique()
-  password  String
-  name      String?
-  role      Role       @default(USER)
-  professor Professor?
+  id         String     @id() @default(ulid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt()
+  email      String     @unique()
+  password   String
+  name       String?
+  role       Role       @default(USER)
+  professor  Professor?
+  logEntries LogEntry[]
 }
 
 model Course {
@@ -153,4 +154,26 @@ model Attachment {
   size          Int
   contentBlocks ContentBlock?
   professor     Professor?
+}
+
+model LogEntry {
+  id        String   @id() @default(ulid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String
+  method    String
+  body      String?
+  params    String?
+  response  String?
+  ip        String?
+  userAgent String?
+  isError   Boolean  @default(false)
+  error     String?
+
+  @@index([userId, createdAt])
+  @@index([endpoint, createdAt])
+  @@index([method, createdAt])
+  @@index([isError, createdAt])
 }

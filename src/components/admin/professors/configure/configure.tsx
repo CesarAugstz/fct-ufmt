@@ -103,6 +103,7 @@ export default function Configure({
                 image: {
                   upsert: {
                     where: { id: values.image.id },
+                    update: {},
                     create: {
                       ...values.image,
                       contentBlocks: undefined,

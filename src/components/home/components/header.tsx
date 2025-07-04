@@ -1,9 +1,12 @@
+'use client'
+
 import Image from 'next/image'
-import { Search, Facebook, Instagram, Youtube, Linkedin } from 'lucide-react'
+import { Search, Instagram, Youtube } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/common/theme-toggle'
 import Link from 'next/link'
+import { commonData } from '@/data/common.data'
 
 export function Header() {
   return (
@@ -49,29 +52,17 @@ export function Header() {
             variant="ghost"
             size="icon"
             className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
-          >
-            <Facebook className="h-5 w-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
+            onClick={() => window.open(commonData.instagram, '_blank')}
           >
             <Instagram className="h-5 w-5" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
+            onClick={() => window.open(commonData.youtube, '_blank')}
             className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
           >
             <Youtube className="h-5 w-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
-          >
-            <Linkedin className="h-5 w-5" />
           </Button>
         </div>
         <ThemeToggle className="" buttonProps={{ variant: 'ghost' }} />

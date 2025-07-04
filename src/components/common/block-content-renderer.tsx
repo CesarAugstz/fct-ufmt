@@ -1,10 +1,11 @@
 'use client'
 
 import { useMarkdown } from '@/lib/hooks/markdown'
-import { Alignment, BlockSize, Prisma } from '@prisma/client'
+import { Alignment, BlockSize } from '@prisma/client'
 import Image from 'next/image'
 import LoadingSpinner from './loading-spinner'
 import type { Block } from '@/components/ui/form-fields/block-text-image/types'
+import { AttachmentType } from '@/types/attachment.type'
 
 interface BlockContentRendererProps {
   blocks: Block[]
@@ -94,7 +95,7 @@ function TextBlock({ content }: { content: string }) {
 }
 
 interface ImageBlockProps {
-  file?: Prisma.AttachmentCreateInput | null
+  file?: AttachmentType | null
   caption?: string | null
   size?: BlockSize | null
   alignment?: Alignment | null

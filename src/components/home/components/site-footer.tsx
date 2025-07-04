@@ -1,10 +1,10 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import {
-  Facebook,
   Instagram,
   Youtube,
-  Linkedin,
   MapPin,
   Phone,
   Mail,
@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { commonData } from '@/data/common.data'
 
 export function SiteFooter() {
   return (
@@ -60,21 +61,26 @@ function FooterAbout() {
         Tecnologia da Informação.
       </p>
       <div className="flex space-x-3">
-        <SocialButton icon={<Facebook className="h-5 w-5" />} />
-        <SocialButton icon={<Instagram className="h-5 w-5" />} />
-        <SocialButton icon={<Youtube className="h-5 w-5" />} />
-        <SocialButton icon={<Linkedin className="h-5 w-5" />} />
+        <SocialButton
+          href={commonData.instagram}
+          icon={<Instagram className="h-5 w-5" />}
+        />
+        <SocialButton
+          href={commonData.youtube}
+          icon={<Youtube className="h-5 w-5" />}
+        />
       </div>
     </div>
   )
 }
 
-function SocialButton({ icon }: { icon: React.ReactNode }) {
+function SocialButton({ icon, href }: { icon: React.ReactNode; href: string }) {
   return (
     <Button
       variant="ghost"
       size="icon"
       className="text-white hover:text-blue-200 hover:bg-blue-900/20 h-9 w-9"
+      onClick={() => window.open(href, '_blank')}
     >
       {icon}
     </Button>
@@ -123,7 +129,7 @@ function FooterLinks() {
       <div className="text-destructive"> ajustar com links reais </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <ul className="text-sm space-y-2">
-          <FooterLink href="#" label="Portal da UFMT" />
+          <FooterLink href={commonData.portalUfmt} label="Portal da UFMT" />
           <FooterLink href="#" label="Biblioteca Central" />
           <FooterLink href="#" label="Ouvidoria" />
           <FooterLink href="#" label="Mapa do Site" />
@@ -156,14 +162,16 @@ function FooterLinks() {
 interface FooterLinkProps {
   href: string
   label: string
+  blank?: boolean
 }
 
-function FooterLink({ href, label }: FooterLinkProps) {
+function FooterLink({ href, label, blank = true }: FooterLinkProps) {
   return (
     <li>
       <Link
         href={href}
         className="text-white/80 hover:text-white transition-colors flex items-center"
+        target={blank ? '_blank' : '_self'}
       >
         <ArrowRight className="h-3 w-3 mr-2" /> {label}
       </Link>

@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, User } from '@zenstackhq/runtime/models'
+import type { Prisma, LogEntry } from '@zenstackhq/runtime/models'
 import type {
   UseMutationOptions,
   UseQueryOptions,
@@ -37,48 +37,12 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from '@tanstack/react-query'
 
-export function useCreateUser(
-  options?: Omit<
-    UseMutationOptions<User | undefined, DefaultError, Prisma.UserCreateArgs> &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.UserCreateArgs,
-    DefaultError,
-    User,
-    true
-  >('User', 'POST', `${endpoint}/user/create`, metadata, options, fetch, true)
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.UserCreateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.UserCreateArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, User, Prisma.UserGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.UserCreateArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, User, Prisma.UserGetPayload<T>>
-        | undefined
-    },
-  }
-  return mutation
-}
-
-export function useCreateManyUser(
+export function useCreateLogEntry(
   options?: Omit<
     UseMutationOptions<
-      Prisma.BatchPayload,
+      LogEntry | undefined,
       DefaultError,
-      Prisma.UserCreateManyArgs
+      Prisma.LogEntryCreateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -86,14 +50,62 @@ export function useCreateManyUser(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.UserCreateManyArgs,
+    Prisma.LogEntryCreateArgs,
+    DefaultError,
+    LogEntry,
+    true
+  >(
+    'LogEntry',
+    'POST',
+    `${endpoint}/logEntry/create`,
+    metadata,
+    options,
+    fetch,
+    true,
+  )
+  const mutation = {
+    ..._mutation,
+    mutateAsync: async <T extends Prisma.LogEntryCreateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.LogEntryCreateArgs>,
+      options?: Omit<
+        UseMutationOptions<
+          CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>> | undefined,
+          DefaultError,
+          Prisma.SelectSubset<T, Prisma.LogEntryCreateArgs>
+        > &
+          ExtraMutationOptions,
+        'mutationFn'
+      >,
+    ) => {
+      return (await _mutation.mutateAsync(args, options as any)) as
+        | CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>>
+        | undefined
+    },
+  }
+  return mutation
+}
+
+export function useCreateManyLogEntry(
+  options?: Omit<
+    UseMutationOptions<
+      Prisma.BatchPayload,
+      DefaultError,
+      Prisma.LogEntryCreateManyArgs
+    > &
+      ExtraMutationOptions,
+    'mutationFn'
+  >,
+) {
+  const { endpoint, fetch } = getHooksContext()
+  const _mutation = useModelMutation<
+    Prisma.LogEntryCreateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'User',
+    'LogEntry',
     'POST',
-    `${endpoint}/user/createMany`,
+    `${endpoint}/logEntry/createMany`,
     metadata,
     options,
     fetch,
@@ -101,13 +113,13 @@ export function useCreateManyUser(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.UserCreateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.UserCreateManyArgs>,
+    mutateAsync: async <T extends Prisma.LogEntryCreateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.LogEntryCreateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.UserCreateManyArgs>
+          Prisma.SelectSubset<T, Prisma.LogEntryCreateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -122,35 +134,35 @@ export function useCreateManyUser(
   return mutation
 }
 
-export function useFindManyUser<
-  TArgs extends Prisma.UserFindManyArgs,
+export function useFindManyLogEntry<
+  TArgs extends Prisma.LogEntryFindManyArgs,
   TQueryFnData = Array<
-    Prisma.UserGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.LogEntryGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindManyArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findMany`,
+    'LogEntry',
+    `${endpoint}/logEntry/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useInfiniteFindManyUser<
-  TArgs extends Prisma.UserFindManyArgs,
-  TQueryFnData = Array<Prisma.UserGetPayload<TArgs>>,
+export function useInfiniteFindManyLogEntry<
+  TArgs extends Prisma.LogEntryFindManyArgs,
+  TQueryFnData = Array<Prisma.LogEntryGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindManyArgs>,
   options?: Omit<
     UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -159,23 +171,23 @@ export function useInfiniteFindManyUser<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findMany`,
+    'LogEntry',
+    `${endpoint}/logEntry/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindManyUser<
-  TArgs extends Prisma.UserFindManyArgs,
+export function useSuspenseFindManyLogEntry<
+  TArgs extends Prisma.LogEntryFindManyArgs,
   TQueryFnData = Array<
-    Prisma.UserGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.LogEntryGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindManyArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -184,21 +196,21 @@ export function useSuspenseFindManyUser<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findMany`,
+    'LogEntry',
+    `${endpoint}/logEntry/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseInfiniteFindManyUser<
-  TArgs extends Prisma.UserFindManyArgs,
-  TQueryFnData = Array<Prisma.UserGetPayload<TArgs>>,
+export function useSuspenseInfiniteFindManyLogEntry<
+  TArgs extends Prisma.LogEntryFindManyArgs,
+  TQueryFnData = Array<Prisma.LogEntryGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindManyArgs>,
   options?: Omit<
     UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -207,41 +219,41 @@ export function useSuspenseInfiniteFindManyUser<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findMany`,
+    'LogEntry',
+    `${endpoint}/logEntry/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindUniqueUser<
-  TArgs extends Prisma.UserFindUniqueArgs,
-  TQueryFnData = Prisma.UserGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindUniqueLogEntry<
+  TArgs extends Prisma.LogEntryFindUniqueArgs,
+  TQueryFnData = Prisma.LogEntryGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.UserFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindUniqueArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findUnique`,
+    'LogEntry',
+    `${endpoint}/logEntry/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindUniqueUser<
-  TArgs extends Prisma.UserFindUniqueArgs,
-  TQueryFnData = Prisma.UserGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindUniqueLogEntry<
+  TArgs extends Prisma.LogEntryFindUniqueArgs,
+  TQueryFnData = Prisma.LogEntryGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.UserFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindUniqueArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -250,41 +262,41 @@ export function useSuspenseFindUniqueUser<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findUnique`,
+    'LogEntry',
+    `${endpoint}/logEntry/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindFirstUser<
-  TArgs extends Prisma.UserFindFirstArgs,
-  TQueryFnData = Prisma.UserGetPayload<TArgs> & { $optimistic?: boolean },
+export function useFindFirstLogEntry<
+  TArgs extends Prisma.LogEntryFindFirstArgs,
+  TQueryFnData = Prisma.LogEntryGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindFirstArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findFirst`,
+    'LogEntry',
+    `${endpoint}/logEntry/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindFirstUser<
-  TArgs extends Prisma.UserFindFirstArgs,
-  TQueryFnData = Prisma.UserGetPayload<TArgs> & { $optimistic?: boolean },
+export function useSuspenseFindFirstLogEntry<
+  TArgs extends Prisma.LogEntryFindFirstArgs,
+  TQueryFnData = Prisma.LogEntryGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryFindFirstArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -293,56 +305,20 @@ export function useSuspenseFindFirstUser<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/findFirst`,
+    'LogEntry',
+    `${endpoint}/logEntry/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useUpdateUser(
-  options?: Omit<
-    UseMutationOptions<User | undefined, DefaultError, Prisma.UserUpdateArgs> &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.UserUpdateArgs,
-    DefaultError,
-    User,
-    true
-  >('User', 'PUT', `${endpoint}/user/update`, metadata, options, fetch, true)
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.UserUpdateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.UserUpdateArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, User, Prisma.UserGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.UserUpdateArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, User, Prisma.UserGetPayload<T>>
-        | undefined
-    },
-  }
-  return mutation
-}
-
-export function useUpdateManyUser(
+export function useUpdateLogEntry(
   options?: Omit<
     UseMutationOptions<
-      Prisma.BatchPayload,
+      LogEntry | undefined,
       DefaultError,
-      Prisma.UserUpdateManyArgs
+      Prisma.LogEntryUpdateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -350,120 +326,47 @@ export function useUpdateManyUser(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.UserUpdateManyArgs,
+    Prisma.LogEntryUpdateArgs,
     DefaultError,
-    Prisma.BatchPayload,
-    false
+    LogEntry,
+    true
   >(
-    'User',
+    'LogEntry',
     'PUT',
-    `${endpoint}/user/updateMany`,
+    `${endpoint}/logEntry/update`,
     metadata,
     options,
     fetch,
-    false,
+    true,
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.UserUpdateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.UserUpdateManyArgs>,
+    mutateAsync: async <T extends Prisma.LogEntryUpdateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.LogEntryUpdateArgs>,
       options?: Omit<
         UseMutationOptions<
-          Prisma.BatchPayload,
+          CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>> | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.UserUpdateManyArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(
-        args,
-        options as any,
-      )) as Prisma.BatchPayload
-    },
-  }
-  return mutation
-}
-
-export function useUpsertUser(
-  options?: Omit<
-    UseMutationOptions<User | undefined, DefaultError, Prisma.UserUpsertArgs> &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.UserUpsertArgs,
-    DefaultError,
-    User,
-    true
-  >('User', 'POST', `${endpoint}/user/upsert`, metadata, options, fetch, true)
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.UserUpsertArgs>(
-      args: Prisma.SelectSubset<T, Prisma.UserUpsertArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, User, Prisma.UserGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.UserUpsertArgs>
+          Prisma.SelectSubset<T, Prisma.LogEntryUpdateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, User, Prisma.UserGetPayload<T>>
+        | CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteUser(
-  options?: Omit<
-    UseMutationOptions<User | undefined, DefaultError, Prisma.UserDeleteArgs> &
-      ExtraMutationOptions,
-    'mutationFn'
-  >,
-) {
-  const { endpoint, fetch } = getHooksContext()
-  const _mutation = useModelMutation<
-    Prisma.UserDeleteArgs,
-    DefaultError,
-    User,
-    true
-  >('User', 'DELETE', `${endpoint}/user/delete`, metadata, options, fetch, true)
-  const mutation = {
-    ..._mutation,
-    mutateAsync: async <T extends Prisma.UserDeleteArgs>(
-      args: Prisma.SelectSubset<T, Prisma.UserDeleteArgs>,
-      options?: Omit<
-        UseMutationOptions<
-          CheckSelect<T, User, Prisma.UserGetPayload<T>> | undefined,
-          DefaultError,
-          Prisma.SelectSubset<T, Prisma.UserDeleteArgs>
-        > &
-          ExtraMutationOptions,
-        'mutationFn'
-      >,
-    ) => {
-      return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, User, Prisma.UserGetPayload<T>>
-        | undefined
-    },
-  }
-  return mutation
-}
-
-export function useDeleteManyUser(
+export function useUpdateManyLogEntry(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.UserDeleteManyArgs
+      Prisma.LogEntryUpdateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -471,14 +374,14 @@ export function useDeleteManyUser(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.UserDeleteManyArgs,
+    Prisma.LogEntryUpdateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'User',
-    'DELETE',
-    `${endpoint}/user/deleteMany`,
+    'LogEntry',
+    'PUT',
+    `${endpoint}/logEntry/updateMany`,
     metadata,
     options,
     fetch,
@@ -486,13 +389,13 @@ export function useDeleteManyUser(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.UserDeleteManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.UserDeleteManyArgs>,
+    mutateAsync: async <T extends Prisma.LogEntryUpdateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.LogEntryUpdateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.UserDeleteManyArgs>
+          Prisma.SelectSubset<T, Prisma.LogEntryUpdateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -507,33 +410,178 @@ export function useDeleteManyUser(
   return mutation
 }
 
-export function useAggregateUser<
-  TArgs extends Prisma.UserAggregateArgs,
-  TQueryFnData = Prisma.GetUserAggregateType<TArgs>,
+export function useUpsertLogEntry(
+  options?: Omit<
+    UseMutationOptions<
+      LogEntry | undefined,
+      DefaultError,
+      Prisma.LogEntryUpsertArgs
+    > &
+      ExtraMutationOptions,
+    'mutationFn'
+  >,
+) {
+  const { endpoint, fetch } = getHooksContext()
+  const _mutation = useModelMutation<
+    Prisma.LogEntryUpsertArgs,
+    DefaultError,
+    LogEntry,
+    true
+  >(
+    'LogEntry',
+    'POST',
+    `${endpoint}/logEntry/upsert`,
+    metadata,
+    options,
+    fetch,
+    true,
+  )
+  const mutation = {
+    ..._mutation,
+    mutateAsync: async <T extends Prisma.LogEntryUpsertArgs>(
+      args: Prisma.SelectSubset<T, Prisma.LogEntryUpsertArgs>,
+      options?: Omit<
+        UseMutationOptions<
+          CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>> | undefined,
+          DefaultError,
+          Prisma.SelectSubset<T, Prisma.LogEntryUpsertArgs>
+        > &
+          ExtraMutationOptions,
+        'mutationFn'
+      >,
+    ) => {
+      return (await _mutation.mutateAsync(args, options as any)) as
+        | CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>>
+        | undefined
+    },
+  }
+  return mutation
+}
+
+export function useDeleteLogEntry(
+  options?: Omit<
+    UseMutationOptions<
+      LogEntry | undefined,
+      DefaultError,
+      Prisma.LogEntryDeleteArgs
+    > &
+      ExtraMutationOptions,
+    'mutationFn'
+  >,
+) {
+  const { endpoint, fetch } = getHooksContext()
+  const _mutation = useModelMutation<
+    Prisma.LogEntryDeleteArgs,
+    DefaultError,
+    LogEntry,
+    true
+  >(
+    'LogEntry',
+    'DELETE',
+    `${endpoint}/logEntry/delete`,
+    metadata,
+    options,
+    fetch,
+    true,
+  )
+  const mutation = {
+    ..._mutation,
+    mutateAsync: async <T extends Prisma.LogEntryDeleteArgs>(
+      args: Prisma.SelectSubset<T, Prisma.LogEntryDeleteArgs>,
+      options?: Omit<
+        UseMutationOptions<
+          CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>> | undefined,
+          DefaultError,
+          Prisma.SelectSubset<T, Prisma.LogEntryDeleteArgs>
+        > &
+          ExtraMutationOptions,
+        'mutationFn'
+      >,
+    ) => {
+      return (await _mutation.mutateAsync(args, options as any)) as
+        | CheckSelect<T, LogEntry, Prisma.LogEntryGetPayload<T>>
+        | undefined
+    },
+  }
+  return mutation
+}
+
+export function useDeleteManyLogEntry(
+  options?: Omit<
+    UseMutationOptions<
+      Prisma.BatchPayload,
+      DefaultError,
+      Prisma.LogEntryDeleteManyArgs
+    > &
+      ExtraMutationOptions,
+    'mutationFn'
+  >,
+) {
+  const { endpoint, fetch } = getHooksContext()
+  const _mutation = useModelMutation<
+    Prisma.LogEntryDeleteManyArgs,
+    DefaultError,
+    Prisma.BatchPayload,
+    false
+  >(
+    'LogEntry',
+    'DELETE',
+    `${endpoint}/logEntry/deleteMany`,
+    metadata,
+    options,
+    fetch,
+    false,
+  )
+  const mutation = {
+    ..._mutation,
+    mutateAsync: async <T extends Prisma.LogEntryDeleteManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.LogEntryDeleteManyArgs>,
+      options?: Omit<
+        UseMutationOptions<
+          Prisma.BatchPayload,
+          DefaultError,
+          Prisma.SelectSubset<T, Prisma.LogEntryDeleteManyArgs>
+        > &
+          ExtraMutationOptions,
+        'mutationFn'
+      >,
+    ) => {
+      return (await _mutation.mutateAsync(
+        args,
+        options as any,
+      )) as Prisma.BatchPayload
+    },
+  }
+  return mutation
+}
+
+export function useAggregateLogEntry<
+  TArgs extends Prisma.LogEntryAggregateArgs,
+  TQueryFnData = Prisma.GetLogEntryAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.UserAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.LogEntryAggregateArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/aggregate`,
+    'LogEntry',
+    `${endpoint}/logEntry/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseAggregateUser<
-  TArgs extends Prisma.UserAggregateArgs,
-  TQueryFnData = Prisma.GetUserAggregateType<TArgs>,
+export function useSuspenseAggregateLogEntry<
+  TArgs extends Prisma.LogEntryAggregateArgs,
+  TQueryFnData = Prisma.GetLogEntryAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.UserAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.LogEntryAggregateArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -542,23 +590,23 @@ export function useSuspenseAggregateUser<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/aggregate`,
+    'LogEntry',
+    `${endpoint}/logEntry/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useGroupByUser<
-  TArgs extends Prisma.UserGroupByArgs,
+export function useGroupByLogEntry<
+  TArgs extends Prisma.LogEntryGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.UserGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.UserGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.LogEntryGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.LogEntryGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -611,13 +659,19 @@ export function useGroupByUser<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.UserGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.LogEntryGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.UserGroupByOutputType]: P extends '_count'
+            keyof Prisma.LogEntryGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
-              : Prisma.GetScalarType<TArgs[P], Prisma.UserGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.UserGroupByOutputType[P]>
+              : Prisma.GetScalarType<
+                  TArgs[P],
+                  Prisma.LogEntryGroupByOutputType[P]
+                >
+            : Prisma.GetScalarType<
+                TArgs[P],
+                Prisma.LogEntryGroupByOutputType[P]
+              >
         }
       >
     : InputErrors,
@@ -626,7 +680,7 @@ export function useGroupByUser<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.UserGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.LogEntryGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
@@ -634,23 +688,23 @@ export function useGroupByUser<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/groupBy`,
+    'LogEntry',
+    `${endpoint}/logEntry/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseGroupByUser<
-  TArgs extends Prisma.UserGroupByArgs,
+export function useSuspenseGroupByLogEntry<
+  TArgs extends Prisma.LogEntryGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.UserGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.UserGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.LogEntryGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.LogEntryGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -703,13 +757,19 @@ export function useSuspenseGroupByUser<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.UserGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.LogEntryGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.UserGroupByOutputType]: P extends '_count'
+            keyof Prisma.LogEntryGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
-              : Prisma.GetScalarType<TArgs[P], Prisma.UserGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.UserGroupByOutputType[P]>
+              : Prisma.GetScalarType<
+                  TArgs[P],
+                  Prisma.LogEntryGroupByOutputType[P]
+                >
+            : Prisma.GetScalarType<
+                TArgs[P],
+                Prisma.LogEntryGroupByOutputType[P]
+              >
         }
       >
     : InputErrors,
@@ -718,7 +778,7 @@ export function useSuspenseGroupByUser<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<TArgs, Prisma.UserGroupByArgs, OrderByArg> &
+    Prisma.SubsetIntersection<TArgs, Prisma.LogEntryGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<
@@ -729,55 +789,55 @@ export function useSuspenseGroupByUser<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/groupBy`,
+    'LogEntry',
+    `${endpoint}/logEntry/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useCountUser<
-  TArgs extends Prisma.UserCountArgs,
+export function useCountLogEntry<
+  TArgs extends Prisma.LogEntryCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.UserCountAggregateOutputType
+          Prisma.LogEntryCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryCountArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/count`,
+    'LogEntry',
+    `${endpoint}/logEntry/count`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseCountUser<
-  TArgs extends Prisma.UserCountArgs,
+export function useSuspenseCountLogEntry<
+  TArgs extends Prisma.LogEntryCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.UserCountAggregateOutputType
+          Prisma.LogEntryCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.UserCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.LogEntryCountArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -786,24 +846,29 @@ export function useSuspenseCountUser<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'User',
-    `${endpoint}/user/count`,
+    'LogEntry',
+    `${endpoint}/logEntry/count`,
     args,
     options,
     fetch,
   )
 }
-import type { Role } from '@zenstackhq/runtime/models'
 
-export function useCheckUser<TError = DefaultError>(
+export function useCheckLogEntry<TError = DefaultError>(
   args: {
     operation: PolicyCrudKind
     where?: {
       id?: string
-      email?: string
-      password?: string
-      name?: string
-      role?: Role
+      userId?: string
+      endpoint?: string
+      method?: string
+      body?: string
+      params?: string
+      response?: string
+      ip?: string
+      userAgent?: string
+      isError?: boolean
+      error?: string
     }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
@@ -811,8 +876,8 @@ export function useCheckUser<TError = DefaultError>(
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<boolean, boolean, TError>(
-    'User',
-    `${endpoint}/user/check`,
+    'LogEntry',
+    `${endpoint}/logEntry/check`,
     args,
     options,
     fetch,

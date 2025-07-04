@@ -1,4 +1,5 @@
-import { ContentBlock, Prisma } from '@prisma/client'
+import { AttachmentType } from '@/types/attachment.type'
+import { ContentBlock } from '@prisma/client'
 
 export type TextBlock = Pick<ContentBlock, 'id' | 'content' | 'order'> & {
   nature: 'TEXT'
@@ -9,7 +10,7 @@ export type ImageBlock = Pick<
   'id' | 'caption' | 'size' | 'alignment' | 'order'
 > & {
   nature: 'IMAGE'
-  file: Prisma.AttachmentCreateInput | null
+  file: AttachmentType | null
 }
 
 export type Block = TextBlock | ImageBlock

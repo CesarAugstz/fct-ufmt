@@ -51,6 +51,13 @@ const metadata = {
           isOptional: true,
           backLink: 'user',
         },
+        logEntries: {
+          name: 'logEntries',
+          type: 'LogEntry',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'user',
+        },
       },
       uniqueConstraints: {
         id: {
@@ -221,7 +228,6 @@ const metadata = {
           isOptional: true,
           backLink: 'professor',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'imageId' },
         },
         userId: {
@@ -236,7 +242,6 @@ const metadata = {
           isDataModel: true,
           backLink: 'professor',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'userId' },
         },
       },
@@ -300,7 +305,6 @@ const metadata = {
           isDataModel: true,
           backLink: 'faqCategories',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'courseId' },
         },
         faqItems: {
@@ -377,7 +381,6 @@ const metadata = {
           isDataModel: true,
           backLink: 'faqItems',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'categoryId' },
         },
       },
@@ -452,7 +455,6 @@ const metadata = {
           isDataModel: true,
           backLink: 'aboutContentBlocks',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'courseId' },
         },
         fileId: {
@@ -469,7 +471,6 @@ const metadata = {
           isOptional: true,
           backLink: 'contentBlocks',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'fileId' },
         },
       },
@@ -532,6 +533,92 @@ const metadata = {
           isDataModel: true,
           isOptional: true,
           backLink: 'image',
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+      },
+    },
+    logEntry: {
+      name: 'LogEntry',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        userId: {
+          name: 'userId',
+          type: 'String',
+          isOptional: true,
+          isForeignKey: true,
+          relationField: 'user',
+        },
+        user: {
+          name: 'user',
+          type: 'User',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'logEntries',
+          isRelationOwner: true,
+          foreignKeyMapping: { id: 'userId' },
+        },
+        endpoint: {
+          name: 'endpoint',
+          type: 'String',
+        },
+        method: {
+          name: 'method',
+          type: 'String',
+        },
+        body: {
+          name: 'body',
+          type: 'String',
+          isOptional: true,
+        },
+        params: {
+          name: 'params',
+          type: 'String',
+          isOptional: true,
+        },
+        response: {
+          name: 'response',
+          type: 'String',
+          isOptional: true,
+        },
+        ip: {
+          name: 'ip',
+          type: 'String',
+          isOptional: true,
+        },
+        userAgent: {
+          name: 'userAgent',
+          type: 'String',
+          isOptional: true,
+        },
+        isError: {
+          name: 'isError',
+          type: 'Boolean',
+          attributes: [{ name: '@default', args: [{ value: false }] }],
+        },
+        error: {
+          name: 'error',
+          type: 'String',
+          isOptional: true,
         },
       },
       uniqueConstraints: {
@@ -622,7 +709,7 @@ const metadata = {
     },
   },
   deleteCascade: {
-    user: ['Professor'],
+    user: ['Professor', 'LogEntry'],
     course: ['FaqCategory', 'ContentBlock'],
     faqCategory: ['FaqItem'],
     attachment: ['Professor', 'ContentBlock'],

@@ -11,6 +11,7 @@ Table User {
   name String
   role Role [not null, default: 'USER']
   professor Professor
+  logEntries LogEntry [not null]
 }
 
 Table Course {
@@ -103,6 +104,23 @@ Table Attachment {
   professor Professor
 }
 
+Table LogEntry {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userId String
+  user User
+  endpoint String [not null]
+  method String [not null]
+  body String
+  params String
+  response String
+  ip String
+  userAgent String
+  isError Boolean [not null, default: false]
+  error String
+}
+
 Table CourseToProfessor {
   professorsId String [ref: > Professor.id]
   coursesId String [ref: > Course.id]
@@ -159,3 +177,5 @@ Ref: FaqItem.categoryId > FaqCategory.id [delete: Cascade]
 Ref: ContentBlock.courseId > Course.id [delete: Cascade]
 
 Ref: ContentBlock.fileId - Attachment.id [delete: Cascade]
+
+Ref: LogEntry.userId > User.id [delete: Cascade]
