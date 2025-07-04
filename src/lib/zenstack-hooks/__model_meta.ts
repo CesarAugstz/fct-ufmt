@@ -595,11 +595,6 @@ const metadata = {
           type: 'String',
           isOptional: true,
         },
-        response: {
-          name: 'response',
-          type: 'String',
-          isOptional: true,
-        },
         ip: {
           name: 'ip',
           type: 'String',
@@ -618,6 +613,21 @@ const metadata = {
         error: {
           name: 'error',
           type: 'String',
+          isOptional: true,
+        },
+        response_headers: {
+          name: 'response_headers',
+          type: 'String',
+          isOptional: true,
+        },
+        response_body: {
+          name: 'response_body',
+          type: 'String',
+          isOptional: true,
+        },
+        response_status: {
+          name: 'response_status',
+          type: 'Int',
           isOptional: true,
         },
       },

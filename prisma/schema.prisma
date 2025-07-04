@@ -157,20 +157,22 @@ model Attachment {
 }
 
 model LogEntry {
-  id        String   @id() @default(ulid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  endpoint  String
-  method    String
-  body      String?
-  params    String?
-  response  String?
-  ip        String?
-  userAgent String?
-  isError   Boolean  @default(false)
-  error     String?
+  id               String   @id() @default(ulid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt()
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint         String
+  method           String
+  body             String?
+  params           String?
+  ip               String?
+  userAgent        String?
+  isError          Boolean  @default(false)
+  error            String?
+  response_headers String?
+  response_body    String?
+  response_status  Int?
 
   @@index([userId, createdAt])
   @@index([endpoint, createdAt])

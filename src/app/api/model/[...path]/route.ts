@@ -3,7 +3,7 @@ import { db } from '@/server/db'
 import { Prisma } from '@prisma/client'
 import { enhance } from '@zenstackhq/runtime'
 import { NextRequestHandler } from '@zenstackhq/server/next'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 type Context = {
   params: Promise<{
@@ -26,15 +26,39 @@ const saveLogSafe = async (logEntry: Prisma.LogEntryCreateInput) => {
   }
 }
 
+const getResponseBodySafe = async (response: NextResponse) => {
+  try {
+    const clone = response.clone()
+    const responseBody = await clone.text()
+    return responseBody.length > 1000
+      ? responseBody.slice(0, 1000) + '...'
+      : responseBody
+  } catch (error) {
+    console.error('Error getting response body:', error)
+    return undefined
+  }
+}
+
+const getHeadersSafe = (headers: Headers) => {
+  try {
+    return Object.fromEntries(headers.entries())
+  } catch (error) {
+    console.error('Error getting headers:', error)
+    return undefined
+  }
+}
+
 const handlerWithLogging = async (req: NextRequest, ctx: Context) => {
   console.log('Request:', req.method, req.url)
   const user = await getCurrentUser()
   let error: any
+  let result: NextResponse | undefined
 
   try {
-    const result = await handler(req, ctx)
+    result = await handler(req, ctx)
     return result
   } catch (err) {
+    console.log('Error on api:', err)
     error = err
     throw err
   } finally {
@@ -42,17 +66,28 @@ const handlerWithLogging = async (req: NextRequest, ctx: Context) => {
       req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')
     const userAgent = req.headers.get('user-agent')
 
-    await saveLogSafe({
+    const response = {
+      response_headers: JSON.stringify(
+        getHeadersSafe(result?.headers ?? new Headers()),
+      ),
+      response_body: await getResponseBodySafe(result!),
+      response_status: result?.status,
+    }
+
+    const log: Prisma.LogEntryCreateInput = {
       ...(user ? { user: { connect: { id: user.id } } } : {}),
       endpoint: req.url,
       method: req.method,
       body: req.body ? JSON.stringify(req.body) : undefined,
-      params: JSON.stringify(ctx.params),
+      params: JSON.stringify(await ctx.params),
+      ...response,
       ip,
       userAgent,
-      isError: error !== undefined,
+      isError: error !== undefined || result?.ok === false,
       error: error ? JSON.stringify(error) : undefined,
-    })
+    }
+
+    await saveLogSafe(log)
   }
 }
 

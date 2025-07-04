@@ -864,11 +864,13 @@ export function useCheckLogEntry<TError = DefaultError>(
       method?: string
       body?: string
       params?: string
-      response?: string
       ip?: string
       userAgent?: string
       isError?: boolean
       error?: string
+      response_headers?: string
+      response_body?: string
+      response_status?: number
     }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &

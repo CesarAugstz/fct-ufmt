@@ -23,11 +23,7 @@ export default function CourseProfessorsTab() {
   const { data: professors } = useFindManyProfessor(
     {
       where: {
-        courses: {
-          some: {
-            slug: slug!,
-          },
-        },
+        courses: { some: { slug: slug! } },
       },
       include: {
         user: { select: { name: true, email: true } },

@@ -114,11 +114,13 @@ Table LogEntry {
   method String [not null]
   body String
   params String
-  response String
   ip String
   userAgent String
   isError Boolean [not null, default: false]
   error String
+  response_headers String
+  response_body String
+  response_status Int
 }
 
 Table CourseToProfessor {

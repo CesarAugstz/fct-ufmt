@@ -205,11 +205,13 @@ model LogEntry extends BaseModel {
   method   String 
   body     String?
   params   String?
-  response String?
   ip       String?
   userAgent String?
   isError  Boolean @default(false)
   error    String?
+  response_headers String?
+  response_body String?
+  response_status Int?
 
   @@allow('all', auth().role == 'ADMIN')
   @@index([userId, createdAt])

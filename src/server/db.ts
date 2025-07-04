@@ -2,10 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 const createPrismaClient = () => {
   const prisma = new PrismaClient({
-    log:
-      process.env.NODE_ENV === 'development'
-        ? ['query', 'error', 'warn', 'info']
-        : ['error'],
+    log: process.env.NODE_ENV === 'development' ? ['error'] : ['error'],
   })
   prisma.$on('query' as never, (e: any) => {
     console.log('Query: ' + e.query)
