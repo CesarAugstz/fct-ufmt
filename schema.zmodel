@@ -152,6 +152,7 @@ model FaqItem extends BaseModel {
 enum ContentNature {
   TEXT
   IMAGE
+  ACCORDION
 }
 
 enum Alignment {
@@ -174,20 +175,29 @@ enum GridSize {
   FOUR   // 12/12 - 100%
 }
 
+type AccordionItem {
+  title   String
+  content String
+}
+
 model ContentBlock extends BaseModel {
   nature       ContentNature
-  content    String? @db.Text
-  caption    String?
   size       BlockSize?
-  alignment  Alignment?
   order      Int      @default(0)
   withBorder Boolean  @default(false)
   gridSize   GridSize @default(FOUR)
 
-  courseId   String
-  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  alignment  Alignment?
+  caption    String?
   fileId     String?  @unique
   file       Attachment?    @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  content    String? @db.Text
+
+  accordionItems AccordionItem[] @json @default('[]')
+
+  courseId   String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@allow('read', true)
   @@allow('create,update,delete', auth().role == 'ADMIN')

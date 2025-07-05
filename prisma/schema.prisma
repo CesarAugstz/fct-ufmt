@@ -41,6 +41,7 @@ enum FaqNature {
 enum ContentNature {
   TEXT
   IMAGE
+  ACCORDION
 }
 
 enum Alignment {
@@ -136,21 +137,22 @@ model FaqItem {
 }
 
 model ContentBlock {
-  id         String        @id() @default(ulid())
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt()
-  nature     ContentNature
-  content    String?       @db.Text()
-  caption    String?
-  size       BlockSize?
-  alignment  Alignment?
-  order      Int           @default(0)
-  withBorder Boolean       @default(false)
-  gridSize   GridSize      @default(FOUR)
-  courseId   String
-  course     Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  fileId     String?       @unique()
-  file       Attachment?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  id             String        @id() @default(ulid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  nature         ContentNature
+  size           BlockSize?
+  order          Int           @default(0)
+  withBorder     Boolean       @default(false)
+  gridSize       GridSize      @default(FOUR)
+  alignment      Alignment?
+  caption        String?
+  fileId         String?       @unique()
+  file           Attachment?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  content        String?       @db.Text()
+  accordionItems Json          @default("[]")
+  courseId       String
+  course         Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {

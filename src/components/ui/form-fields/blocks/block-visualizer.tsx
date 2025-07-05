@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Eye, EyeOff, FileText, Image as ImageIcon } from 'lucide-react'
+import { Eye, EyeOff, FileText, Image as ImageIcon, List } from 'lucide-react'
 import { BlockContentRenderer } from '@/components/common/block-content-renderer'
 import type { Block } from './types'
 
@@ -20,6 +20,9 @@ export function BlockVisualizer({ blocks }: BlockVisualizerProps) {
 
   const textBlocks = blocks.filter(block => block.nature === 'TEXT').length
   const imageBlocks = blocks.filter(block => block.nature === 'IMAGE').length
+  const accordionBlocks = blocks.filter(
+    block => block.nature === 'ACCORDION',
+  ).length
 
   return (
     <div className="bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg p-4">
@@ -42,6 +45,12 @@ export function BlockVisualizer({ blocks }: BlockVisualizerProps) {
               <Badge variant="secondary" className="text-xs px-2 py-0.5">
                 <ImageIcon className="h-3 w-3 mr-1" />
                 {imageBlocks} imagem{imageBlocks > 1 ? 's' : ''}
+              </Badge>
+            )}
+            {accordionBlocks > 0 && (
+              <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                <List className="h-3 w-3 mr-1" />
+                {accordionBlocks} accordion{accordionBlocks > 1 ? 's' : ''}
               </Badge>
             )}
           </div>

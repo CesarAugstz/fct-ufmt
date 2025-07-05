@@ -8,11 +8,12 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
-import { Trash2, Type, Image, ChevronUp, ChevronDown } from 'lucide-react'
+import { Trash2, Type, Image, ChevronUp, ChevronDown, List } from 'lucide-react'
 import { TextBlockComponent } from './text-block'
 import { ImageBlockComponent } from './image-block'
+import { AccordionBlockComponent } from './accordion-block'
 import { BlockConfig } from './block-config'
-import type { Block, ImageBlock, TextBlock } from './types'
+import type { Block, ImageBlock, TextBlock, AccordionBlock } from './types'
 import { ContentNature, GridSize } from '@prisma/client'
 
 interface BlockComponentProps {
@@ -62,7 +63,12 @@ export function BlockComponent({
     >
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          {block.nature === 'TEXT' ? 'Texto' : 'Imagem'} {index + 1}
+          {block.nature === 'TEXT'
+            ? 'Texto'
+            : block.nature === 'ACCORDION'
+              ? 'Accordion'
+              : 'Imagem'}{' '}
+          {index + 1}
         </span>
         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <BlockConfig block={block} onUpdate={onUpdate} />
@@ -101,6 +107,25 @@ export function BlockComponent({
               </TooltipTrigger>
               <TooltipContent>
                 <p>Adicionar imagem acima</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onAddBlock(ContentNature.ACCORDION, index)}
+                  className="h-6 w-6 p-0"
+                >
+                  <List className="h-3 w-3" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Adicionar accordion acima</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -169,6 +194,13 @@ export function BlockComponent({
       <div>
         {block.nature === 'TEXT' ? (
           <TextBlockComponent block={block as TextBlock} onUpdate={onUpdate} />
+        ) : block.nature === 'ACCORDION' ? (
+          <ErrorBoundary>
+            <AccordionBlockComponent
+              block={block as AccordionBlock}
+              onUpdate={onUpdate}
+            />
+          </ErrorBoundary>
         ) : (
           <ErrorBoundary>
             <ImageBlockComponent

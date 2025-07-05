@@ -13,10 +13,10 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Info } from 'lucide-react'
-import { BlockTextImageField } from './block-text-image-field'
+import { BlocksField } from './blocks-field'
 import { twMerge } from 'tailwind-merge'
 
-interface FormBlockTextImageProps<
+interface FormBlocksProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 > {
@@ -27,7 +27,7 @@ interface FormBlockTextImageProps<
   span?: number
 }
 
-export function FormBlockTextImage<
+export function FormBlocks<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -36,7 +36,7 @@ export function FormBlockTextImage<
   required,
   className,
   span,
-}: FormBlockTextImageProps<TFieldValues, TName>) {
+}: FormBlocksProps<TFieldValues, TName>) {
   const { field } = useController({
     name,
     defaultValue: [
@@ -72,10 +72,7 @@ export function FormBlockTextImage<
         </div>
       )}
       <FormControl>
-        <BlockTextImageField
-          blocks={field.value || []}
-          onChange={field.onChange}
-        />
+        <BlocksField blocks={field.value || []} onChange={field.onChange} />
       </FormControl>
       <FormMessage />
     </FormItem>

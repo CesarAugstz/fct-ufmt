@@ -81,17 +81,18 @@ Table ContentBlock {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   nature ContentNature [not null]
-  content String
-  caption String
   size BlockSize
-  alignment Alignment
   order Int [not null, default: 0]
   withBorder Boolean [not null, default: false]
   gridSize GridSize [not null, default: 'FOUR']
-  courseId String [not null]
-  course Course [not null]
+  alignment Alignment
+  caption String
   fileId String [unique]
   file Attachment
+  content String
+  accordionItems Json [not null, default: '[]']
+  courseId String [not null]
+  course Course [not null]
 }
 
 Table Attachment {
@@ -153,6 +154,7 @@ Enum FaqNature {
 Enum ContentNature {
   TEXT
   IMAGE
+  ACCORDION
 }
 
 Enum Alignment {
@@ -183,8 +185,8 @@ Ref: FaqCategory.courseId > Course.id [delete: Cascade]
 
 Ref: FaqItem.categoryId > FaqCategory.id [delete: Cascade]
 
-Ref: ContentBlock.courseId > Course.id [delete: Cascade]
-
 Ref: ContentBlock.fileId - Attachment.id [delete: Cascade]
+
+Ref: ContentBlock.courseId > Course.id [delete: Cascade]
 
 Ref: LogEntry.userId > User.id [delete: Cascade]

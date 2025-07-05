@@ -3,7 +3,7 @@
 import ToolTipMadrid from '@/components/common/tooltip-madrid'
 import { ContentNature } from '@prisma/client'
 
-import { Plus, Type, Image } from 'lucide-react'
+import { Plus, Type, Image, List } from 'lucide-react'
 
 interface AddBlockButtonProps {
   onAdd: (type: ContentNature) => void
@@ -28,6 +28,15 @@ export function AddBlockButton({ onAdd }: AddBlockButtonProps) {
         <Plus className="h-3 w-3" />
         <Image className="h-3 w-3" />
         Imagem
+      </ToolTipMadrid>
+
+      <ToolTipMadrid
+        onClick={() => onAdd(ContentNature.ACCORDION)}
+        content="Adiciona um novo bloco de accordion"
+      >
+        <Plus className="h-3 w-3" />
+        <List className="h-3 w-3" />
+        Accordion
       </ToolTipMadrid>
     </div>
   )

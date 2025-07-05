@@ -228,7 +228,6 @@ const metadata = {
           isOptional: true,
           backLink: 'professor',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'imageId' },
         },
         userId: {
@@ -243,7 +242,6 @@ const metadata = {
           isDataModel: true,
           backLink: 'professor',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'userId' },
         },
       },
@@ -307,7 +305,6 @@ const metadata = {
           isDataModel: true,
           backLink: 'faqCategories',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'courseId' },
         },
         faqItems: {
@@ -384,7 +381,6 @@ const metadata = {
           isDataModel: true,
           backLink: 'faqItems',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'categoryId' },
         },
       },
@@ -422,24 +418,9 @@ const metadata = {
           name: 'nature',
           type: 'ContentNature',
         },
-        content: {
-          name: 'content',
-          type: 'String',
-          isOptional: true,
-        },
-        caption: {
-          name: 'caption',
-          type: 'String',
-          isOptional: true,
-        },
         size: {
           name: 'size',
           type: 'BlockSize',
-          isOptional: true,
-        },
-        alignment: {
-          name: 'alignment',
-          type: 'Alignment',
           isOptional: true,
         },
         order: {
@@ -457,20 +438,15 @@ const metadata = {
           type: 'GridSize',
           attributes: [{ name: '@default', args: [] }],
         },
-        courseId: {
-          name: 'courseId',
-          type: 'String',
-          isForeignKey: true,
-          relationField: 'course',
+        alignment: {
+          name: 'alignment',
+          type: 'Alignment',
+          isOptional: true,
         },
-        course: {
-          name: 'course',
-          type: 'Course',
-          isDataModel: true,
-          backLink: 'aboutContentBlocks',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'courseId' },
+        caption: {
+          name: 'caption',
+          type: 'String',
+          isOptional: true,
         },
         fileId: {
           name: 'fileId',
@@ -486,8 +462,33 @@ const metadata = {
           isOptional: true,
           backLink: 'contentBlocks',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'fileId' },
+        },
+        content: {
+          name: 'content',
+          type: 'String',
+          isOptional: true,
+        },
+        accordionItems: {
+          name: 'accordionItems',
+          type: 'AccordionItem',
+          isTypeDef: true,
+          isArray: true,
+          attributes: [{ name: '@default', args: [{ value: '[]' }] }],
+        },
+        courseId: {
+          name: 'courseId',
+          type: 'String',
+          isForeignKey: true,
+          relationField: 'course',
+        },
+        course: {
+          name: 'course',
+          type: 'Course',
+          isDataModel: true,
+          backLink: 'aboutContentBlocks',
+          isRelationOwner: true,
+          foreignKeyMapping: { id: 'courseId' },
         },
       },
       uniqueConstraints: {
@@ -591,7 +592,6 @@ const metadata = {
           isOptional: true,
           backLink: 'logEntries',
           isRelationOwner: true,
-          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'userId' },
         },
         endpoint: {
@@ -721,6 +721,19 @@ const metadata = {
           name: 'description',
           type: 'String',
           isOptional: true,
+        },
+      },
+    },
+    accordionItem: {
+      name: 'AccordionItem',
+      fields: {
+        title: {
+          name: 'title',
+          type: 'String',
+        },
+        content: {
+          name: 'content',
+          type: 'String',
         },
       },
     },

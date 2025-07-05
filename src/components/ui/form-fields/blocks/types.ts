@@ -1,11 +1,24 @@
 import { AttachmentType } from '@/types/attachment.type'
 import { ContentBlock } from '@prisma/client'
 
+export interface AccordionItem {
+  title: string
+  content: string
+}
+
 export type TextBlock = Pick<
   ContentBlock,
   'id' | 'content' | 'order' | 'withBorder' | 'gridSize'
 > & {
   nature: 'TEXT'
+}
+
+export type AccordionBlock = Pick<
+  ContentBlock,
+  'id' | 'order' | 'withBorder' | 'gridSize'
+> & {
+  nature: 'ACCORDION'
+  accordionItems: AccordionItem[]
 }
 
 export type ImageBlock = Pick<
@@ -16,4 +29,4 @@ export type ImageBlock = Pick<
   file: AttachmentType | null
 }
 
-export type Block = TextBlock | ImageBlock
+export type Block = TextBlock | ImageBlock | AccordionBlock
