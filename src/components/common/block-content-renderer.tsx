@@ -1,11 +1,12 @@
 'use client'
 
 import { useMarkdown } from '@/lib/hooks/markdown'
-import { Alignment, BlockSize } from '@prisma/client'
+import { Alignment, BlockSize, GridSize } from '@prisma/client'
 import Image from 'next/image'
 import LoadingSpinner from './loading-spinner'
 import type { Block } from '@/components/ui/form-fields/block-text-image/types'
 import { AttachmentType } from '@/types/attachment.type'
+import { Card } from '../ui/card'
 
 interface BlockContentRendererProps {
   blocks: Block[]
@@ -36,32 +37,53 @@ export function BlockContentRenderer({
 
   const sortedBlocks = [...blocks].sort((a, b) => a.order - b.order)
 
+  const getGridClass = (gridSize: GridSize | undefined) => {
+    switch (gridSize) {
+      case GridSize.ONE:
+        return 'col-span-3'
+      case GridSize.TWO:
+        return 'col-span-6'
+      case GridSize.THREE:
+        return 'col-span-9'
+      case GridSize.FOUR:
+      default:
+        return 'col-span-12'
+    }
+  }
+
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`grid grid-cols-12 gap-4 ${className}`}>
       {sortedBlocks.map(block => (
-        <BlockItem key={block.id} block={block} />
+        <div key={block.id} className={getGridClass(block.gridSize)}>
+          <BlockItem block={block} />
+        </div>
       ))}
     </div>
   )
 }
 
 function BlockItem({ block }: { block: Block }) {
-  if (block.nature === 'TEXT') {
-    return <TextBlock content={block.content ?? ''} />
-  }
+  const Wrapper = ({ children }: { children: React.ReactNode }) => {
+    if (!block.withBorder) {
+      return <>{children}</>
+    }
 
-  if (block.nature === 'IMAGE') {
-    return (
-      <ImageBlock
-        file={block.file}
-        caption={block.caption}
-        size={block.size}
-        alignment={block.alignment}
-      />
-    )
+    return <Card className="border p-6 rounded-xl shadow-sm">{children}</Card>
   }
-
-  return null
+  return (
+    <Wrapper>
+      {block.nature === 'TEXT' ? (
+        <TextBlock content={block.content ?? ''} />
+      ) : (
+        <ImageBlock
+          file={block.file}
+          caption={block.caption}
+          size={block.size}
+          alignment={block.alignment}
+        />
+      )}
+    </Wrapper>
+  )
 }
 
 function TextBlock({ content }: { content: string }) {

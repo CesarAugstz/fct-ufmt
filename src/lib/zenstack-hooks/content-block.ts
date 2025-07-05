@@ -877,6 +877,7 @@ import type {
   ContentNature,
   BlockSize,
   Alignment,
+  GridSize,
 } from '@zenstackhq/runtime/models'
 
 export function useCheckContentBlock<TError = DefaultError>(
@@ -890,6 +891,8 @@ export function useCheckContentBlock<TError = DefaultError>(
       size?: BlockSize
       alignment?: Alignment
       order?: number
+      withBorder?: boolean
+      gridSize?: GridSize
       courseId?: string
       fileId?: string
     }

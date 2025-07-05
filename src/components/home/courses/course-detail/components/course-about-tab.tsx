@@ -44,6 +44,8 @@ export default function CourseAboutTab({ courseSlug }: CourseAboutTabProps) {
     alignment: block.alignment,
     order: block.order,
     file: block.file,
+    withBorder: block.withBorder,
+    gridSize: block.gridSize,
   }))
 
   return (

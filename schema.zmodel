@@ -167,6 +167,13 @@ enum BlockSize {
   FULL
 }
 
+enum GridSize {
+  ONE    // 3/12 - 25%
+  TWO    // 6/12 - 50%
+  THREE  // 9/12 - 75%
+  FOUR   // 12/12 - 100%
+}
+
 model ContentBlock extends BaseModel {
   nature       ContentNature
   content    String? @db.Text
@@ -174,6 +181,8 @@ model ContentBlock extends BaseModel {
   size       BlockSize?
   alignment  Alignment?
   order      Int      @default(0)
+  withBorder Boolean  @default(false)
+  gridSize   GridSize @default(FOUR)
 
   courseId   String
   course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)

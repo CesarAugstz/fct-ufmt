@@ -6,7 +6,7 @@ import { BlockVisualizer } from './block-text-image/block-visualizer'
 import type { Block, TextBlock, ImageBlock } from './block-text-image/types'
 export type { Block, TextBlock, ImageBlock }
 import { ulid } from 'ulidx'
-import { Alignment, BlockSize, ContentNature } from '@prisma/client'
+import { Alignment, BlockSize, ContentNature, GridSize } from '@prisma/client'
 import { useCallback } from 'react'
 
 interface BlockTextImageFieldProps {
@@ -23,7 +23,13 @@ export function BlockTextImageField({
   const addBlock = (nature: ContentNature, index?: number) => {
     const newBlock: Block =
       nature === 'TEXT'
-        ? ({ id: generateId(), nature, content: '' } as TextBlock)
+        ? ({
+            id: generateId(),
+            nature,
+            content: '',
+            withBorder: false,
+            gridSize: GridSize.FOUR,
+          } as TextBlock)
         : ({
             nature,
             id: generateId(),
@@ -31,6 +37,8 @@ export function BlockTextImageField({
             caption: '',
             size: BlockSize.MEDIUM,
             alignment: Alignment.CENTER,
+            withBorder: false,
+            gridSize: GridSize.FOUR,
           } as ImageBlock)
 
     let newBlocks: Block[]
@@ -85,20 +93,22 @@ export function BlockTextImageField({
 
   return (
     <div className="relative border border-input rounded-md bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:border-transparent transition-all">
-      <div className="p-3 space-y-2">
-        {blocks.map((block, index) => (
-          <BlockComponent
-            key={block.id}
-            block={block}
-            index={index}
-            totalBlocks={blocks.length}
-            onUpdate={updateBlock}
-            onDelete={deleteBlock}
-            onAddBlock={addBlock}
-            onMoveUp={moveBlockUp}
-            onMoveDown={moveBlockDown}
-          />
-        ))}
+      <div className="p-3">
+        <div className="grid grid-cols-12 gap-2">
+          {blocks.map((block, index) => (
+            <BlockComponent
+              key={block.id}
+              block={block}
+              index={index}
+              totalBlocks={blocks.length}
+              onUpdate={updateBlock}
+              onDelete={deleteBlock}
+              onAddBlock={addBlock}
+              onMoveUp={moveBlockUp}
+              onMoveDown={moveBlockDown}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="border-t border-border/50 p-2">

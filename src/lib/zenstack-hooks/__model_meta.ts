@@ -228,6 +228,7 @@ const metadata = {
           isOptional: true,
           backLink: 'professor',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'imageId' },
         },
         userId: {
@@ -242,6 +243,7 @@ const metadata = {
           isDataModel: true,
           backLink: 'professor',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'userId' },
         },
       },
@@ -305,6 +307,7 @@ const metadata = {
           isDataModel: true,
           backLink: 'faqCategories',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'courseId' },
         },
         faqItems: {
@@ -381,6 +384,7 @@ const metadata = {
           isDataModel: true,
           backLink: 'faqItems',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'categoryId' },
         },
       },
@@ -443,6 +447,16 @@ const metadata = {
           type: 'Int',
           attributes: [{ name: '@default', args: [{ value: 0 }] }],
         },
+        withBorder: {
+          name: 'withBorder',
+          type: 'Boolean',
+          attributes: [{ name: '@default', args: [{ value: false }] }],
+        },
+        gridSize: {
+          name: 'gridSize',
+          type: 'GridSize',
+          attributes: [{ name: '@default', args: [] }],
+        },
         courseId: {
           name: 'courseId',
           type: 'String',
@@ -455,6 +469,7 @@ const metadata = {
           isDataModel: true,
           backLink: 'aboutContentBlocks',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'courseId' },
         },
         fileId: {
@@ -471,6 +486,7 @@ const metadata = {
           isOptional: true,
           backLink: 'contentBlocks',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'fileId' },
         },
       },
@@ -575,6 +591,7 @@ const metadata = {
           isOptional: true,
           backLink: 'logEntries',
           isRelationOwner: true,
+          onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'userId' },
         },
         endpoint: {

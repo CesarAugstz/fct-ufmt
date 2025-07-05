@@ -56,6 +56,13 @@ enum BlockSize {
   FULL
 }
 
+enum GridSize {
+  ONE
+  TWO
+  THREE
+  FOUR
+}
+
 model User {
   id         String     @id() @default(ulid())
   createdAt  DateTime   @default(now())
@@ -129,19 +136,21 @@ model FaqItem {
 }
 
 model ContentBlock {
-  id        String        @id() @default(ulid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt()
-  nature    ContentNature
-  content   String?       @db.Text()
-  caption   String?
-  size      BlockSize?
-  alignment Alignment?
-  order     Int           @default(0)
-  courseId  String
-  course    Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  fileId    String?       @unique()
-  file      Attachment?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  id         String        @id() @default(ulid())
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt()
+  nature     ContentNature
+  content    String?       @db.Text()
+  caption    String?
+  size       BlockSize?
+  alignment  Alignment?
+  order      Int           @default(0)
+  withBorder Boolean       @default(false)
+  gridSize   GridSize      @default(FOUR)
+  courseId   String
+  course     Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  fileId     String?       @unique()
+  file       Attachment?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {

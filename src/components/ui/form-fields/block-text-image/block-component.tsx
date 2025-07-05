@@ -11,8 +11,9 @@ import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { Trash2, Type, Image, ChevronUp, ChevronDown } from 'lucide-react'
 import { TextBlockComponent } from './text-block'
 import { ImageBlockComponent } from './image-block'
+import { BlockConfig } from './block-config'
 import type { Block, ImageBlock, TextBlock } from './types'
-import { ContentNature } from '@prisma/client'
+import { ContentNature, GridSize } from '@prisma/client'
 
 interface BlockComponentProps {
   block: Block
@@ -35,13 +36,37 @@ export function BlockComponent({
   onMoveUp,
   onMoveDown,
 }: BlockComponentProps) {
+  const getGridClass = (gridSize: GridSize | undefined) => {
+    switch (gridSize) {
+      case GridSize.ONE:
+        return 'col-span-3'
+      case GridSize.TWO:
+        return 'col-span-6'
+      case GridSize.THREE:
+        return 'col-span-9'
+      case GridSize.FOUR:
+      default:
+        return 'col-span-12'
+    }
+  }
+
+  const borderClass = block.withBorder
+    ? 'border-2 border-border/50'
+    : 'border border-border/30'
+
   return (
-    <div className="group relative border border-border/30 rounded-md p-3 hover:border-border transition-colors">
+    <div
+      className={`group relative ${borderClass} rounded-md p-3 hover:border-border transition-colors ${getGridClass(
+        block.gridSize,
+      )}`}
+    >
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
           {block.nature === 'TEXT' ? 'Texto' : 'Imagem'} {index + 1}
         </span>
         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <BlockConfig block={block} onUpdate={onUpdate} />
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

@@ -20,6 +20,7 @@ import {
   BlockSize,
   ContentNature,
   CourseNature,
+  GridSize,
 } from '@prisma/client'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 import { revalidateCourses } from '@/lib/cache-revalidation'
@@ -45,6 +46,8 @@ const formSchema = z.object({
         size: z.enum(BlockSize).nullish(),
         alignment: z.enum(Alignment).nullish(),
         order: z.number().nullish(),
+        withBorder: z.boolean(),
+        gridSize: z.enum(GridSize),
         file: z
           .object({
             id: z.ulid(),
@@ -89,6 +92,8 @@ export default function CourseGeneralTab() {
             alignment: true,
             fileId: true,
             order: true,
+            withBorder: true,
+            gridSize: true,
             file: {
               select: {
                 id: true,

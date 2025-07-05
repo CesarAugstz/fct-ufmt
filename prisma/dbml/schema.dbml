@@ -86,6 +86,8 @@ Table ContentBlock {
   size BlockSize
   alignment Alignment
   order Int [not null, default: 0]
+  withBorder Boolean [not null, default: false]
+  gridSize GridSize [not null, default: 'FOUR']
   courseId String [not null]
   course Course [not null]
   fileId String [unique]
@@ -164,6 +166,13 @@ Enum BlockSize {
   MEDIUM
   LARGE
   FULL
+}
+
+Enum GridSize {
+  ONE
+  TWO
+  THREE
+  FOUR
 }
 
 Ref: Professor.imageId - Attachment.id [delete: Cascade]
