@@ -12,8 +12,15 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ className, buttonProps }: ThemeToggleProps) {
-  const { theme, setTheme } = useTheme()
+  const { theme, resolvedTheme, setTheme } = useTheme()
   const { setMode } = useColorScheme()
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute(
+      'data-color-mode',
+      resolvedTheme || 'light',
+    )
+  }, [resolvedTheme, theme])
 
   const onClick = React.useCallback(() => {
     const updatedTheme = theme === 'dark' ? 'light' : 'dark'

@@ -2,6 +2,7 @@
 
 import MDEditor, { commands } from '@uiw/react-md-editor'
 import { type ICommand } from '@uiw/react-md-editor'
+import { twMerge } from 'tailwind-merge'
 
 const bold: ICommand = {
   ...commands.bold,
@@ -266,12 +267,15 @@ export function MarkdownEditor({
   className = '',
 }: MarkdownEditorProps) {
   return (
-    <div className={className}>
+    <div className={twMerge('', className)}>
       <MDEditor
         value={value}
         onChange={onChange}
         height={height}
         minHeight={minHeight}
+        previewOptions={{
+          className: 'prose prose-sm dark:prose-invert max-w-none',
+        }}
         maxHeight={maxHeight}
         visibleDragbar={visibleDragbar}
         preview={preview}
