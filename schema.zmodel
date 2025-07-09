@@ -55,7 +55,8 @@ model Course extends BaseModel {
   slug String @unique 
   description String?
 
-  aboutContentBlocks ContentBlock[]
+  aboutContentBlocks ContentBlock[] @relation('aboutContentBlocks')
+  admissionContentBlocks ContentBlock[] @relation('admissionContentBlocks')
   professors Professor[]
   faqCategories FaqCategory[]
 
@@ -196,8 +197,12 @@ model ContentBlock extends BaseModel {
 
   accordionItems AccordionItem[] @json @default('[]')
 
-  courseId   String
-  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId   String?
+  course     Course?   @relation('aboutContentBlocks', fields: [courseId], references: [id], onDelete: Cascade)
+
+  admissionCourseId   String?
+  admissionCourse     Course?   @relation('admissionContentBlocks', fields: [admissionCourseId], references: [id], onDelete: Cascade)
+
 
   @@allow('read', true)
   @@allow('create,update,delete', auth().role == 'ADMIN')

@@ -17,9 +17,9 @@ export default function LoadingSpinner({ size = 'md', className }: Args) {
         className,
       )}
     >
-      <div className={`animate-spin rounded-full border-b-2 border-primary`}>
+      <div className={`animate-spin rounded-full border-b-2 border-secondary`}>
         <div
-          className={`animate-spin rounded-full border-b-2 border-primary ${
+          className={`animate-spin rounded-full border-b-2 border-secondary ${
             size === 'sm'
               ? 'h-8 w-8'
               : size === 'md'

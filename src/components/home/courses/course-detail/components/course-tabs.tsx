@@ -6,8 +6,6 @@ import {
   CourseProfessorsTab,
   CourseAdmissionTab,
   CourseFAQTab,
-  CoursePolesSection,
-  CourseSeminarsSection,
 } from '../'
 import TabsHeader from '@/components/common/tabs-header'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -68,11 +66,6 @@ export default function CourseTabs({ courseSlug }: CourseTabsProps) {
             </TabsContent>
           ))}
         </Tabs>
-
-        <div className="mt-16 space-y-16">
-          <CourseSeminarsSection courseSlug={courseSlug} />
-          <CoursePolesSection courseSlug={courseSlug} />
-        </div>
       </div>
     </div>
   )

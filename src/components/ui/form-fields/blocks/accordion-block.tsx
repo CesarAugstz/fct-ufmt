@@ -58,6 +58,8 @@ export function AccordionBlockComponent({
     onUpdate(block.id, { accordionItems: updatedItems })
   }
 
+  console.log('accordion block', block)
+
   return (
     <div className="space-y-4">
       {block.accordionItems.length > 0 && (

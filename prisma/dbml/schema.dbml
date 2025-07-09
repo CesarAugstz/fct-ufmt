@@ -23,6 +23,7 @@ Table Course {
   slug String [unique, not null]
   description String
   aboutContentBlocks ContentBlock [not null]
+  admissionContentBlocks ContentBlock [not null]
   professors Professor [not null]
   faqCategories FaqCategory [not null]
 }
@@ -91,8 +92,10 @@ Table ContentBlock {
   file Attachment
   content String
   accordionItems Json [not null, default: '[]']
-  courseId String [not null]
-  course Course [not null]
+  courseId String
+  course Course
+  admissionCourseId String
+  admissionCourse Course
 }
 
 Table Attachment {
@@ -188,5 +191,7 @@ Ref: FaqItem.categoryId > FaqCategory.id [delete: Cascade]
 Ref: ContentBlock.fileId - Attachment.id [delete: Cascade]
 
 Ref: ContentBlock.courseId > Course.id [delete: Cascade]
+
+Ref: ContentBlock.admissionCourseId > Course.id [delete: Cascade]
 
 Ref: LogEntry.userId > User.id [delete: Cascade]

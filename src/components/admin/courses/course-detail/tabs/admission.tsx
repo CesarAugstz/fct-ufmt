@@ -2,49 +2,40 @@
 
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { FormText } from '@/components/ui/form-fields/form-text'
-import { FormSelect } from '@/components/ui/form-fields/form-select'
 import LoadingSpinner from '@/components/common/loading-spinner'
 import { useFindUniqueCourse, useUpdateCourse } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
-import { CourseNature } from '@prisma/client'
-import { formatToSlug } from '@/lib/formatters/slug.formatter'
 import { revalidateCourses } from '@/lib/cache-revalidation'
 
 import { FormBlockTextImage } from '@/components/ui/form-fields'
 import { useAtomValue } from 'jotai'
 import { courseSlugAtom } from '../../store/course.store'
-import { useRouter } from 'next/navigation'
 import { z } from '@/utils/zod'
 import FormGrid from '@/components/ui/form-fields/form-grid'
 import { getBlockSchema } from '@/components/ui/form-fields/blocks/blocks.schema'
 
 const formSchema = z.object({
-  name: z.string().min(1, 'Nome é obrigatório'),
-  nature: z.enum([CourseNature.GRADUATION, CourseNature.POST_GRADUATION]),
-  aboutContentBlocks: z.array(getBlockSchema()).optional(),
+  admissionContentBlocks: z.array(getBlockSchema()).optional(),
 })
 
 type CourseFormValues = z.infer<typeof formSchema>
 
-export default function CourseGeneralTab() {
+export default function AdmissionTab() {
   const toast = useToast()
   const slug = useAtomValue(courseSlugAtom)
-  const router = useRouter()
 
   const { mutate: updateCourse, isPending } = useUpdateCourse()
+
+  const isLoading = isPending
 
   const { data: course } = useFindUniqueCourse(
     {
       where: { slug: slug! },
       select: {
         id: true,
-        name: true,
-        nature: true,
-        description: true,
-        aboutContentBlocks: {
+        admissionContentBlocks: {
           orderBy: { order: 'asc' },
           select: {
             id: true,
@@ -77,9 +68,7 @@ export default function CourseGeneralTab() {
   const methods = useForm<CourseFormValues>({
     resolver: zodResolver(formSchema),
     values: {
-      name: course?.name ?? '',
-      nature: course?.nature || CourseNature.GRADUATION,
-      aboutContentBlocks: course?.aboutContentBlocks || [],
+      admissionContentBlocks: course?.admissionContentBlocks || [],
     },
   })
 
@@ -90,11 +79,8 @@ export default function CourseGeneralTab() {
       {
         where: { slug: slug! },
         data: {
-          name: values.name,
-          nature: values.nature,
-          slug: formatToSlug(values.name),
-          aboutContentBlocks: {
-            upsert: values?.aboutContentBlocks
+          admissionContentBlocks: {
+            upsert: values?.admissionContentBlocks
               ?.map((block, index) => ({ ...block, order: index }))
               .map(block => ({
                 where: { id: block.id },
@@ -121,11 +107,6 @@ export default function CourseGeneralTab() {
       {
         onSuccess: async () => {
           await revalidateCourses()
-          if (slug !== formatToSlug(values.name)) {
-            toast.success('Curso atualizado com sucesso! Redirecionando...')
-            router.replace(`/admin/courses/${formatToSlug(values.name)}`)
-            return
-          }
           toast.success('Curso atualizado com sucesso!')
         },
         onError: error => {
@@ -138,9 +119,6 @@ export default function CourseGeneralTab() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Informações Gerais</CardTitle>
-      </CardHeader>
       <CardContent>
         <FormProvider {...methods}>
           <form
@@ -150,40 +128,17 @@ export default function CourseGeneralTab() {
             className="space-y-6"
           >
             <FormGrid>
-              <FormText
-                name="name"
-                label="Nome do Curso"
-                placeholder="Digite o nome do curso"
-                className="md:col-span-2"
-                required
-              />
-
-              <FormSelect
-                name="nature"
-                label="Tipo do Curso"
-                className="md:col-span-2"
-                placeholder="Selecione o tipo"
-                options={[
-                  { value: CourseNature.GRADUATION, label: 'Graduação' },
-                  {
-                    value: CourseNature.POST_GRADUATION,
-                    label: 'Pós-Graduação',
-                  },
-                ]}
-                required
-              />
-
               <FormBlockTextImage
                 span={4}
-                name="aboutContentBlocks"
+                name="admissionContentBlocks"
                 className="md:col-span-4"
                 label="Conteúdo em Blocos"
               />
             </FormGrid>
 
             <div className="flex justify-end">
-              <Button type="submit" variant="default" disabled={isPending}>
-                {isPending && <LoadingSpinner className="mr-2 h-4 w-4" />}
+              <Button type="submit" variant="default" disabled={isLoading}>
+                {isLoading && <LoadingSpinner size="sm" />}
                 Salvar Alterações
               </Button>
             </div>

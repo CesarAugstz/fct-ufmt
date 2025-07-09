@@ -113,6 +113,13 @@ const metadata = {
           isArray: true,
           backLink: 'course',
         },
+        admissionContentBlocks: {
+          name: 'admissionContentBlocks',
+          type: 'ContentBlock',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'admissionCourse',
+        },
         professors: {
           name: 'professors',
           type: 'Professor',
@@ -479,6 +486,7 @@ const metadata = {
         courseId: {
           name: 'courseId',
           type: 'String',
+          isOptional: true,
           isForeignKey: true,
           relationField: 'course',
         },
@@ -486,9 +494,26 @@ const metadata = {
           name: 'course',
           type: 'Course',
           isDataModel: true,
+          isOptional: true,
           backLink: 'aboutContentBlocks',
           isRelationOwner: true,
           foreignKeyMapping: { id: 'courseId' },
+        },
+        admissionCourseId: {
+          name: 'admissionCourseId',
+          type: 'String',
+          isOptional: true,
+          isForeignKey: true,
+          relationField: 'admissionCourse',
+        },
+        admissionCourse: {
+          name: 'admissionCourse',
+          type: 'Course',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'admissionContentBlocks',
+          isRelationOwner: true,
+          foreignKeyMapping: { id: 'admissionCourseId' },
         },
       },
       uniqueConstraints: {

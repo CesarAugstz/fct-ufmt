@@ -61,7 +61,7 @@ export function BlockContentRenderer({
   }
 
   return (
-    <div className={`grid grid-cols-12 gap-4 ${className}`}>
+    <div className={`grid grid-cols-12 gap-6 ${className}`}>
       {sortedBlocks.map(block => (
         <div key={block.id} className={getGridClass(block.gridSize)}>
           <BlockItem block={block} />
@@ -77,7 +77,9 @@ function BlockItem({ block }: { block: Block }) {
       return <>{children}</>
     }
 
-    return <Card className="border p-6 rounded-xl shadow-sm">{children}</Card>
+    return (
+      <Card className="h-full border p-6 rounded-xl shadow-sm">{children}</Card>
+    )
   }
   return (
     <Wrapper>

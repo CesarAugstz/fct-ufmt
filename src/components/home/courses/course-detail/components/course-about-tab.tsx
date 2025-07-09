@@ -1,11 +1,6 @@
 import LoadingSpinner from '@/components/common/loading-spinner'
 import { BlockContentRenderer } from '@/components/common/block-content-renderer'
 import { useFindUniqueCourse } from '@/lib/zenstack-hooks'
-import type {
-  Block,
-  AccordionItem,
-} from '@/components/ui/form-fields/blocks/types'
-import { ContentNature } from '@prisma/client'
 
 interface CourseAboutTabProps {
   courseSlug: string
@@ -40,44 +35,9 @@ export default function CourseAboutTab({ courseSlug }: CourseAboutTabProps) {
     )
   }
 
-  const transformedBlocks: Block[] = course.aboutContentBlocks.map(block => {
-    const baseBlock = {
-      id: block.id,
-      nature: block.nature,
-      order: block.order,
-      withBorder: block.withBorder,
-      gridSize: block.gridSize,
-    }
-
-    if (block.nature === ContentNature.TEXT) {
-      return {
-        ...baseBlock,
-        nature: 'TEXT' as const,
-        content: block.content ?? '',
-      }
-    }
-
-    if (block.nature === ContentNature.ACCORDION) {
-      return {
-        ...baseBlock,
-        nature: 'ACCORDION' as const,
-        accordionItems: (block.accordionItems as AccordionItem[]) ?? [],
-      }
-    }
-
-    return {
-      ...baseBlock,
-      nature: 'IMAGE' as const,
-      file: block.file,
-      caption: block.caption ?? '',
-      size: block.size,
-      alignment: block.alignment,
-    }
-  })
-
   return (
     <BlockContentRenderer
-      blocks={transformedBlocks}
+      blocks={course.aboutContentBlocks}
       className="prose dark:prose-invert prose-lg max-w-none"
     />
   )
