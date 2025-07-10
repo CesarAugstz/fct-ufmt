@@ -11,7 +11,7 @@ import TabsHeader from '@/components/common/tabs-header'
 export default function CourseTabs() {
   const tabs = [
     { name: 'Informações Gerais', component: CourseGeneralTab },
-    { name: 'Admissão', component: AdmissionTab },
+    { name: 'Ingresso', component: AdmissionTab },
     { name: 'Professores', component: CourseProfessorsTab },
     { name: 'FAQ', component: CourseFaqTab },
   ]

@@ -26,6 +26,8 @@ export interface FormTextProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
   onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   span?: number
+  autoFocus?: boolean
+  tabIndex?: number
 }
 
 export function FormText({
@@ -43,6 +45,8 @@ export function FormText({
   required = false,
   showPasswordToggle = false,
   span,
+  autoFocus = false,
+  tabIndex,
 }: FormTextProps) {
   const { control } = useFormContext()
 
@@ -61,6 +65,8 @@ export function FormText({
           </FormLabel>
           <FormControl>
             <TextField
+              tabIndex={tabIndex}
+              autoFocus={autoFocus}
               showPasswordToggle={showPasswordToggle}
               placeholder={placeholder}
               {...field}

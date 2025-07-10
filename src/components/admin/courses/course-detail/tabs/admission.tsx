@@ -73,8 +73,6 @@ export default function AdmissionTab() {
   })
 
   const onSubmit = async (values: CourseFormValues) => {
-    console.log('submitting form', values)
-
     updateCourse(
       {
         where: { slug: slug! },

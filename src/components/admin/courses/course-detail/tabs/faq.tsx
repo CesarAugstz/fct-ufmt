@@ -10,10 +10,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Plus, Edit, HelpCircle } from 'lucide-react'
+import { Plus, Edit, HelpCircle, Trash2, ExternalLink } from 'lucide-react'
 import { FaqCategory, FaqItem } from '@zenstackhq/runtime/models'
+import {
+  useFindUniqueCourse,
+  useDeleteFaqCategory,
+  useDeleteFaqItem,
+} from '@/lib/zenstack-hooks'
+import { useAtomValue } from 'jotai'
+import { courseSlugAtom } from '../../store/course.store'
+import { useToast } from '@/lib/hooks/toast'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import Link from 'next/link'
 import FaqCategoryForm from '../../forms/faq-category-form'
 import FaqItemForm from '../../forms/faq-item-form'
+import LoadingSpinner from '@/components/common/loading-spinner'
 
 export default function CourseFaqTab() {
   const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false)
@@ -25,8 +36,39 @@ export default function CourseFaqTab() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null,
   )
+  const [deletingCategory, setDeletingCategory] = useState<FaqCategory | null>(
+    null,
+  )
+  const [deletingItem, setDeletingItem] = useState<FaqItem | null>(null)
 
-  const course = {} as any
+  const slug = useAtomValue(courseSlugAtom)
+  const toast = useToast()
+
+  const { mutate: deleteCategory } = useDeleteFaqCategory()
+  const { mutate: deleteItem } = useDeleteFaqItem()
+
+  const { data: course, isLoading } = useFindUniqueCourse(
+    {
+      where: { slug: slug! },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        faqCategories: {
+          orderBy: { order: 'asc' },
+          include: {
+            faqItems: {
+              orderBy: { order: 'asc' },
+              include: {
+                contentBlocks: true,
+              },
+            },
+          },
+        },
+      },
+    },
+    { enabled: !!slug },
+  )
 
   const handleAddCategory = () => {
     setEditingCategory(null)
@@ -36,6 +78,28 @@ export default function CourseFaqTab() {
   const handleEditCategory = (category: FaqCategory) => {
     setEditingCategory(category)
     setIsCategoryFormOpen(true)
+  }
+
+  const handleDeleteCategory = (category: FaqCategory) => {
+    setDeletingCategory(category)
+  }
+
+  const handleConfirmDeleteCategory = () => {
+    if (!deletingCategory) return
+
+    deleteCategory(
+      { where: { id: deletingCategory.id } },
+      {
+        onSuccess: () => {
+          toast.success('Categoria excluída com sucesso!')
+          setDeletingCategory(null)
+        },
+        onError: error => {
+          console.error('Category delete error:', error)
+          toast.error('Erro ao excluir categoria')
+        },
+      },
+    )
   }
 
   const handleAddItem = (categoryId: string) => {
@@ -50,12 +114,42 @@ export default function CourseFaqTab() {
     setIsItemFormOpen(true)
   }
 
+  const handleDeleteItem = (item: FaqItem) => {
+    setDeletingItem(item)
+  }
+
+  const handleConfirmDeleteItem = () => {
+    if (!deletingItem) return
+
+    deleteItem(
+      { where: { id: deletingItem.id } },
+      {
+        onSuccess: () => {
+          toast.success('Item excluído com sucesso!')
+          setDeletingItem(null)
+        },
+        onError: error => {
+          console.error('Item delete error:', error)
+          toast.error('Erro ao excluir item')
+        },
+      },
+    )
+  }
+
   const handleFormSuccess = () => {
     setIsCategoryFormOpen(false)
     setIsItemFormOpen(false)
     setEditingCategory(null)
     setEditingItem(null)
     setSelectedCategoryId(null)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        <LoadingSpinner className="h-8 w-8" />
+      </div>
+    )
   }
 
   return (
@@ -71,7 +165,7 @@ export default function CourseFaqTab() {
           </div>
         </CardHeader>
         <CardContent>
-          {course?.faqCategories?.length === 0 ? (
+          {!course?.faqCategories?.length ? (
             <div className="text-center py-12">
               <HelpCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-muted-foreground">
@@ -83,7 +177,7 @@ export default function CourseFaqTab() {
             </div>
           ) : (
             <div className="space-y-4">
-              {course?.faqCategories?.map((category: any) => (
+              {course.faqCategories.map(category => (
                 <Card key={category.id}>
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start">
@@ -116,6 +210,14 @@ export default function CourseFaqTab() {
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteCategory(category)}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                   </CardHeader>
@@ -126,55 +228,69 @@ export default function CourseFaqTab() {
                       </p>
                     ) : (
                       <Accordion type="single" collapsible className="w-full">
-                        {category.faqItems
-                          .sort((a: any, b: any) => a.order - b.order)
-                          .map((item: any) => (
-                            <AccordionItem key={item.id} value={item.id}>
-                              <AccordionTrigger className="text-left">
-                                <div className="flex justify-between items-center w-full mr-4">
-                                  <span>{item.title}</span>
-                                  <div className="flex items-center gap-2">
-                                    <Badge
-                                      variant={
-                                        item.published ? 'default' : 'secondary'
-                                      }
-                                      className="text-xs"
-                                    >
-                                      {item.published
-                                        ? 'Publicado'
-                                        : 'Rascunho'}
-                                    </Badge>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={e => {
-                                        e.stopPropagation()
-                                        handleEditItem(item)
-                                      }}
-                                    >
-                                      <Edit className="h-3 w-3" />
-                                    </Button>
-                                  </div>
+                        {category.faqItems.map(item => (
+                          <AccordionItem key={item.id} value={item.id}>
+                            <AccordionTrigger className="text-left">
+                              <div className="flex justify-between items-center w-full mr-4">
+                                <span>{item.title}</span>
+                                <div className="flex items-center gap-2">
+                                  <Badge
+                                    variant={
+                                      item.published ? 'default' : 'secondary'
+                                    }
+                                    className="text-xs"
+                                  >
+                                    {item.published ? 'Publicado' : 'Rascunho'}
+                                  </Badge>
+                                  <Link
+                                    href={`/home/courses/${course.slug}/faq/${item.slug}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-muted-foreground hover:text-primary"
+                                    onClick={e => e.stopPropagation()}
+                                  >
+                                    <ExternalLink className="h-3 w-3" />
+                                  </Link>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      handleEditItem(item)
+                                    }}
+                                  >
+                                    <Edit className="h-3 w-3" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      handleDeleteItem(item)
+                                    }}
+                                    className="text-destructive hover:text-destructive"
+                                  >
+                                    <Trash2 className="h-3 w-3" />
+                                  </Button>
                                 </div>
-                              </AccordionTrigger>
-                              <AccordionContent>
-                                <div className="pt-2">
-                                  {item.content ? (
-                                    <div
-                                      className="prose prose-sm max-w-none"
-                                      dangerouslySetInnerHTML={{
-                                        __html: item.content,
-                                      }}
-                                    />
-                                  ) : (
-                                    <p className="text-muted-foreground italic">
-                                      Sem conteúdo
-                                    </p>
-                                  )}
-                                </div>
-                              </AccordionContent>
-                            </AccordionItem>
-                          ))}
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <div className="pt-2">
+                                <p className="text-muted-foreground text-sm mb-2">
+                                  Slug:{' '}
+                                  <code className="bg-muted px-1 rounded">
+                                    {item.slug}
+                                  </code>
+                                </p>
+                                <p className="text-muted-foreground text-sm">
+                                  {item.contentBlocks?.length || 0} blocos de
+                                  conteúdo
+                                </p>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
                       </Accordion>
                     )}
                   </CardContent>
@@ -189,7 +305,7 @@ export default function CourseFaqTab() {
         isOpen={isCategoryFormOpen}
         onClose={() => setIsCategoryFormOpen(false)}
         onSuccess={handleFormSuccess}
-        courseId={'11'} // course.id}
+        courseId={course?.id || ''}
         category={editingCategory}
       />
 
@@ -199,6 +315,22 @@ export default function CourseFaqTab() {
         onSuccess={handleFormSuccess}
         categoryId={selectedCategoryId}
         item={editingItem}
+      />
+
+      <ConfirmDialog
+        open={!!deletingCategory}
+        onOpenChange={() => setDeletingCategory(null)}
+        onConfirm={handleConfirmDeleteCategory}
+        title="Excluir Categoria"
+        description={`Tem certeza que deseja excluir a categoria "${deletingCategory?.name}"? Esta ação não pode ser desfeita e todos os itens desta categoria também serão excluídos.`}
+      />
+
+      <ConfirmDialog
+        open={!!deletingItem}
+        onOpenChange={() => setDeletingItem(null)}
+        onConfirm={handleConfirmDeleteItem}
+        title="Excluir Item FAQ"
+        description={`Tem certeza que deseja excluir o item "${deletingItem?.title}"? Esta ação não pode ser desfeita.`}
       />
     </div>
   )

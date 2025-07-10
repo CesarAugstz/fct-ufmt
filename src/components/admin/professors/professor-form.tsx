@@ -67,7 +67,7 @@ export default function ProfessorForm({
       email: userData?.email || '',
       password: '',
       courses: professorData?.courses?.map(c => c.id) || [],
-      role: userData?.role || 'PROFESSOR',
+      role: 'PROFESSOR',
     },
   })
 

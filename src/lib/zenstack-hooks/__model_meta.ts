@@ -33,6 +33,7 @@ const metadata = {
         password: {
           name: 'password',
           type: 'String',
+          isOptional: true,
         },
         name: {
           name: 'name',
@@ -43,6 +44,31 @@ const metadata = {
           name: 'role',
           type: 'Role',
           attributes: [{ name: '@default', args: [] }],
+        },
+        otpCode: {
+          name: 'otpCode',
+          type: 'String',
+          isOptional: true,
+        },
+        otpExpiration: {
+          name: 'otpExpiration',
+          type: 'DateTime',
+          isOptional: true,
+        },
+        isFirstAccess: {
+          name: 'isFirstAccess',
+          type: 'Boolean',
+          attributes: [{ name: '@default', args: [{ value: true }] }],
+        },
+        passwordResetToken: {
+          name: 'passwordResetToken',
+          type: 'String',
+          isOptional: true,
+        },
+        passwordResetExpiration: {
+          name: 'passwordResetExpiration',
+          type: 'DateTime',
+          isOptional: true,
         },
         professor: {
           name: 'professor',
@@ -356,11 +382,6 @@ const metadata = {
           name: 'slug',
           type: 'String',
         },
-        nature: {
-          name: 'nature',
-          type: 'FaqNature',
-          attributes: [{ name: '@default', args: [] }],
-        },
         order: {
           name: 'order',
           type: 'Int',
@@ -371,10 +392,12 @@ const metadata = {
           type: 'Boolean',
           attributes: [{ name: '@default', args: [{ value: false }] }],
         },
-        content: {
-          name: 'content',
-          type: 'String',
-          isOptional: true,
+        contentBlocks: {
+          name: 'contentBlocks',
+          type: 'ContentBlock',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'faqItem',
         },
         categoryId: {
           name: 'categoryId',
@@ -514,6 +537,22 @@ const metadata = {
           backLink: 'admissionContentBlocks',
           isRelationOwner: true,
           foreignKeyMapping: { id: 'admissionCourseId' },
+        },
+        faqItemId: {
+          name: 'faqItemId',
+          type: 'String',
+          isOptional: true,
+          isForeignKey: true,
+          relationField: 'faqItem',
+        },
+        faqItem: {
+          name: 'faqItem',
+          type: 'FaqItem',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'contentBlocks',
+          isRelationOwner: true,
+          foreignKeyMapping: { id: 'faqItemId' },
         },
       },
       uniqueConstraints: {
@@ -767,6 +806,7 @@ const metadata = {
     user: ['Professor', 'LogEntry'],
     course: ['FaqCategory', 'ContentBlock'],
     faqCategory: ['FaqItem'],
+    faqItem: ['ContentBlock'],
     attachment: ['Professor', 'ContentBlock'],
   },
   authModel: 'User',

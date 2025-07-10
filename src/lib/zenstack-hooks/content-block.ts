@@ -896,6 +896,7 @@ export function useCheckContentBlock<TError = DefaultError>(
       content?: string
       courseId?: string
       admissionCourseId?: string
+      faqItemId?: string
     }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &

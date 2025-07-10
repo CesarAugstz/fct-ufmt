@@ -33,15 +33,21 @@ enum Role {
 
 model User extends BaseModel {
   email     String     @unique
-  password  String     @password @omit
+  password  String?    @password @omit @allow('update', auth() == this || auth().role == 'ADMIN')
   name      String?
-  role      Role       @default(USER)
+  role      Role       @default(USER) @allow('update', auth() == this || auth().role == 'ADMIN')
+  
+  otpCode            String?
+  otpExpiration      DateTime?
+  isFirstAccess      Boolean  @default(true)
+  passwordResetToken String?
+  passwordResetExpiration DateTime?
 
   professor Professor?
   logEntries LogEntry[]
 
-  @@allow('create,read', true)
-  @@allow('update,delete', auth().role == 'ADMIN' || auth() == this)
+  @@deny('all', auth() == null)
+  @@allow('all', true)
 }
 
 enum CourseNature {
@@ -113,11 +119,6 @@ model Professor extends BaseModel {
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == user)
 }
 
-enum FaqNature {
-  SIMPLE
-  PAGE
-}
-
 model FaqCategory extends BaseModel {
   name        String
   description String?
@@ -135,11 +136,10 @@ model FaqCategory extends BaseModel {
 model FaqItem extends BaseModel {
   title       String
   slug        String
-  nature      FaqNature  @default(SIMPLE)
   order       Int      @default(0)
   published   Boolean  @default(false)
   
-  content     String?
+  contentBlocks ContentBlock[]
   
   categoryId  String
   category    FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -203,6 +203,8 @@ model ContentBlock extends BaseModel {
   admissionCourseId   String?
   admissionCourse     Course?   @relation('admissionContentBlocks', fields: [admissionCourseId], references: [id], onDelete: Cascade)
 
+  faqItemId   String?
+  faqItem     FaqItem?   @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
 
   @@allow('read', true)
   @@allow('create,update,delete', auth().role == 'ADMIN')

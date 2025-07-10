@@ -6,9 +6,16 @@ import { FormCheckbox } from '../ui/form-fields/form-checkbox'
 export default function LoginForm({ onEnter }: { onEnter?: () => void }) {
   return (
     <>
-      <FormText name="email" label="Email" placeholder="seu@email.com" />
+      <FormText
+        autoFocus
+        name="email"
+        label="Email"
+        placeholder="seu@email.com"
+        tabIndex={1}
+      />
 
       <FormText
+        tabIndex={2}
         name="password"
         placeholder="********"
         type="password"
