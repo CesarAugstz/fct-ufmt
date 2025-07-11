@@ -5,6 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Prisma, Role } from '@prisma/client'
+import { useSession } from 'next-auth/react'
 import {
   Dialog,
   DialogContent,
@@ -28,6 +29,7 @@ import { FormSelect } from '@/components/ui/form-fields/form-select'
 import { RoleMapper } from '@/utils/mappers/role.mapper'
 
 const formSchema = UserSchema.formSchema
+const adminFormSchema = UserSchema.adminFormSchema
 
 type UserFormValues = z.infer<typeof formSchema>
 
@@ -47,6 +49,11 @@ export default function UserForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isEditMode = !!userId
   const toast = useToast()
+  const { data: session } = useSession()
+
+  const isAdmin =
+    session?.user?.role === 'ADMIN' || session?.user?.role === 'ADMIN_PROFESSOR'
+  const currentSchema = isAdmin ? adminFormSchema : formSchema
 
   const { data: userData, isLoading: isLoadingUser } = useFindUniqueUser(
     { where: { id: userId } },
@@ -57,7 +64,7 @@ export default function UserForm({
   const { mutate: updateUser } = useUpdateUser()
 
   const methods = useForm<UserFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(currentSchema),
     values: {
       name: userData?.name || '',
       email: userData?.email || '',
@@ -69,12 +76,11 @@ export default function UserForm({
   const onSubmit = (values: UserFormValues) => {
     setIsSubmitting(true)
 
-    const data: Omit<Prisma.UserUpdateInput, 'id' | 'createdAt' | 'updatedAt'> =
-      {
-        name: values.name,
-        email: values.email,
-        role: values.role as Role,
-      }
+    const data: Prisma.UserUpdateInput = {
+      name: values.name,
+      email: values.email,
+      role: values.role as Role,
+    }
 
     if (values.password && values.password.length > 0) {
       data.password = values.password
@@ -99,13 +105,8 @@ export default function UserForm({
         },
       )
     } else {
-      if (!data.password) {
-        methods.setError('password', {
-          type: 'manual',
-          message: 'Senha é obrigatória para novos usuários',
-        })
-        setIsSubmitting(false)
-        return
+      if (!isAdmin && !data.password) {
+        data.isFirstAccess = true
       }
 
       if (!data.email || typeof data.email !== 'string') {
@@ -119,6 +120,7 @@ export default function UserForm({
 
       createUser(
         {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: data as any,
         },
         {
@@ -146,7 +148,9 @@ export default function UserForm({
           <DialogDescription>
             {isEditMode
               ? 'Atualize as informações do usuário no formulário abaixo.'
-              : 'Insira os detalhes do novo usuário.'}
+              : isAdmin
+                ? 'Insira os detalhes do novo usuário. A senha é opcional - usuários podem recuperar sua senha depois.'
+                : 'Insira os detalhes do novo usuário. O usuário receberá instruções para criar sua senha.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -173,19 +177,20 @@ export default function UserForm({
                 required
               />
 
-              <FormText
-                name="password"
-                label={
-                  isEditMode
-                    ? 'Senha (deixe em branco para manter a atual)'
-                    : 'Senha'
-                }
-                placeholder={
-                  isEditMode ? 'Digite a nova senha' : 'Digite a senha'
-                }
-                type="password"
-                required={!isEditMode}
-              />
+              {isAdmin && (
+                <FormText
+                  name="password"
+                  label={
+                    isEditMode
+                      ? 'Senha (deixe em branco para manter a atual)'
+                      : 'Senha (opcional - usuário pode recuperar depois)'
+                  }
+                  placeholder={
+                    isEditMode ? 'Digite a nova senha' : 'Digite a senha'
+                  }
+                  type="password"
+                />
+              )}
 
               <FormSelect
                 name="role"

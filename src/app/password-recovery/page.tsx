@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import Image from 'next/image'
 import { ChevronLeft, Mail, Key, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
@@ -129,15 +128,6 @@ export default function PasswordRecoveryPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <Image
-              src="/sei-logo.svg"
-              alt="FCT UFMT"
-              width={80}
-              height={80}
-              className="h-20 w-auto"
-            />
-          </div>
           <h1 className="text-2xl font-bold text-gray-900">
             {currentStep === 'request'
               ? 'Recuperar Senha'

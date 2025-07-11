@@ -23,6 +23,16 @@ declare module 'next-auth' {
       role: string
     } & DefaultSession['user']
   }
+
+  interface User {
+    role: string
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    role: string
+  }
 }
 
 /**
@@ -39,9 +49,16 @@ export const authOptions: NextAuthOptions = {
     error: '/login',
   },
   callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.role = user.role
+      }
+      return token
+    },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub!
+        session.user.role = token.role as string
       }
 
       return session
