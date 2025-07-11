@@ -7,9 +7,13 @@ import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
 import { FormSelect } from '@/components/ui/form-fields/form-select'
 import LoadingSpinner from '@/components/common/loading-spinner'
-import { useFindUniqueCourse, useUpdateCourse } from '@/lib/zenstack-hooks'
+import {
+  useFindUniqueCourse,
+  useUpdateCourse,
+  useUpsertAttachment,
+} from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
-import { CourseNature } from '@prisma/client'
+import { CourseNature, Prisma } from '@prisma/client'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 import { revalidateCourses } from '@/lib/cache-revalidation'
 
@@ -34,7 +38,8 @@ export default function CourseGeneralTab() {
   const slug = useAtomValue(courseSlugAtom)
   const router = useRouter()
 
-  const { mutate: updateCourse, isPending } = useUpdateCourse()
+  const { mutateAsync: updateCourse, isPending } = useUpdateCourse()
+  const { mutateAsync: upsertAttachment } = useUpsertAttachment()
 
   const { data: course } = useFindUniqueCourse(
     {
@@ -84,56 +89,80 @@ export default function CourseGeneralTab() {
   })
 
   const onSubmit = async (values: CourseFormValues) => {
-    console.log('submitting form', values)
+    try {
+      const blocksToDelete = course?.aboutContentBlocks
+        ?.filter(
+          block => !values.aboutContentBlocks?.find(b => b.id === block.id),
+        )
+        .map(block => block.id) as string[]
 
-    updateCourse(
-      {
+      const filesToCreate: Prisma.AttachmentCreateInput[] = []
+      await updateCourse({
         where: { slug: slug! },
         data: {
           name: values.name,
           nature: values.nature,
           slug: formatToSlug(values.name),
           aboutContentBlocks: {
+            deleteMany: { id: { in: blocksToDelete } },
             upsert: values?.aboutContentBlocks
               ?.map((block, index) => ({ ...block, order: index }))
-              .map(block => ({
-                where: { id: block.id },
-                update: {
-                  ...block,
-                  accordionItems: block.accordionItems || [],
-                  file: block.file
-                    ? {
-                        create: {
-                          ...block.file,
-                        },
-                      }
-                    : undefined,
-                },
-                create: {
-                  ...block,
-                  accordionItems: block.accordionItems || [],
-                  file: block.file ? { create: block.file } : undefined,
-                },
-              })),
+              .map(block => {
+                if (block.file) {
+                  filesToCreate.push({
+                    ...block.file,
+                    contentBlocks: {
+                      connect: { id: block.id },
+                    },
+                  })
+                }
+                return {
+                  where: { id: block.id },
+                  update: {
+                    ...block,
+                    accordionItems: block.accordionItems || [],
+                    file: block.file
+                      ? {
+                          upsert: {
+                            where: { id: block.file.id },
+                            update: {},
+                            create: {
+                              ...block.file,
+                            },
+                          },
+                        }
+                      : undefined,
+                  },
+                  create: {
+                    ...block,
+                    accordionItems: block.accordionItems || [],
+                    file: block.file ? { create: block.file } : undefined,
+                  },
+                }
+              }),
           },
         },
-      },
-      {
-        onSuccess: async () => {
-          await revalidateCourses()
-          if (slug !== formatToSlug(values.name)) {
-            toast.success('Curso atualizado com sucesso! Redirecionando...')
-            router.replace(`/admin/courses/${formatToSlug(values.name)}`)
-            return
-          }
-          toast.success('Curso atualizado com sucesso!')
-        },
-        onError: error => {
-          console.error('Course update error:', error)
-          toast.error('Erro ao atualizar curso')
-        },
-      },
-    )
+      })
+      await Promise.all(
+        filesToCreate.map(file =>
+          upsertAttachment({
+            where: { id: file.id },
+            update: {},
+            create: { ...file } as any,
+          }),
+        ),
+      )
+      await revalidateCourses()
+      if (slug !== formatToSlug(values.name)) {
+        toast.success('Curso atualizado com sucesso! Redirecionando...')
+        router.replace(`/admin/courses/${formatToSlug(values.name)}`)
+        return
+      }
+      toast.success('Curso atualizado com sucesso!')
+    } catch (error) {
+      console.error('Course update error:', error)
+      toast.error('Erro ao atualizar curso')
+    }
   }
 
   return (

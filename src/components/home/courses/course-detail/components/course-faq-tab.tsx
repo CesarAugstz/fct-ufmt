@@ -6,7 +6,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Button } from '@/components/ui/button'
 import { ArrowRight, Clock, HelpCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useFindUniqueCourse } from '@/lib/zenstack-hooks'
@@ -206,36 +205,6 @@ export default function CourseFAQTab({ courseSlug }: CourseFAQTabProps) {
           </motion.div>
         ))}
       </Accordion>
-
-      <motion.div
-        className="text-center py-8 border-t"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 1 }}
-      >
-        <motion.p
-          className="text-muted-foreground mb-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
-        >
-          Não encontrou o que procurava?
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 1.2 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Button asChild variant="outline">
-            <Link href="/home/faq">
-              Ver FAQ Geral
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </motion.div>
-      </motion.div>
     </motion.div>
   )
 }

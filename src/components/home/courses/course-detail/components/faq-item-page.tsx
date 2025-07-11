@@ -125,10 +125,6 @@ export default function FaqItemPage({ courseSlug, faqSlug }: FaqItemPageProps) {
                 Categoria: <strong>{faqItem.category.name}</strong>
               </p>
             </div>
-
-            <Button asChild variant="outline">
-              <Link href="/home/faq">Ver FAQ Geral</Link>
-            </Button>
           </div>
         </footer>
       </div>
