@@ -33,7 +33,7 @@ enum Role {
 
 model User extends BaseModel {
   email     String     @unique
-  password  String?    @password @omit @allow('update', auth() == this || auth().role == 'ADMIN')
+  password  String?    @password @omit @allow('update', auth() == this || auth().role == 'ADMIN' || role == 'PROFESSOR')
   name      String?
   role      Role       @default(USER) @allow('update', auth() == this || auth().role == 'ADMIN')
   
@@ -47,8 +47,17 @@ model User extends BaseModel {
   logEntries LogEntry[]
 
   @@deny('all', auth() == null)
-  @@allow('all', true)
+  
+  @@allow('create', auth().role == 'USER' && (role == 'USER' || role == 'PROFESSOR'))
+  
+  @@allow('create', auth().role == 'ADMIN')
+  
+  @@allow('read', true)
+  @@allow('update', auth() == this || auth().role == 'ADMIN')
+  @@allow('update', auth().role == 'USER' && role == 'PROFESSOR')
+  @@allow('delete', auth().role == 'ADMIN')
 }
+
 
 enum CourseNature {
   GRADUATION
@@ -66,7 +75,9 @@ model Course extends BaseModel {
   professors Professor[]
   faqCategories FaqCategory[]
 
-  @@allow('all', true)
+  @@allow('read', true)
+  @@allow('create,update', auth() != null)
+  @@allow('delete', auth().role == 'ADMIN')
 }
 
 type Publication {
@@ -115,8 +126,11 @@ model Professor extends BaseModel {
   userId            String             @unique
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@allow('create,read', true)
+  @@allow('read', true)
+  @@allow('create', auth().role == 'USER')
+  @@allow('create', auth().role == 'ADMIN')
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == user)
+  @@allow('update', auth().role == 'USER')
 }
 
 model FaqCategory extends BaseModel {
@@ -130,7 +144,7 @@ model FaqCategory extends BaseModel {
   faqItems    FaqItem[]
 
   @@allow('read', true)
-  @@allow('create,update,delete', auth().role == 'ADMIN')
+  @@allow('create,update,delete', auth() != null)
 }
 
 model FaqItem extends BaseModel {
@@ -145,9 +159,8 @@ model FaqItem extends BaseModel {
   category    FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   
   @@unique([categoryId, slug])
-  @@allow('read', published || auth().role == 'ADMIN')
-  @@allow('create', auth() != null)
-  @@allow('update,delete', auth().role == 'ADMIN')
+  @@allow('read', published || auth() != null)
+  @@allow('create,update,delete', auth().role != null)
 }
 
 enum ContentNature {
@@ -205,9 +218,6 @@ model ContentBlock extends BaseModel {
 
   faqItemId   String?
   faqItem     FaqItem?   @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
-
-  @@allow('read', true)
-  @@allow('create,update,delete', auth().role == 'ADMIN')
 }
 
 model Attachment extends BaseModel {

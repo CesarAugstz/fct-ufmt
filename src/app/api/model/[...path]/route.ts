@@ -18,6 +18,40 @@ async function getPrisma() {
 
 const handler = NextRequestHandler({ getPrisma, useAppDir: true })
 
+const removeBigKeysFromObject = (obj: any) => {
+  if (typeof obj === 'string') {
+    return obj.length > 1000 ? obj.slice(0, 1000) + '...' : obj
+  }
+
+  if (!(obj instanceof Object)) {
+    return
+  }
+
+  for (const key in obj) {
+    if (obj[key] instanceof Object) {
+      obj[key] = removeBigKeysFromObject(obj[key])
+    }
+    if (obj[key] instanceof Array) {
+      obj[key] = obj[key].map(removeBigKeysFromObject)
+    }
+    if (obj[key] instanceof Buffer) {
+      obj[key] = 'Buffer'
+    }
+  }
+  return obj
+}
+
+const getBody = async (req: Request) => {
+  try {
+    const reqClone = req.clone()
+    const body = await reqClone.json()
+    return removeBigKeysFromObject(body)
+  } catch (error) {
+    console.error('Error parsing request body:', error)
+    return undefined
+  }
+}
+
 const saveLogSafe = async (logEntry: Prisma.LogEntryCreateInput) => {
   try {
     await db.logEntry.create({ data: logEntry })
@@ -29,6 +63,7 @@ const saveLogSafe = async (logEntry: Prisma.LogEntryCreateInput) => {
 const handlerWithLogging = async (req: NextRequest, ctx: Context) => {
   console.log('Request:', req.method, req.url)
   const user = await getCurrentUser()
+  const reqClone = req.clone()
   let error: any
 
   try {
@@ -46,8 +81,8 @@ const handlerWithLogging = async (req: NextRequest, ctx: Context) => {
       ...(user ? { user: { connect: { id: user.id } } } : {}),
       endpoint: req.url,
       method: req.method,
-      body: req.body ? JSON.stringify(req.body) : undefined,
-      params: JSON.stringify(ctx.params),
+      body: JSON.stringify(await getBody(reqClone)),
+      params: JSON.stringify(await ctx.params),
       ip,
       userAgent,
       isError: error !== undefined,

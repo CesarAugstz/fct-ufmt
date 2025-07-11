@@ -80,17 +80,17 @@ export default function ProfessorForm({
   const onSubmit = async (values: ProfessorFormValues) => {
     setIsSubmitting(true)
 
-    if (isEditMode && userData) {
+    if (isEditMode && userData && professorData) {
       updateProfessor(
         {
-          where: { id: userData.id },
+          where: { id: professorData.id },
           data: {
             courses: { connect: values.courses.map(id => ({ id })) },
             user: {
               update: {
                 name: values.name,
                 email: values.email,
-                password: values.password,
+                password: values.password || undefined,
               },
             },
           },
