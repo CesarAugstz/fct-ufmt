@@ -1,11 +1,21 @@
 'use client'
 
-import { useMarkdown } from '@/lib/hooks/markdown'
-import { Alignment, BlockSize } from '@prisma/client'
+import { Alignment, BlockSize, GridSize } from '@prisma/client'
 import Image from 'next/image'
 import LoadingSpinner from './loading-spinner'
-import type { Block } from '@/components/ui/form-fields/block-text-image/types'
+import { MarkdownRenderer } from './markdown-renderer'
+import type {
+  Block,
+  AccordionItem,
+} from '@/components/ui/form-fields/blocks/types'
 import { AttachmentType } from '@/types/attachment.type'
+import { Card } from '../ui/card'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem as UIAccordionItem,
+  AccordionTrigger,
+} from '../ui/accordion'
 
 interface BlockContentRendererProps {
   blocks: Block[]
@@ -36,62 +46,61 @@ export function BlockContentRenderer({
 
   const sortedBlocks = [...blocks].sort((a, b) => a.order - b.order)
 
+  const getGridClass = (gridSize: GridSize | undefined) => {
+    switch (gridSize) {
+      case GridSize.ONE:
+        return 'col-span-3'
+      case GridSize.TWO:
+        return 'col-span-6'
+      case GridSize.THREE:
+        return 'col-span-9'
+      case GridSize.FOUR:
+      default:
+        return 'col-span-12'
+    }
+  }
+
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`grid grid-cols-12 gap-6 ${className}`}>
       {sortedBlocks.map(block => (
-        <BlockItem key={block.id} block={block} />
+        <div key={block.id} className={getGridClass(block.gridSize)}>
+          <BlockItem block={block} />
+        </div>
       ))}
     </div>
   )
 }
 
 function BlockItem({ block }: { block: Block }) {
-  if (block.nature === 'TEXT') {
-    return <TextBlock content={block.content ?? ''} />
-  }
+  const Wrapper = ({ children }: { children: React.ReactNode }) => {
+    if (!block.withBorder) {
+      return <>{children}</>
+    }
 
-  if (block.nature === 'IMAGE') {
     return (
-      <ImageBlock
-        file={block.file}
-        caption={block.caption}
-        size={block.size}
-        alignment={block.alignment}
-      />
+      <Card className="h-full border p-6 rounded-xl shadow-sm">{children}</Card>
     )
   }
-
-  return null
+  return (
+    <Wrapper>
+      {block.nature === 'TEXT' ? (
+        <TextBlock content={block.content ?? ''} />
+      ) : block.nature === 'ACCORDION' ? (
+        <AccordionBlock accordionItems={block.accordionItems ?? []} />
+      ) : (
+        <ImageBlock
+          file={block.file}
+          caption={block.caption}
+          size={block.size}
+          alignment={block.alignment}
+        />
+      )}
+    </Wrapper>
+  )
 }
 
 function TextBlock({ content }: { content: string }) {
-  const { markdownContent, loading, error } = useMarkdown(content)
-
-  if (loading) {
-    return (
-      <div className="flex justify-center py-4">
-        <LoadingSpinner className="h-6 w-6" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="text-destructive p-4 border border-destructive/20 rounded-lg">
-        Erro ao renderizar conteúdo
-      </div>
-    )
-  }
-
-  if (!content?.trim()) {
-    return null
-  }
-
-  return (
-    <div className="prose prose-slate prose-lg dark:prose-invert max-w-none">
-      {markdownContent}
-    </div>
-  )
+  return <MarkdownRenderer content={content} />
 }
 
 interface ImageBlockProps {
@@ -167,5 +176,32 @@ function ImageBlock({ file, caption, size, alignment }: ImageBlockProps) {
         </figcaption>
       )}
     </figure>
+  )
+}
+
+function AccordionBlock({
+  accordionItems,
+}: {
+  accordionItems: AccordionItem[]
+}) {
+  if (!accordionItems?.length) {
+    return (
+      <div className="text-center py-4 text-muted-foreground">
+        Nenhum item de accordion configurado.
+      </div>
+    )
+  }
+
+  return (
+    <Accordion type="single" collapsible className="w-full">
+      {accordionItems.map((item, index) => (
+        <UIAccordionItem key={index} value={index.toString()}>
+          <AccordionTrigger>{item.title}</AccordionTrigger>
+          <AccordionContent>
+            <MarkdownRenderer content={item.content} size="sm" />
+          </AccordionContent>
+        </UIAccordionItem>
+      ))}
+    </Accordion>
   )
 }

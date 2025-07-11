@@ -1,33 +1,32 @@
 'use client'
 
 import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import CourseGeneralTab from './tabs/general'
 import CourseProfessorsTab from './tabs/professors'
 import CourseFaqTab from './tabs/faq'
+import AdmissionTab from './tabs/admission'
+import TabsHeader from '@/components/common/tabs-header'
 
 export default function CourseTabs() {
-  const [activeTab, setActiveTab] = useState('general')
+  const tabs = [
+    { name: 'Informações Gerais', component: CourseGeneralTab },
+    { name: 'Ingresso', component: AdmissionTab },
+    { name: 'Professores', component: CourseProfessorsTab },
+    { name: 'FAQ', component: CourseFaqTab },
+  ]
+
+  const [activeTab, setActiveTab] = useState(tabs[0].name)
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="general">Informações Gerais</TabsTrigger>
-        <TabsTrigger value="professors">Professores</TabsTrigger>
-        <TabsTrigger value="faq">FAQ</TabsTrigger>
-      </TabsList>
+      <TabsHeader tabs={tabs.map(tab => tab.name)} showSearch={false} />
 
-      <TabsContent value="general" className="space-y-6">
-        <CourseGeneralTab />
-      </TabsContent>
-
-      <TabsContent value="professors" className="space-y-6">
-        <CourseProfessorsTab />
-      </TabsContent>
-
-      <TabsContent value="faq" className="space-y-6">
-        <CourseFaqTab />
-      </TabsContent>
+      {tabs.map(tab => (
+        <TabsContent key={tab.name} value={tab.name}>
+          <tab.component />
+        </TabsContent>
+      ))}
     </Tabs>
   )
 }

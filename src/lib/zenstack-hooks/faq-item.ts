@@ -847,7 +847,6 @@ export function useSuspenseCountFaqItem<
     fetch,
   )
 }
-import type { FaqNature } from '@zenstackhq/runtime/models'
 
 export function useCheckFaqItem<TError = DefaultError>(
   args: {
@@ -856,10 +855,8 @@ export function useCheckFaqItem<TError = DefaultError>(
       id?: string
       title?: string
       slug?: string
-      nature?: FaqNature
       order?: number
       published?: boolean
-      content?: string
       categoryId?: string
     }
   },

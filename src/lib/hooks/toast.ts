@@ -1,4 +1,4 @@
-import { ExternalToast, toast, ToastT } from 'sonner'
+import { ExternalToast, toast } from 'sonner'
 
 export function useToast() {
   function loading(message: string, options?: ExternalToast) {
@@ -16,13 +16,14 @@ export function useToast() {
   function exception(error: any) {
     switch (true) {
       case error?.info?.rejectedByPolicy:
-        return toast.error('You do not have permission to perform this action.')
+        return toast.error('Você não tem permissão para executar esta ação.')
 
       case error?.info?.message?.includes('Unique constraint failed'): {
         const keyName = error.info.message.match(/\(`(.*)`\)/)?.[1]
-        if (!keyName) return toast.error('An error occurred. Please try again.')
+        if (!keyName)
+          return toast.error('Ocorreu um erro. Por favor, tente novamente.')
         return toast.error(
-          `This ${keyName} already exists. Please choose another one.`,
+          `Já existe um registro com este ${keyName}. Por favor, escolha outro.`,
         )
       }
       case error?.info?.message:

@@ -1,37 +1,56 @@
 'use client'
 
-import { BlockComponent } from './block-text-image/block-component'
-import { AddBlockButton } from './block-text-image/add-block-button'
-import { BlockVisualizer } from './block-text-image/block-visualizer'
-import type { Block, TextBlock, ImageBlock } from './block-text-image/types'
-export type { Block, TextBlock, ImageBlock }
+import { BlockComponent } from './blocks/block-component'
+import { AddBlockButton } from './blocks/add-block-button'
+import { BlockVisualizer } from './blocks/block-visualizer'
+import type {
+  Block,
+  TextBlock,
+  ImageBlock,
+  AccordionBlock,
+} from './blocks/types'
+export type { Block, TextBlock, ImageBlock, AccordionBlock }
 import { ulid } from 'ulidx'
-import { Alignment, BlockSize, ContentNature } from '@prisma/client'
+import { Alignment, BlockSize, ContentNature, GridSize } from '@prisma/client'
 import { useCallback } from 'react'
 
-interface BlockTextImageFieldProps {
+interface BlocksFieldProps {
   blocks: Block[]
   onChange: (blocks: Block[]) => void
 }
 
-export function BlockTextImageField({
-  blocks,
-  onChange,
-}: BlockTextImageFieldProps) {
+export function BlocksField({ blocks, onChange }: BlocksFieldProps) {
   const generateId = () => ulid()
 
   const addBlock = (nature: ContentNature, index?: number) => {
     const newBlock: Block =
       nature === 'TEXT'
-        ? ({ id: generateId(), nature, content: '' } as TextBlock)
-        : ({
-            nature,
+        ? ({
             id: generateId(),
-            file: null,
-            caption: '',
-            size: BlockSize.MEDIUM,
-            alignment: Alignment.CENTER,
-          } as ImageBlock)
+            nature,
+            content: '',
+            withBorder: false,
+            gridSize: GridSize.FOUR,
+          } as TextBlock)
+        : nature === 'ACCORDION'
+          ? ({
+              id: generateId(),
+              nature,
+              accordionItems: [],
+              withBorder: false,
+              gridSize: GridSize.FOUR,
+              order: 0,
+            } as AccordionBlock)
+          : ({
+              nature,
+              id: generateId(),
+              file: null,
+              caption: '',
+              size: BlockSize.MEDIUM,
+              alignment: Alignment.CENTER,
+              withBorder: false,
+              gridSize: GridSize.FOUR,
+            } as ImageBlock)
 
     let newBlocks: Block[]
     if (index !== undefined) {
@@ -46,11 +65,9 @@ export function BlockTextImageField({
   }
 
   const updateBlock = (id: string, updates: Partial<Block>) => {
-    console.log('update block', id, updates, blocks)
     const newBlocks = blocks.map(block =>
       block.id === id ? { ...block, ...updates } : block,
     ) as Block[]
-    console.log('new blocks', newBlocks)
     onChange(newBlocks)
   }
 
@@ -85,20 +102,22 @@ export function BlockTextImageField({
 
   return (
     <div className="relative border border-input rounded-md bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:border-transparent transition-all">
-      <div className="p-3 space-y-2">
-        {blocks.map((block, index) => (
-          <BlockComponent
-            key={block.id}
-            block={block}
-            index={index}
-            totalBlocks={blocks.length}
-            onUpdate={updateBlock}
-            onDelete={deleteBlock}
-            onAddBlock={addBlock}
-            onMoveUp={moveBlockUp}
-            onMoveDown={moveBlockDown}
-          />
-        ))}
+      <div className="p-3">
+        <div className="grid grid-cols-12 gap-2">
+          {blocks.map((block, index) => (
+            <BlockComponent
+              key={block.id}
+              block={block}
+              index={index}
+              totalBlocks={blocks.length}
+              onUpdate={updateBlock}
+              onDelete={deleteBlock}
+              onAddBlock={addBlock}
+              onMoveUp={moveBlockUp}
+              onMoveDown={moveBlockDown}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="border-t border-border/50 p-2">

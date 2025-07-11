@@ -6,7 +6,7 @@ export { FormSelect } from './form-select'
 export { FormSwitch } from './form-switch'
 export { FormText } from './form-text'
 export { FormTextarea } from './form-textarea'
-export { FormBlockTextImage } from './form-block-text-image'
+export { FormBlocks as FormBlockTextImage } from './form-blocks'
 
 export { SelectField } from './select-field'
 export { TextAreaField } from './text-area-field'

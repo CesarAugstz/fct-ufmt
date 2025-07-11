@@ -35,20 +35,9 @@ export default function CourseAboutTab({ courseSlug }: CourseAboutTabProps) {
     )
   }
 
-  const transformedBlocks = course.aboutContentBlocks.map(block => ({
-    id: block.id,
-    nature: block.nature,
-    content: block.content,
-    caption: block.caption,
-    size: block.size,
-    alignment: block.alignment,
-    order: block.order,
-    file: block.file,
-  }))
-
   return (
     <BlockContentRenderer
-      blocks={transformedBlocks}
+      blocks={course.aboutContentBlocks}
       className="prose dark:prose-invert prose-lg max-w-none"
     />
   )

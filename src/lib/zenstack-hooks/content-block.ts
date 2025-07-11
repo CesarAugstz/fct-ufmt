@@ -876,6 +876,7 @@ export function useSuspenseCountContentBlock<
 import type {
   ContentNature,
   BlockSize,
+  GridSize,
   Alignment,
 } from '@zenstackhq/runtime/models'
 
@@ -885,13 +886,17 @@ export function useCheckContentBlock<TError = DefaultError>(
     where?: {
       id?: string
       nature?: ContentNature
-      content?: string
-      caption?: string
       size?: BlockSize
-      alignment?: Alignment
       order?: number
-      courseId?: string
+      withBorder?: boolean
+      gridSize?: GridSize
+      alignment?: Alignment
+      caption?: string
       fileId?: string
+      content?: string
+      courseId?: string
+      admissionCourseId?: string
+      faqItemId?: string
     }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &

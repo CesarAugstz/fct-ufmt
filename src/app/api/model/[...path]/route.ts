@@ -18,6 +18,41 @@ async function getPrisma() {
 
 const handler = NextRequestHandler({ getPrisma, useAppDir: true })
 
+const removeBigKeysFromObject = (obj: unknown): unknown => {
+  if (typeof obj === 'string') {
+    return obj.length > 1000 ? obj.slice(0, 1000) + '...' : obj
+  }
+
+  if (!obj || typeof obj !== 'object') {
+    return obj
+  }
+
+  if (obj instanceof Buffer) {
+    return 'Buffer'
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(removeBigKeysFromObject)
+  }
+
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(obj)) {
+    result[key] = removeBigKeysFromObject(value)
+  }
+  return result
+}
+
+const getBody = async (req: Request): Promise<unknown> => {
+  try {
+    const reqClone = req.clone()
+    const body = await reqClone.json()
+    return removeBigKeysFromObject(body)
+  } catch (error) {
+    console.error('Error parsing request body:', error)
+    return null
+  }
+}
+
 const saveLogSafe = async (logEntry: Prisma.LogEntryCreateInput) => {
   try {
     await db.logEntry.create({ data: logEntry })
@@ -26,7 +61,9 @@ const saveLogSafe = async (logEntry: Prisma.LogEntryCreateInput) => {
   }
 }
 
-const getResponseBodySafe = async (response: NextResponse) => {
+const getResponseBodySafe = async (
+  response: NextResponse,
+): Promise<string | null> => {
   try {
     const clone = response.clone()
     const responseBody = await clone.text()
@@ -35,23 +72,49 @@ const getResponseBodySafe = async (response: NextResponse) => {
       : responseBody
   } catch (error) {
     console.error('Error getting response body:', error)
-    return undefined
+    return null
   }
 }
 
-const getHeadersSafe = (headers: Headers) => {
+const serializeError = (error: unknown): string | null => {
+  if (!error) return null
+
+  try {
+    if (error instanceof Error) {
+      return JSON.stringify({
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      })
+    }
+    return JSON.stringify(error)
+  } catch {
+    return String(error)
+  }
+}
+
+const safeStringify = (obj: unknown): string => {
+  try {
+    return JSON.stringify(obj)
+  } catch {
+    return String(obj)
+  }
+}
+
+const getHeadersSafe = (headers: Headers): Record<string, string> | null => {
   try {
     return Object.fromEntries(headers.entries())
   } catch (error) {
     console.error('Error getting headers:', error)
-    return undefined
+    return null
   }
 }
 
 const handlerWithLogging = async (req: NextRequest, ctx: Context) => {
   console.log('Request:', req.method, req.url)
   const user = await getCurrentUser()
-  let error: any
+  const reqClone = req.clone()
+  let error: Error | unknown
   let result: NextResponse | undefined
 
   try {
@@ -67,7 +130,7 @@ const handlerWithLogging = async (req: NextRequest, ctx: Context) => {
     const userAgent = req.headers.get('user-agent')
 
     const response = {
-      response_headers: JSON.stringify(
+      response_headers: safeStringify(
         getHeadersSafe(result?.headers ?? new Headers()),
       ),
       response_body: await getResponseBodySafe(result!),
@@ -78,13 +141,13 @@ const handlerWithLogging = async (req: NextRequest, ctx: Context) => {
       ...(user ? { user: { connect: { id: user.id } } } : {}),
       endpoint: req.url,
       method: req.method,
-      body: req.body ? JSON.stringify(req.body) : undefined,
-      params: JSON.stringify(await ctx.params),
+      body: safeStringify(await getBody(reqClone)),
+      params: safeStringify(await ctx.params),
       ...response,
       ip,
       userAgent,
       isError: error !== undefined || result?.ok === false,
-      error: error ? JSON.stringify(error) : undefined,
+      error: serializeError(error),
     }
 
     await saveLogSafe(log)

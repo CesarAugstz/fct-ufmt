@@ -33,14 +33,10 @@ enum ProjectStatus {
   FINISHED
 }
 
-enum FaqNature {
-  SIMPLE
-  PAGE
-}
-
 enum ContentNature {
   TEXT
   IMAGE
+  ACCORDION
 }
 
 enum Alignment {
@@ -56,29 +52,42 @@ enum BlockSize {
   FULL
 }
 
+enum GridSize {
+  ONE
+  TWO
+  THREE
+  FOUR
+}
+
 model User {
-  id         String     @id() @default(ulid())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt()
-  email      String     @unique()
-  password   String
-  name       String?
-  role       Role       @default(USER)
-  professor  Professor?
-  logEntries LogEntry[]
+  id                      String     @id() @default(ulid())
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt()
+  email                   String     @unique()
+  password                String?
+  name                    String?
+  role                    Role       @default(USER)
+  otpCode                 String?
+  otpExpiration           DateTime?
+  isFirstAccess           Boolean    @default(true)
+  passwordResetToken      String?
+  passwordResetExpiration DateTime?
+  professor               Professor?
+  logEntries              LogEntry[]
 }
 
 model Course {
-  id                 String         @id() @default(ulid())
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt()
-  name               String         @unique()
-  nature             CourseNature
-  slug               String         @unique()
-  description        String?
-  aboutContentBlocks ContentBlock[]
-  professors         Professor[]
-  faqCategories      FaqCategory[]
+  id                     String         @id() @default(ulid())
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt()
+  name                   String         @unique()
+  nature                 CourseNature
+  slug                   String         @unique()
+  description            String?
+  aboutContentBlocks     ContentBlock[] @relation("aboutContentBlocks")
+  admissionContentBlocks ContentBlock[] @relation("admissionContentBlocks")
+  professors             Professor[]
+  faqCategories          FaqCategory[]
 }
 
 model Professor {
@@ -113,35 +122,41 @@ model FaqCategory {
 }
 
 model FaqItem {
-  id         String      @id() @default(ulid())
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt()
-  title      String
-  slug       String
-  nature     FaqNature   @default(SIMPLE)
-  order      Int         @default(0)
-  published  Boolean     @default(false)
-  content    String?
-  categoryId String
-  category   FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  id            String         @id() @default(ulid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  title         String
+  slug          String
+  order         Int            @default(0)
+  published     Boolean        @default(false)
+  contentBlocks ContentBlock[]
+  categoryId    String
+  category      FaqCategory    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, slug])
 }
 
 model ContentBlock {
-  id        String        @id() @default(ulid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt()
-  nature    ContentNature
-  content   String?       @db.Text()
-  caption   String?
-  size      BlockSize?
-  alignment Alignment?
-  order     Int           @default(0)
-  courseId  String
-  course    Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  fileId    String?       @unique()
-  file      Attachment?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  id                String        @id() @default(ulid())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt()
+  nature            ContentNature
+  size              BlockSize?
+  order             Int           @default(0)
+  withBorder        Boolean       @default(false)
+  gridSize          GridSize      @default(FOUR)
+  alignment         Alignment?
+  caption           String?
+  fileId            String?       @unique()
+  file              Attachment?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  content           String?       @db.Text()
+  accordionItems    Json          @default("[]")
+  courseId          String?
+  course            Course?       @relation("aboutContentBlocks", fields: [courseId], references: [id], onDelete: Cascade)
+  admissionCourseId String?
+  admissionCourse   Course?       @relation("admissionContentBlocks", fields: [admissionCourseId], references: [id], onDelete: Cascade)
+  faqItemId         String?
+  faqItem           FaqItem?      @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {

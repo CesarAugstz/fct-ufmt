@@ -33,16 +33,31 @@ enum Role {
 
 model User extends BaseModel {
   email     String     @unique
-  password  String     @password @omit
+  password  String?    @password @omit @allow('update', auth() == this || auth().role == 'ADMIN' || role == 'PROFESSOR')
   name      String?
-  role      Role       @default(USER)
+  role      Role       @default(USER) @allow('update', auth() == this || auth().role == 'ADMIN')
+  
+  otpCode            String?
+  otpExpiration      DateTime?
+  isFirstAccess      Boolean  @default(true)
+  passwordResetToken String?
+  passwordResetExpiration DateTime?
 
   professor Professor?
   logEntries LogEntry[]
 
-  @@allow('create,read', true)
-  @@allow('update,delete', auth().role == 'ADMIN' || auth() == this)
+  @@deny('all', auth() == null)
+  
+  @@allow('create', auth().role == 'USER' && (role == 'USER' || role == 'PROFESSOR'))
+  
+  @@allow('create', auth().role == 'ADMIN')
+  
+  @@allow('read', true)
+  @@allow('update', auth() == this || auth().role == 'ADMIN')
+  @@allow('update', auth().role == 'USER' && role == 'PROFESSOR')
+  @@allow('delete', auth().role == 'ADMIN')
 }
+
 
 enum CourseNature {
   GRADUATION
@@ -55,11 +70,14 @@ model Course extends BaseModel {
   slug String @unique 
   description String?
 
-  aboutContentBlocks ContentBlock[]
+  aboutContentBlocks ContentBlock[] @relation('aboutContentBlocks')
+  admissionContentBlocks ContentBlock[] @relation('admissionContentBlocks')
   professors Professor[]
   faqCategories FaqCategory[]
 
-  @@allow('all', true)
+  @@allow('read', true)
+  @@allow('create,update', auth() != null)
+  @@allow('delete', auth().role == 'ADMIN')
 }
 
 type Publication {
@@ -108,13 +126,11 @@ model Professor extends BaseModel {
   userId            String             @unique
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@allow('create,read', true)
+  @@allow('read', true)
+  @@allow('create', auth().role == 'USER')
+  @@allow('create', auth().role == 'ADMIN')
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == user)
-}
-
-enum FaqNature {
-  SIMPLE
-  PAGE
+  @@allow('update', auth().role == 'USER')
 }
 
 model FaqCategory extends BaseModel {
@@ -128,30 +144,29 @@ model FaqCategory extends BaseModel {
   faqItems    FaqItem[]
 
   @@allow('read', true)
-  @@allow('create,update,delete', auth().role == 'ADMIN')
+  @@allow('create,update,delete', auth() != null)
 }
 
 model FaqItem extends BaseModel {
   title       String
   slug        String
-  nature      FaqNature  @default(SIMPLE)
   order       Int      @default(0)
   published   Boolean  @default(false)
   
-  content     String?
+  contentBlocks ContentBlock[]
   
   categoryId  String
   category    FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   
   @@unique([categoryId, slug])
-  @@allow('read', published || auth().role == 'ADMIN')
-  @@allow('create', auth() != null)
-  @@allow('update,delete', auth().role == 'ADMIN')
+  @@allow('read', published || auth() != null)
+  @@allow('create,update,delete', auth().role != null)
 }
 
 enum ContentNature {
   TEXT
   IMAGE
+  ACCORDION
 }
 
 enum Alignment {
@@ -167,21 +182,45 @@ enum BlockSize {
   FULL
 }
 
+enum GridSize {
+  ONE    // 3/12 - 25%
+  TWO    // 6/12 - 50%
+  THREE  // 9/12 - 75%
+  FOUR   // 12/12 - 100%
+}
+
+type AccordionItem {
+  title   String
+  content String
+}
+
 model ContentBlock extends BaseModel {
   nature       ContentNature
-  content    String? @db.Text
-  caption    String?
   size       BlockSize?
-  alignment  Alignment?
   order      Int      @default(0)
+  withBorder Boolean  @default(false)
+  gridSize   GridSize @default(FOUR)
 
-  courseId   String
-  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  alignment  Alignment?
+  caption    String?
   fileId     String?  @unique
   file       Attachment?    @relation(fields: [fileId], references: [id], onDelete: Cascade)
 
+  content    String? @db.Text
+
+  accordionItems AccordionItem[] @json @default('[]')
+
+  courseId   String?
+  course     Course?   @relation('aboutContentBlocks', fields: [courseId], references: [id], onDelete: Cascade)
+
+  admissionCourseId   String?
+  admissionCourse     Course?   @relation('admissionContentBlocks', fields: [admissionCourseId], references: [id], onDelete: Cascade)
+
+  faqItemId   String?
+  faqItem     FaqItem?   @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
+
   @@allow('read', true)
-  @@allow('create,update,delete', auth().role == 'ADMIN')
+  @@allow('create,update,delete', auth().role != null)
 }
 
 model Attachment extends BaseModel {

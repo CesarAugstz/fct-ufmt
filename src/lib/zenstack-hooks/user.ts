@@ -804,6 +804,9 @@ export function useCheckUser<TError = DefaultError>(
       password?: string
       name?: string
       role?: Role
+      otpCode?: string
+      isFirstAccess?: boolean
+      passwordResetToken?: string
     }
   },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &

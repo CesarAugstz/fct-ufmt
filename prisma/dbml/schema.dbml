@@ -7,9 +7,14 @@ Table User {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   email String [unique, not null]
-  password String [not null]
+  password String
   name String
   role Role [not null, default: 'USER']
+  otpCode String
+  otpExpiration DateTime
+  isFirstAccess Boolean [not null, default: true]
+  passwordResetToken String
+  passwordResetExpiration DateTime
   professor Professor
   logEntries LogEntry [not null]
 }
@@ -23,6 +28,7 @@ Table Course {
   slug String [unique, not null]
   description String
   aboutContentBlocks ContentBlock [not null]
+  admissionContentBlocks ContentBlock [not null]
   professors Professor [not null]
   faqCategories FaqCategory [not null]
 }
@@ -64,10 +70,9 @@ Table FaqItem {
   updatedAt DateTime [not null]
   title String [not null]
   slug String [not null]
-  nature FaqNature [not null, default: 'SIMPLE']
   order Int [not null, default: 0]
   published Boolean [not null, default: false]
-  content String
+  contentBlocks ContentBlock [not null]
   categoryId String [not null]
   category FaqCategory [not null]
 
@@ -81,15 +86,22 @@ Table ContentBlock {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   nature ContentNature [not null]
-  content String
-  caption String
   size BlockSize
-  alignment Alignment
   order Int [not null, default: 0]
-  courseId String [not null]
-  course Course [not null]
+  withBorder Boolean [not null, default: false]
+  gridSize GridSize [not null, default: 'FOUR']
+  alignment Alignment
+  caption String
   fileId String [unique]
   file Attachment
+  content String
+  accordionItems Json [not null, default: '[]']
+  courseId String
+  course Course
+  admissionCourseId String
+  admissionCourse Course
+  faqItemId String
+  faqItem FaqItem
 }
 
 Table Attachment {
@@ -145,14 +157,10 @@ Enum ProjectStatus {
   FINISHED
 }
 
-Enum FaqNature {
-  SIMPLE
-  PAGE
-}
-
 Enum ContentNature {
   TEXT
   IMAGE
+  ACCORDION
 }
 
 Enum Alignment {
@@ -168,6 +176,13 @@ Enum BlockSize {
   FULL
 }
 
+Enum GridSize {
+  ONE
+  TWO
+  THREE
+  FOUR
+}
+
 Ref: Professor.imageId - Attachment.id [delete: Cascade]
 
 Ref: Professor.userId - User.id [delete: Cascade]
@@ -176,8 +191,12 @@ Ref: FaqCategory.courseId > Course.id [delete: Cascade]
 
 Ref: FaqItem.categoryId > FaqCategory.id [delete: Cascade]
 
+Ref: ContentBlock.fileId - Attachment.id [delete: Cascade]
+
 Ref: ContentBlock.courseId > Course.id [delete: Cascade]
 
-Ref: ContentBlock.fileId - Attachment.id [delete: Cascade]
+Ref: ContentBlock.admissionCourseId > Course.id [delete: Cascade]
+
+Ref: ContentBlock.faqItemId > FaqItem.id [delete: Cascade]
 
 Ref: LogEntry.userId > User.id [delete: Cascade]

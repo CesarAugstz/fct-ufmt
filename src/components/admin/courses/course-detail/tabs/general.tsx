@@ -6,21 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
 import { FormSelect } from '@/components/ui/form-fields/form-select'
-import { FormTextarea } from '@/components/ui/form-fields/form-textarea'
 import LoadingSpinner from '@/components/common/loading-spinner'
-import {
-  useDeleteManyAttachment,
-  useDeleteManyContentBlock,
-  useFindUniqueCourse,
-  useUpdateCourse,
-} from '@/lib/zenstack-hooks'
+import { useFindUniqueCourse, useUpdateCourse } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
-import {
-  Alignment,
-  BlockSize,
-  ContentNature,
-  CourseNature,
-} from '@prisma/client'
+import { CourseNature } from '@prisma/client'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 import { revalidateCourses } from '@/lib/cache-revalidation'
 
@@ -30,33 +19,12 @@ import { courseSlugAtom } from '../../store/course.store'
 import { useRouter } from 'next/navigation'
 import { z } from '@/utils/zod'
 import FormGrid from '@/components/ui/form-fields/form-grid'
+import { getBlockSchema } from '@/components/ui/form-fields/blocks/blocks.schema'
 
 const formSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
   nature: z.enum([CourseNature.GRADUATION, CourseNature.POST_GRADUATION]),
-  description: z.string().min(20),
-  aboutContentBlocks: z
-    .array(
-      z.object({
-        id: z.string(),
-        nature: z.enum(ContentNature),
-        content: z.string().nullish(),
-        caption: z.string().nullish(),
-        size: z.enum(BlockSize).nullish(),
-        alignment: z.enum(Alignment).nullish(),
-        order: z.number().nullish(),
-        file: z
-          .object({
-            id: z.ulid(),
-            name: z.string(),
-            dataUrl: z.string(),
-            mimeType: z.string(),
-            size: z.number(),
-          })
-          .nullish(),
-      }),
-    )
-    .optional(),
+  aboutContentBlocks: z.array(getBlockSchema()).optional(),
 })
 
 type CourseFormValues = z.infer<typeof formSchema>
@@ -66,8 +34,6 @@ export default function CourseGeneralTab() {
   const slug = useAtomValue(courseSlugAtom)
   const router = useRouter()
 
-  const { mutateAsync: deleteBlock } = useDeleteManyContentBlock()
-  const { mutateAsync: deleteFile } = useDeleteManyAttachment()
   const { mutate: updateCourse, isPending } = useUpdateCourse()
 
   const { data: course } = useFindUniqueCourse(
@@ -89,6 +55,9 @@ export default function CourseGeneralTab() {
             alignment: true,
             fileId: true,
             order: true,
+            withBorder: true,
+            accordionItems: true,
+            gridSize: true,
             file: {
               select: {
                 id: true,
@@ -110,33 +79,12 @@ export default function CourseGeneralTab() {
     values: {
       name: course?.name ?? '',
       nature: course?.nature || CourseNature.GRADUATION,
-      description: course?.description || '',
       aboutContentBlocks: course?.aboutContentBlocks || [],
     },
   })
 
   const onSubmit = async (values: CourseFormValues) => {
     console.log('submitting form', values)
-    await deleteBlock({
-      where: {
-        courseId: course?.id,
-        NOT: {
-          id: { in: values.aboutContentBlocks?.map(block => block.id) },
-        },
-      },
-    })
-
-    await deleteFile({
-      where: {
-        id: {
-          in:
-            (values.aboutContentBlocks
-              ?.filter(block => !!block.file)
-              .map(block => block.file?.id)
-              .filter(id => !!id) as string[]) || undefined,
-        },
-      },
-    })
 
     updateCourse(
       {
@@ -144,7 +92,6 @@ export default function CourseGeneralTab() {
         data: {
           name: values.name,
           nature: values.nature,
-          description: values.description,
           slug: formatToSlug(values.name),
           aboutContentBlocks: {
             upsert: values?.aboutContentBlocks
@@ -153,6 +100,7 @@ export default function CourseGeneralTab() {
                 where: { id: block.id },
                 update: {
                   ...block,
+                  accordionItems: block.accordionItems || [],
                   file: block.file
                     ? {
                         create: {
@@ -163,6 +111,7 @@ export default function CourseGeneralTab() {
                 },
                 create: {
                   ...block,
+                  accordionItems: block.accordionItems || [],
                   file: block.file ? { create: block.file } : undefined,
                 },
               })),
@@ -222,15 +171,6 @@ export default function CourseGeneralTab() {
                   },
                 ]}
                 required
-              />
-
-              <FormTextarea
-                name="description"
-                label="Descrição"
-                className="md:col-span-4"
-                placeholder="Digite uma descrição para o curso"
-                resize="none"
-                rows={4}
               />
 
               <FormBlockTextImage

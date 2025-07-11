@@ -93,13 +93,27 @@ function authorize(prisma: PrismaClient) {
       where: {
         email: credentials.email,
       },
-      select: { id: true, email: true, password: true, name: true, role: true },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        name: true,
+        role: true,
+        isFirstAccess: true,
+      },
     })
 
-    if (!maybeUser?.password) return null
+    if (!maybeUser) return null
 
-    const isValid = await compare(credentials.password, maybeUser.password)
+    if (!maybeUser.password && maybeUser.isFirstAccess) {
+      throw new Error(
+        'Primeiro acesso necessário. Use a opção "Esqueceu sua senha?" para criar sua senha.',
+      )
+    }
+
+    const isValid = await compare(credentials.password, maybeUser.password!)
     if (!isValid) return null
+
     return {
       id: maybeUser.id,
       email: maybeUser.email,

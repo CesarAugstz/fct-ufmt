@@ -26,6 +26,9 @@ export interface FormMarkdownProps {
   rows?: number
   preview?: boolean
   span?: number
+  height?: number
+  minHeight?: number
+  maxHeight?: number
 }
 
 export function FormMarkdown({
@@ -38,6 +41,9 @@ export function FormMarkdown({
   rows,
   preview = true,
   span,
+  height,
+  minHeight,
+  maxHeight,
 }: FormMarkdownProps) {
   const { control } = useFormContext()
 
@@ -78,6 +84,9 @@ export function FormMarkdown({
               placeholder={placeholder}
               rows={rows}
               preview={preview}
+              height={height}
+              minHeight={minHeight}
+              maxHeight={maxHeight}
               {...field}
               value={field.value || ''}
             />

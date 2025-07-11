@@ -3,10 +3,15 @@ import { CourseNature, Prisma, PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { generateProfessorData } from './professor-generator'
 import { getRandomProfessorImage } from './mock-images'
+import {
+  generateRandomContentBlocks,
+  ContentBlockData,
+} from './content-blocks-generator'
 
 const prisma = new PrismaClient()
 
 const shouldClean = process.argv.includes('--clean')
+const seedAll = process.argv.includes('--all')
 
 async function cleanDatabase() {
   console.log('🧹 Cleaning database...')
@@ -18,6 +23,19 @@ async function cleanDatabase() {
 
 async function main() {
   if (shouldClean) await cleanDatabase()
+
+  await prisma.user.upsert({
+    where: {
+      email: 'dev.caugustoaf@gmail.com',
+    },
+    create: {
+      name: 'Cesar Filho',
+      email: 'dev.caugustoaf@gmail.com',
+      password: bcrypt.hashSync('password123'),
+      role: 'ADMIN',
+    },
+    update: {},
+  })
 
   const courses: Prisma.CourseCreateInput[] = [
     {
@@ -73,6 +91,8 @@ async function main() {
     ),
   )
 
+  if (!seedAll) return
+
   console.log('🧑‍🏫 Creating professors...')
 
   const professorsPromises: Promise<void>[] = []
@@ -94,7 +114,9 @@ async function main() {
             await prisma.user.create({
               data: {
                 ...professorData.user,
-                password: bcrypt.hashSync(professorData.user.password),
+                password: professorData.user.password
+                  ? bcrypt.hashSync(professorData.user.password)
+                  : null,
                 professor: {
                   create: {
                     ...professorData.professor,
@@ -127,18 +149,98 @@ async function main() {
 
   console.log('✅ Professors created')
 
-  await prisma.user.upsert({
-    where: {
-      email: 'cgl@email.com',
-    },
-    create: {
-      name: 'CGL - test user',
-      email: 'cgl@email.com',
-      password: bcrypt.hashSync('password123'),
-      role: 'ADMIN',
-    },
-    update: {},
-  })
+  console.log('📚 Creating FAQ categories and items...')
+
+  async function createContentBlocks(
+    faqItemId: string,
+    contentBlocks: ContentBlockData[],
+  ) {
+    for (const blockData of contentBlocks) {
+      let fileId: string | undefined
+
+      if (blockData.nature === 'IMAGE' && blockData.imageData) {
+        const attachment = await prisma.attachment.create({
+          data: {
+            name: blockData.imageData.name,
+            dataUrl: blockData.imageData.dataUrl,
+            mimeType: blockData.imageData.mimeType,
+            size: blockData.imageData.size,
+          },
+        })
+        fileId = attachment.id
+      }
+
+      await prisma.contentBlock.create({
+        data: {
+          nature: blockData.nature,
+          content: blockData.content,
+          size: blockData.size,
+          gridSize: blockData.gridSize,
+          alignment: blockData.alignment,
+          withBorder: blockData.withBorder || false,
+          order: blockData.order || 0,
+          caption: blockData.caption,
+          accordionItems: blockData.accordionItems || [],
+          fileId,
+          faqItemId,
+        },
+      })
+    }
+  }
+
+  for (const course of courses) {
+    const createdCourse = await prisma.course.findUnique({
+      where: { name: course.name },
+    })
+
+    if (!createdCourse) continue
+
+    const faqCategory = await prisma.faqCategory.create({
+      data: {
+        name: 'Informações Gerais',
+        description: 'Perguntas frequentes sobre o curso',
+        order: 0,
+        courseId: createdCourse.id,
+      },
+    })
+
+    const faqItems = [
+      {
+        title: 'Como me inscrever no curso?',
+        slug: formatToSlug('Como me inscrever no curso'),
+        order: 0,
+        published: true,
+        categoryId: faqCategory.id,
+      },
+      {
+        title: 'Quais são os requisitos para ingressar?',
+        slug: formatToSlug('Quais são os requisitos para ingressar'),
+        order: 1,
+        published: true,
+        categoryId: faqCategory.id,
+      },
+      {
+        title: 'Qual a duração do curso?',
+        slug: formatToSlug('Qual a duração do curso'),
+        order: 2,
+        published: true,
+        categoryId: faqCategory.id,
+      },
+    ]
+
+    for (const faqItemData of faqItems) {
+      const faqItem = await prisma.faqItem.create({
+        data: faqItemData,
+      })
+
+      if (faqItemData.title === 'Como me inscrever no curso?') {
+        const contentBlocks = generateRandomContentBlocks('faq')
+        await createContentBlocks(faqItem.id, contentBlocks)
+      }
+    }
+  }
+
+  console.log('✅ FAQ categories and items created')
 }
 
 main()

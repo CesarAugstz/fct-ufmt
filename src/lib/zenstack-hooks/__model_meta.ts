@@ -33,6 +33,7 @@ const metadata = {
         password: {
           name: 'password',
           type: 'String',
+          isOptional: true,
         },
         name: {
           name: 'name',
@@ -43,6 +44,31 @@ const metadata = {
           name: 'role',
           type: 'Role',
           attributes: [{ name: '@default', args: [] }],
+        },
+        otpCode: {
+          name: 'otpCode',
+          type: 'String',
+          isOptional: true,
+        },
+        otpExpiration: {
+          name: 'otpExpiration',
+          type: 'DateTime',
+          isOptional: true,
+        },
+        isFirstAccess: {
+          name: 'isFirstAccess',
+          type: 'Boolean',
+          attributes: [{ name: '@default', args: [{ value: true }] }],
+        },
+        passwordResetToken: {
+          name: 'passwordResetToken',
+          type: 'String',
+          isOptional: true,
+        },
+        passwordResetExpiration: {
+          name: 'passwordResetExpiration',
+          type: 'DateTime',
+          isOptional: true,
         },
         professor: {
           name: 'professor',
@@ -112,6 +138,13 @@ const metadata = {
           isDataModel: true,
           isArray: true,
           backLink: 'course',
+        },
+        admissionContentBlocks: {
+          name: 'admissionContentBlocks',
+          type: 'ContentBlock',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'admissionCourse',
         },
         professors: {
           name: 'professors',
@@ -352,11 +385,6 @@ const metadata = {
           name: 'slug',
           type: 'String',
         },
-        nature: {
-          name: 'nature',
-          type: 'FaqNature',
-          attributes: [{ name: '@default', args: [] }],
-        },
         order: {
           name: 'order',
           type: 'Int',
@@ -367,10 +395,12 @@ const metadata = {
           type: 'Boolean',
           attributes: [{ name: '@default', args: [{ value: false }] }],
         },
-        content: {
-          name: 'content',
-          type: 'String',
-          isOptional: true,
+        contentBlocks: {
+          name: 'contentBlocks',
+          type: 'ContentBlock',
+          isDataModel: true,
+          isArray: true,
+          backLink: 'faqItem',
         },
         categoryId: {
           name: 'categoryId',
@@ -422,24 +452,9 @@ const metadata = {
           name: 'nature',
           type: 'ContentNature',
         },
-        content: {
-          name: 'content',
-          type: 'String',
-          isOptional: true,
-        },
-        caption: {
-          name: 'caption',
-          type: 'String',
-          isOptional: true,
-        },
         size: {
           name: 'size',
           type: 'BlockSize',
-          isOptional: true,
-        },
-        alignment: {
-          name: 'alignment',
-          type: 'Alignment',
           isOptional: true,
         },
         order: {
@@ -447,20 +462,25 @@ const metadata = {
           type: 'Int',
           attributes: [{ name: '@default', args: [{ value: 0 }] }],
         },
-        courseId: {
-          name: 'courseId',
-          type: 'String',
-          isForeignKey: true,
-          relationField: 'course',
+        withBorder: {
+          name: 'withBorder',
+          type: 'Boolean',
+          attributes: [{ name: '@default', args: [{ value: false }] }],
         },
-        course: {
-          name: 'course',
-          type: 'Course',
-          isDataModel: true,
-          backLink: 'aboutContentBlocks',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'courseId' },
+        gridSize: {
+          name: 'gridSize',
+          type: 'GridSize',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        alignment: {
+          name: 'alignment',
+          type: 'Alignment',
+          isOptional: true,
+        },
+        caption: {
+          name: 'caption',
+          type: 'String',
+          isOptional: true,
         },
         fileId: {
           name: 'fileId',
@@ -478,6 +498,69 @@ const metadata = {
           isRelationOwner: true,
           onDeleteAction: 'Cascade',
           foreignKeyMapping: { id: 'fileId' },
+        },
+        content: {
+          name: 'content',
+          type: 'String',
+          isOptional: true,
+        },
+        accordionItems: {
+          name: 'accordionItems',
+          type: 'AccordionItem',
+          isTypeDef: true,
+          isArray: true,
+          attributes: [{ name: '@default', args: [{ value: '[]' }] }],
+        },
+        courseId: {
+          name: 'courseId',
+          type: 'String',
+          isOptional: true,
+          isForeignKey: true,
+          relationField: 'course',
+        },
+        course: {
+          name: 'course',
+          type: 'Course',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'aboutContentBlocks',
+          isRelationOwner: true,
+          onDeleteAction: 'Cascade',
+          foreignKeyMapping: { id: 'courseId' },
+        },
+        admissionCourseId: {
+          name: 'admissionCourseId',
+          type: 'String',
+          isOptional: true,
+          isForeignKey: true,
+          relationField: 'admissionCourse',
+        },
+        admissionCourse: {
+          name: 'admissionCourse',
+          type: 'Course',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'admissionContentBlocks',
+          isRelationOwner: true,
+          onDeleteAction: 'Cascade',
+          foreignKeyMapping: { id: 'admissionCourseId' },
+        },
+        faqItemId: {
+          name: 'faqItemId',
+          type: 'String',
+          isOptional: true,
+          isForeignKey: true,
+          relationField: 'faqItem',
+        },
+        faqItem: {
+          name: 'faqItem',
+          type: 'FaqItem',
+          isDataModel: true,
+          isOptional: true,
+          backLink: 'contentBlocks',
+          isRelationOwner: true,
+          onDeleteAction: 'Cascade',
+          foreignKeyMapping: { id: 'faqItemId' },
         },
       },
       uniqueConstraints: {
@@ -724,11 +807,25 @@ const metadata = {
         },
       },
     },
+    accordionItem: {
+      name: 'AccordionItem',
+      fields: {
+        title: {
+          name: 'title',
+          type: 'String',
+        },
+        content: {
+          name: 'content',
+          type: 'String',
+        },
+      },
+    },
   },
   deleteCascade: {
     user: ['Professor', 'LogEntry'],
     course: ['FaqCategory', 'ContentBlock'],
     faqCategory: ['FaqItem'],
+    faqItem: ['ContentBlock'],
     attachment: ['Professor', 'ContentBlock'],
   },
   authModel: 'User',

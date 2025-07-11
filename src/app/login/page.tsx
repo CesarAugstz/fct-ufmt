@@ -130,6 +130,7 @@ export default function LoginPage() {
                 isLoading={isLoading}
                 className="w-full justify-center"
                 onClick={form.handleSubmit(onSubmit)}
+                tabIndex={3}
               >
                 Entrar
               </ActionButton>
@@ -146,21 +147,19 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="text-center">
+            <div className="text-center space-y-2">
               <Link
                 href="/register"
-                className="text-sm text-primary hover:underline"
+                className="text-sm text-primary hover:underline block"
               >
                 Ainda não tem uma conta? Crie uma agora
               </Link>
-            </div>
-
-            <div className="p-4 bg-muted rounded-lg border border-border">
-              <div className="text-muted-foreground text-sm font-medium">
-                Credenciais de teste:
-              </div>
-              <div className="font-mono text-xs mt-1">Email: cgl@email.com</div>
-              <div className="font-mono text-xs">Password: password123</div>
+              <Link
+                href="/password-recovery"
+                className="text-sm text-muted-foreground hover:text-primary hover:underline block"
+              >
+                Esqueceu sua senha?
+              </Link>
             </div>
           </div>
         </div>
