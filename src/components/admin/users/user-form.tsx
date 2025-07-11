@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -72,6 +72,12 @@ export default function UserForm({
       role: userData?.role || 'USER',
     },
   })
+
+  useEffect(() => {
+    if (!isOpen) {
+      methods.reset()
+    }
+  }, [isOpen, methods])
 
   const onSubmit = (values: UserFormValues) => {
     setIsSubmitting(true)
