@@ -11,6 +11,7 @@ import {
 const prisma = new PrismaClient()
 
 const shouldClean = process.argv.includes('--clean')
+const seedAll = process.argv.includes('--all')
 
 async function cleanDatabase() {
   console.log('🧹 Cleaning database...')
@@ -22,6 +23,19 @@ async function cleanDatabase() {
 
 async function main() {
   if (shouldClean) await cleanDatabase()
+
+  await prisma.user.upsert({
+    where: {
+      email: 'dev.caugustoaf@gmail.com',
+    },
+    create: {
+      name: 'Cesar Filho',
+      email: 'dev.caugustoaf@gmail.com',
+      password: bcrypt.hashSync('password123'),
+      role: 'ADMIN',
+    },
+    update: {},
+  })
 
   const courses: Prisma.CourseCreateInput[] = [
     {
@@ -76,6 +90,8 @@ async function main() {
       }),
     ),
   )
+
+  if (!seedAll) return
 
   console.log('🧑‍🏫 Creating professors...')
 
@@ -225,19 +241,6 @@ async function main() {
   }
 
   console.log('✅ FAQ categories and items created')
-
-  await prisma.user.upsert({
-    where: {
-      email: 'dev.caugustoaf@gmail.com',
-    },
-    create: {
-      name: 'Cesar Filho',
-      email: 'dev.caugustoaf@gmail.com',
-      password: bcrypt.hashSync('password123'),
-      role: 'ADMIN',
-    },
-    update: {},
-  })
 }
 
 main()

@@ -218,6 +218,9 @@ model ContentBlock extends BaseModel {
 
   faqItemId   String?
   faqItem     FaqItem?   @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth().role != null)
 }
 
 model Attachment extends BaseModel {
