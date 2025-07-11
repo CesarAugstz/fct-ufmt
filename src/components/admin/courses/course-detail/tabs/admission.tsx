@@ -5,7 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/common/loading-spinner'
-import { useFindUniqueCourse, useUpdateCourse } from '@/lib/zenstack-hooks'
+import {
+  useFindUniqueCourse,
+  useUpdateCourse,
+  useUpsertAttachment,
+} from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
 import { revalidateCourses } from '@/lib/cache-revalidation'
 
@@ -26,7 +30,8 @@ export default function AdmissionTab() {
   const toast = useToast()
   const slug = useAtomValue(courseSlugAtom)
 
-  const { mutate: updateCourse, isPending } = useUpdateCourse()
+  const { mutateAsync: updateCourse, isPending } = useUpdateCourse()
+  const { mutateAsync: upsertAttachment } = useUpsertAttachment()
 
   const isLoading = isPending
 
@@ -73,46 +78,63 @@ export default function AdmissionTab() {
   })
 
   const onSubmit = async (values: CourseFormValues) => {
-    updateCourse(
-      {
+    try {
+      const blocksToDelete = course?.admissionContentBlocks
+        ?.filter(
+          block => !values.admissionContentBlocks?.find(b => b.id === block.id),
+        )
+        .map(block => block.id) as string[]
+
+      const filesToCreate: {
+        id: string
+        name: string
+        dataUrl: string
+        mimeType: string
+        size: number
+      }[] = []
+      await updateCourse({
         where: { slug: slug! },
         data: {
           admissionContentBlocks: {
+            deleteMany: { id: { in: blocksToDelete } },
             upsert: values?.admissionContentBlocks
               ?.map((block, index) => ({ ...block, order: index }))
-              .map(block => ({
-                where: { id: block.id },
-                update: {
-                  ...block,
-                  accordionItems: block.accordionItems || [],
-                  file: block.file
-                    ? {
-                        create: {
-                          ...block.file,
-                        },
-                      }
-                    : undefined,
-                },
-                create: {
-                  ...block,
-                  accordionItems: block.accordionItems || [],
-                  file: block.file ? { create: block.file } : undefined,
-                },
-              })),
+              .map(block => {
+                if (block.file) {
+                  filesToCreate.push(block.file)
+                }
+                return {
+                  where: { id: block.id },
+                  update: {
+                    ...block,
+                    accordionItems: block.accordionItems || [],
+                    file: undefined,
+                  },
+                  create: {
+                    ...block,
+                    accordionItems: block.accordionItems || [],
+                    file: block.file ? { create: block.file } : undefined,
+                  },
+                }
+              }),
           },
         },
-      },
-      {
-        onSuccess: async () => {
-          await revalidateCourses()
-          toast.success('Curso atualizado com sucesso!')
-        },
-        onError: error => {
-          console.error('Course update error:', error)
-          toast.error('Erro ao atualizar curso')
-        },
-      },
-    )
+      })
+      await Promise.all(
+        filesToCreate.map(file =>
+          upsertAttachment({
+            where: { id: file.id },
+            update: {},
+            create: file,
+          }),
+        ),
+      )
+      await revalidateCourses()
+      toast.success('Curso atualizado com sucesso!')
+    } catch (error) {
+      console.error('Course update error:', error)
+      toast.error('Erro ao atualizar curso')
+    }
   }
 
   return (

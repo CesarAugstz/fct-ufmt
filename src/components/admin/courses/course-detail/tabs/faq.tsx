@@ -313,8 +313,8 @@ export default function CourseFaqTab() {
         isOpen={isItemFormOpen}
         onClose={() => setIsItemFormOpen(false)}
         onSuccess={handleFormSuccess}
-        categoryId={selectedCategoryId}
-        item={editingItem}
+        categoryId={selectedCategoryId || ''}
+        itemId={editingItem?.id}
       />
 
       <ConfirmDialog

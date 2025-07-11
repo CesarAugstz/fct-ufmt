@@ -17,11 +17,16 @@ import { FormNumber } from '@/components/ui/form-fields/form-number'
 import { FormSwitch } from '@/components/ui/form-fields/form-switch'
 import { FormBlocks } from '@/components/ui/form-fields/form-blocks'
 import LoadingSpinner from '@/components/common/loading-spinner'
-import { useCreateFaqItem, useUpdateFaqItem } from '@/lib/zenstack-hooks'
+import {
+  useCreateFaqItem,
+  useFindUniqueFaqItem,
+  useUpdateFaqItem,
+  useUpsertAttachment,
+} from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
-import { FaqItem } from '@zenstackhq/runtime/models'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 import { getBlockSchema } from '@/components/ui/form-fields/blocks/blocks.schema'
+import { Prisma } from '@prisma/client'
 
 const formSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
@@ -36,44 +41,57 @@ interface FaqItemFormProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
-  categoryId: string | null
-  item?: FaqItem | null
+  itemId?: string
+  categoryId: string
 }
 
 export default function FaqItemForm({
   isOpen,
   onClose,
   onSuccess,
+  itemId,
   categoryId,
-  item,
 }: FaqItemFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const isEditMode = !!item
+  const isEditMode = !!itemId
   const toast = useToast()
 
   const { mutate: createItem } = useCreateFaqItem()
-  const { mutate: updateItem } = useUpdateFaqItem()
+  const { mutateAsync: updateItem } = useUpdateFaqItem()
+  const { mutateAsync: upsertAttachment } = useUpsertAttachment()
+  const { data: item, isLoading: isLoadingItem } = useFindUniqueFaqItem(
+    {
+      where: { id: itemId },
+      include: { contentBlocks: { include: { file: true } } },
+    },
+    { enabled: !!itemId },
+  )
 
   const methods = useForm<ItemFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    values: {
       title: item?.title || '',
       order: item?.order || 0,
       published: item?.published || false,
-      contentBlocks: [],
+      contentBlocks: item?.contentBlocks || [],
     },
   })
 
   const onSubmit = async (values: ItemFormValues) => {
     if (!categoryId) return
-
     setIsSubmitting(true)
 
-    const slug = formatToSlug(values.title)
+    try {
+      const slug = formatToSlug(values.title)
 
-    if (isEditMode && item) {
-      updateItem(
-        {
+      const blocksToDelete = item?.contentBlocks
+        ?.filter(block => !values.contentBlocks?.find(b => b.id === block.id))
+        .map(block => block.id) as string[]
+
+      if (isEditMode && item) {
+        const filesToCreate: Prisma.AttachmentCreateInput[] = []
+
+        await updateItem({
           where: { id: item.id },
           data: {
             title: values.title,
@@ -81,44 +99,49 @@ export default function FaqItemForm({
             order: values.order,
             published: values.published,
             contentBlocks: {
+              deleteMany: { id: { in: blocksToDelete } },
               upsert: values?.contentBlocks
                 ?.map((block, index) => ({ ...block, order: index }))
-                .map(block => ({
-                  where: { id: block.id },
-                  update: {
-                    ...block,
-                    accordionItems: block.accordionItems || [],
-                    file: block.file
-                      ? {
-                          create: {
-                            ...block.file,
-                          },
-                        }
-                      : undefined,
-                  },
-                  create: {
-                    ...block,
-                    accordionItems: block.accordionItems || [],
-                    file: block.file ? { create: block.file } : undefined,
-                  },
-                })),
+                .map(block => {
+                  if (block.file) {
+                    filesToCreate.push({
+                      ...block.file,
+                      contentBlocks: {
+                        connect: { id: block.id },
+                      },
+                    })
+                  }
+                  return {
+                    where: { id: block.id },
+                    update: {
+                      ...block,
+                      accordionItems: block.accordionItems || [],
+                      file: undefined,
+                    },
+                    create: {
+                      ...block,
+                      accordionItems: block.accordionItems || [],
+                      file: block.file ? { create: block.file } : undefined,
+                    },
+                  }
+                }),
             },
           },
-        },
-        {
-          onSuccess: () => {
-            toast.success('Item atualizado com sucesso!')
-            onSuccess()
-            setIsSubmitting(false)
-          },
-          onError: error => {
-            console.error('Item update error:', error)
-            toast.error('Erro ao atualizar item')
-            setIsSubmitting(false)
-          },
-        },
-      )
-    } else {
+        })
+        await Promise.all(
+          filesToCreate.map(file =>
+            upsertAttachment({
+              where: { id: file.id },
+              update: {},
+              create: { ...file } as any,
+            }),
+          ),
+        )
+        toast.success('Item atualizado com sucesso!')
+        onSuccess()
+        setIsSubmitting(false)
+        return
+      }
       createItem(
         {
           data: {
@@ -151,6 +174,11 @@ export default function FaqItemForm({
           },
         },
       )
+    } catch (error) {
+      console.error('Item creation error:', error)
+      toast.error('Erro ao criar item')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
