@@ -149,16 +149,10 @@ export default function LoginPage() {
 
             <div className="text-center space-y-2">
               <Link
-                href="/register"
-                className="text-sm text-primary hover:underline block"
-              >
-                Ainda não tem uma conta? Crie uma agora
-              </Link>
-              <Link
                 href="/password-recovery"
                 className="text-sm text-muted-foreground hover:text-primary hover:underline block"
               >
-                Esqueceu sua senha?
+                Esqueceu sua senha ou primeiro acesso?
               </Link>
             </div>
           </div>
