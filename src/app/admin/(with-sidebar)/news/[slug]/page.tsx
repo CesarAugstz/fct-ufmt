@@ -6,6 +6,5 @@ export default async function EditNewsPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  console.log('params', slug)
   return <NewsForm id={slug} />
 }

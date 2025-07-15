@@ -6,6 +6,5 @@ export default async function NewsPage({
   params: Promise<{ slug: string }>
 }) {
   const slug = (await params).slug
-  console.log(slug)
   return <NewsDetail slug={slug} />
 }

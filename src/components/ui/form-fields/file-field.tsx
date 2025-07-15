@@ -126,7 +126,6 @@ export function FileField({
   const hasAttachments = attachmentNames.length > 0
 
   const handleUploadClick = () => {
-    console.log('handleUploadClick', inputRef.current)
     if (inputRef.current) {
       inputRef.current.click()
     }

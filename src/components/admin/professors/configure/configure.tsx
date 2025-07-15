@@ -88,11 +88,7 @@ export default function Configure({
     try {
       const values = form.getValues()
 
-      console.log('submitting form', values)
-
       const formattedValues = formatFormToBack(values)
-
-      console.log('formatted values', formattedValues)
 
       await updateProfessorMutation.mutateAsync({
         where: { id: values.id },

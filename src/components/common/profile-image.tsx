@@ -9,8 +9,6 @@ interface Props {
 }
 
 export default function ProfileImage({ src, alt, className, imageId }: Props) {
-  console.log('src', src)
-  console.log('imageId', imageId)
   const srcImage = src ? src : imageId ? `/api/images?id=${imageId}` : undefined
 
   return (

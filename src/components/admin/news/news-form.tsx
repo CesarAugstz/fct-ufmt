@@ -148,7 +148,6 @@ export function NewsForm({ id }: NewsFormProps) {
 
       const filesToCreate: Prisma.AttachmentCreateInput[] = []
 
-      console.log('data.featuredImage', data.featuredImage)
       if (!id) {
         const created = await createNews.mutateAsync({
           data: {
@@ -170,7 +169,6 @@ export function NewsForm({ id }: NewsFormProps) {
             },
           },
         })
-        console.log('created', created)
         filesToCreate.push({
           ...data.featuredImage,
           newsFeaturedImage: { connect: { id: created?.id } },
