@@ -151,7 +151,9 @@ export default function News() {
                         </div>
                       </div>
                       <CardTitle className="line-clamp-2 mt-3 text-xl hover:text-primary">
-                        <Link href={`/home/news/${item.id}`}>{item.title}</Link>
+                        <Link href={`/home/news/${item.slug}`}>
+                          {item.title}
+                        </Link>
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="p-5 pt-0">
@@ -166,7 +168,7 @@ export default function News() {
                         asChild
                       >
                         <Link
-                          href={`/home/news/${item.id}`}
+                          href={`/home/news/${item.slug}`}
                           className="group/link"
                         >
                           Ler mais

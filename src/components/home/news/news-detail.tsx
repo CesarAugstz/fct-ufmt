@@ -12,11 +12,11 @@ import LoadingSpinner from '@/components/common/loading-spinner'
 import { BlockContentRenderer } from '@/components/common/block-content-renderer'
 import { dayJs } from '@/utils/dayjs'
 
-export default function NewsDetail({ id }: { id: string }) {
+export default function NewsDetail({ slug }: { slug: string }) {
   const { share } = useShare()
 
   const { data: news, isLoading } = useFindUniqueNews({
-    where: { id },
+    where: { slug },
     include: {
       category: true,
       featuredImage: true,
@@ -33,7 +33,7 @@ export default function NewsDetail({ id }: { id: string }) {
     where: {
       status: 'PUBLISHED',
       categoryId: news?.categoryId,
-      NOT: { id },
+      NOT: { slug },
     },
     include: {
       featuredImage: true,

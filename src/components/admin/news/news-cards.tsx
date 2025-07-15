@@ -57,8 +57,8 @@ export default function NewsCards({
     router.push(`/admin/news/${id}`)
   }
 
-  const handleView = (id: string) => {
-    window.open(`/home/news/${id}`, '_blank')
+  const handleView = (slug: string) => {
+    window.open(`/home/news/${slug}`, '_blank')
   }
 
   const handleTogglePin = async (id: string, currentPinned: boolean) => {
@@ -175,7 +175,7 @@ export default function NewsCards({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => handleView(item.id)}
+                onClick={() => handleView(item.slug)}
                 className="h-8 w-8 p-0"
               >
                 <Eye className="h-3 w-3" />
