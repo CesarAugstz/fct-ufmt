@@ -6,828 +6,856 @@
 // @ts-nocheck
 
 const metadata = {
-  models: {
-    user: {
-      name: 'User',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
+    models: {
+        user: {
+            name: 'User', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, email: {
+                    name: "email",
+                    type: "String",
+                }, password: {
+                    name: "password",
+                    type: "String",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    isOptional: true,
+                }, role: {
+                    name: "role",
+                    type: "Role",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, otpCode: {
+                    name: "otpCode",
+                    type: "String",
+                    isOptional: true,
+                }, otpExpiration: {
+                    name: "otpExpiration",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isFirstAccess: {
+                    name: "isFirstAccess",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                }, passwordResetToken: {
+                    name: "passwordResetToken",
+                    type: "String",
+                    isOptional: true,
+                }, passwordResetExpiration: {
+                    name: "passwordResetExpiration",
+                    type: "DateTime",
+                    isOptional: true,
+                }, professor: {
+                    name: "professor",
+                    type: "Professor",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'user',
+                }, logEntries: {
+                    name: "logEntries",
+                    type: "LogEntry",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, email: {
+                    name: "email",
+                    fields: ["email"]
+                },
+            },
         },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
+        course: {
+            name: 'Course', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, nature: {
+                    name: "nature",
+                    type: "CourseNature",
+                }, slug: {
+                    name: "slug",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, aboutContentBlocks: {
+                    name: "aboutContentBlocks",
+                    type: "ContentBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'course',
+                }, admissionContentBlocks: {
+                    name: "admissionContentBlocks",
+                    type: "ContentBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'admissionCourse',
+                }, professors: {
+                    name: "professors",
+                    type: "Professor",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'courses',
+                    isRelationOwner: true,
+                }, faqCategories: {
+                    name: "faqCategories",
+                    type: "FaqCategory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'course',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                }, slug: {
+                    name: "slug",
+                    fields: ["slug"]
+                },
+            },
         },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
+        newsCategory: {
+            name: 'NewsCategory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, slug: {
+                    name: "slug",
+                    type: "String",
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, news: {
+                    name: "news",
+                    type: "News",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'category',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                }, slug: {
+                    name: "slug",
+                    fields: ["slug"]
+                },
+            },
         },
-        email: {
-          name: 'email',
-          type: 'String',
-        },
-        password: {
-          name: 'password',
-          type: 'String',
-          isOptional: true,
-        },
-        name: {
-          name: 'name',
-          type: 'String',
-          isOptional: true,
-        },
-        role: {
-          name: 'role',
-          type: 'Role',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        otpCode: {
-          name: 'otpCode',
-          type: 'String',
-          isOptional: true,
-        },
-        otpExpiration: {
-          name: 'otpExpiration',
-          type: 'DateTime',
-          isOptional: true,
-        },
-        isFirstAccess: {
-          name: 'isFirstAccess',
-          type: 'Boolean',
-          attributes: [{ name: '@default', args: [{ value: true }] }],
-        },
-        passwordResetToken: {
-          name: 'passwordResetToken',
-          type: 'String',
-          isOptional: true,
-        },
-        passwordResetExpiration: {
-          name: 'passwordResetExpiration',
-          type: 'DateTime',
-          isOptional: true,
+        news: {
+            name: 'News', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, excerpt: {
+                    name: "excerpt",
+                    type: "String",
+                    isOptional: true,
+                }, slug: {
+                    name: "slug",
+                    type: "String",
+                }, status: {
+                    name: "status",
+                    type: "NewsStatus",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, isPinned: {
+                    name: "isPinned",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                }, publishedAt: {
+                    name: "publishedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, author: {
+                    name: "author",
+                    type: "String",
+                }, featuredImageId: {
+                    name: "featuredImageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'featuredImage',
+                }, featuredImage: {
+                    name: "featuredImage",
+                    type: "Attachment",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'newsFeaturedImage',
+                    isRelationOwner: true,
+                    onDeleteAction: 'SetNull',
+                    foreignKeyMapping: { "id": "featuredImageId" },
+                }, contentBlocks: {
+                    name: "contentBlocks",
+                    type: "ContentBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'news',
+                }, categoryId: {
+                    name: "categoryId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'category',
+                }, category: {
+                    name: "category",
+                    type: "NewsCategory",
+                    isDataModel: true,
+                    backLink: 'news',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "categoryId" },
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, slug: {
+                    name: "slug",
+                    fields: ["slug"]
+                }, featuredImageId: {
+                    name: "featuredImageId",
+                    fields: ["featuredImageId"]
+                },
+            },
         },
         professor: {
-          name: 'professor',
-          type: 'Professor',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'user',
-        },
-        logEntries: {
-          name: 'logEntries',
-          type: 'LogEntry',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'user',
-        },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
-        },
-        email: {
-          name: 'email',
-          fields: ['email'],
-        },
-      },
-    },
-    course: {
-      name: 'Course',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
-        },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
-        },
-        name: {
-          name: 'name',
-          type: 'String',
-        },
-        nature: {
-          name: 'nature',
-          type: 'CourseNature',
-        },
-        slug: {
-          name: 'slug',
-          type: 'String',
-        },
-        description: {
-          name: 'description',
-          type: 'String',
-          isOptional: true,
-        },
-        aboutContentBlocks: {
-          name: 'aboutContentBlocks',
-          type: 'ContentBlock',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'course',
-        },
-        admissionContentBlocks: {
-          name: 'admissionContentBlocks',
-          type: 'ContentBlock',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'admissionCourse',
-        },
-        professors: {
-          name: 'professors',
-          type: 'Professor',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'courses',
-          isRelationOwner: true,
-        },
-        faqCategories: {
-          name: 'faqCategories',
-          type: 'FaqCategory',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'course',
-        },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
-        },
-        name: {
-          name: 'name',
-          fields: ['name'],
-        },
-        slug: {
-          name: 'slug',
-          fields: ['slug'],
-        },
-      },
-    },
-    professor: {
-      name: 'Professor',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
-        },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
-        },
-        courses: {
-          name: 'courses',
-          type: 'Course',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'professors',
-          isRelationOwner: true,
-        },
-        summary: {
-          name: 'summary',
-          type: 'String',
-          isOptional: true,
-        },
-        specialties: {
-          name: 'specialties',
-          type: 'String',
-          isArray: true,
-        },
-        researchAreas: {
-          name: 'researchAreas',
-          type: 'String',
-          isArray: true,
-        },
-        officeHours: {
-          name: 'officeHours',
-          type: 'String',
-          isOptional: true,
-        },
-        lattes: {
-          name: 'lattes',
-          type: 'String',
-          isOptional: true,
-        },
-        publications: {
-          name: 'publications',
-          type: 'Publication',
-          isTypeDef: true,
-          isArray: true,
-        },
-        researchProjects: {
-          name: 'researchProjects',
-          type: 'ResearchProject',
-          isTypeDef: true,
-          isArray: true,
-        },
-        extensionProjects: {
-          name: 'extensionProjects',
-          type: 'ExtensionProject',
-          isTypeDef: true,
-          isArray: true,
-        },
-        imageId: {
-          name: 'imageId',
-          type: 'String',
-          isOptional: true,
-          isForeignKey: true,
-          relationField: 'image',
-        },
-        image: {
-          name: 'image',
-          type: 'Attachment',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'professor',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'imageId' },
-        },
-        userId: {
-          name: 'userId',
-          type: 'String',
-          isForeignKey: true,
-          relationField: 'user',
-        },
-        user: {
-          name: 'user',
-          type: 'User',
-          isDataModel: true,
-          backLink: 'professor',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'userId' },
-        },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
-        },
-        imageId: {
-          name: 'imageId',
-          fields: ['imageId'],
-        },
-        userId: {
-          name: 'userId',
-          fields: ['userId'],
-        },
-      },
-    },
-    faqCategory: {
-      name: 'FaqCategory',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
-        },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
-        },
-        name: {
-          name: 'name',
-          type: 'String',
-        },
-        description: {
-          name: 'description',
-          type: 'String',
-          isOptional: true,
-        },
-        order: {
-          name: 'order',
-          type: 'Int',
-          attributes: [{ name: '@default', args: [{ value: 0 }] }],
-        },
-        courseId: {
-          name: 'courseId',
-          type: 'String',
-          isForeignKey: true,
-          relationField: 'course',
-        },
-        course: {
-          name: 'course',
-          type: 'Course',
-          isDataModel: true,
-          backLink: 'faqCategories',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'courseId' },
-        },
-        faqItems: {
-          name: 'faqItems',
-          type: 'FaqItem',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'category',
-        },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
-        },
-      },
-    },
-    faqItem: {
-      name: 'FaqItem',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
-        },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
-        },
-        title: {
-          name: 'title',
-          type: 'String',
-        },
-        slug: {
-          name: 'slug',
-          type: 'String',
-        },
-        order: {
-          name: 'order',
-          type: 'Int',
-          attributes: [{ name: '@default', args: [{ value: 0 }] }],
-        },
-        published: {
-          name: 'published',
-          type: 'Boolean',
-          attributes: [{ name: '@default', args: [{ value: false }] }],
-        },
-        contentBlocks: {
-          name: 'contentBlocks',
-          type: 'ContentBlock',
-          isDataModel: true,
-          isArray: true,
-          backLink: 'faqItem',
-        },
-        categoryId: {
-          name: 'categoryId',
-          type: 'String',
-          isForeignKey: true,
-          relationField: 'category',
-        },
-        category: {
-          name: 'category',
-          type: 'FaqCategory',
-          isDataModel: true,
-          backLink: 'faqItems',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'categoryId' },
-        },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
-        },
-        categoryId_slug: {
-          name: 'categoryId_slug',
-          fields: ['categoryId', 'slug'],
-        },
-      },
-    },
-    contentBlock: {
-      name: 'ContentBlock',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
-        },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
-        },
-        nature: {
-          name: 'nature',
-          type: 'ContentNature',
-        },
-        size: {
-          name: 'size',
-          type: 'BlockSize',
-          isOptional: true,
-        },
-        order: {
-          name: 'order',
-          type: 'Int',
-          attributes: [{ name: '@default', args: [{ value: 0 }] }],
-        },
-        withBorder: {
-          name: 'withBorder',
-          type: 'Boolean',
-          attributes: [{ name: '@default', args: [{ value: false }] }],
-        },
-        gridSize: {
-          name: 'gridSize',
-          type: 'GridSize',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        alignment: {
-          name: 'alignment',
-          type: 'Alignment',
-          isOptional: true,
-        },
-        caption: {
-          name: 'caption',
-          type: 'String',
-          isOptional: true,
-        },
-        fileId: {
-          name: 'fileId',
-          type: 'String',
-          isOptional: true,
-          isForeignKey: true,
-          relationField: 'file',
-        },
-        file: {
-          name: 'file',
-          type: 'Attachment',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'contentBlocks',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'fileId' },
-        },
-        content: {
-          name: 'content',
-          type: 'String',
-          isOptional: true,
-        },
-        accordionItems: {
-          name: 'accordionItems',
-          type: 'AccordionItem',
-          isTypeDef: true,
-          isArray: true,
-          attributes: [{ name: '@default', args: [{ value: '[]' }] }],
-        },
-        courseId: {
-          name: 'courseId',
-          type: 'String',
-          isOptional: true,
-          isForeignKey: true,
-          relationField: 'course',
-        },
-        course: {
-          name: 'course',
-          type: 'Course',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'aboutContentBlocks',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'courseId' },
-        },
-        admissionCourseId: {
-          name: 'admissionCourseId',
-          type: 'String',
-          isOptional: true,
-          isForeignKey: true,
-          relationField: 'admissionCourse',
-        },
-        admissionCourse: {
-          name: 'admissionCourse',
-          type: 'Course',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'admissionContentBlocks',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'admissionCourseId' },
-        },
-        faqItemId: {
-          name: 'faqItemId',
-          type: 'String',
-          isOptional: true,
-          isForeignKey: true,
-          relationField: 'faqItem',
+            name: 'Professor', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, courses: {
+                    name: "courses",
+                    type: "Course",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'professors',
+                    isRelationOwner: true,
+                }, summary: {
+                    name: "summary",
+                    type: "String",
+                    isOptional: true,
+                }, specialties: {
+                    name: "specialties",
+                    type: "String",
+                    isArray: true,
+                }, researchAreas: {
+                    name: "researchAreas",
+                    type: "String",
+                    isArray: true,
+                }, officeHours: {
+                    name: "officeHours",
+                    type: "String",
+                    isOptional: true,
+                }, lattes: {
+                    name: "lattes",
+                    type: "String",
+                    isOptional: true,
+                }, publications: {
+                    name: "publications",
+                    type: "Publication",
+                    isTypeDef: true,
+                    isArray: true,
+                }, researchProjects: {
+                    name: "researchProjects",
+                    type: "ResearchProject",
+                    isTypeDef: true,
+                    isArray: true,
+                }, extensionProjects: {
+                    name: "extensionProjects",
+                    type: "ExtensionProject",
+                    isTypeDef: true,
+                    isArray: true,
+                }, imageId: {
+                    name: "imageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'image',
+                }, image: {
+                    name: "image",
+                    type: "Attachment",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'professor',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "imageId" },
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'professor',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "userId" },
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, imageId: {
+                    name: "imageId",
+                    fields: ["imageId"]
+                }, userId: {
+                    name: "userId",
+                    fields: ["userId"]
+                },
+            },
+        },
+        faqCategory: {
+            name: 'FaqCategory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, courseId: {
+                    name: "courseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'course',
+                }, course: {
+                    name: "course",
+                    type: "Course",
+                    isDataModel: true,
+                    backLink: 'faqCategories',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "courseId" },
+                }, faqItems: {
+                    name: "faqItems",
+                    type: "FaqItem",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'category',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            },
         },
         faqItem: {
-          name: 'faqItem',
-          type: 'FaqItem',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'contentBlocks',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'faqItemId' },
+            name: 'FaqItem', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, slug: {
+                    name: "slug",
+                    type: "String",
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, published: {
+                    name: "published",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                }, contentBlocks: {
+                    name: "contentBlocks",
+                    type: "ContentBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'faqItem',
+                }, categoryId: {
+                    name: "categoryId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'category',
+                }, category: {
+                    name: "category",
+                    type: "FaqCategory",
+                    isDataModel: true,
+                    backLink: 'faqItems',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "categoryId" },
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, categoryId_slug: {
+                    name: "categoryId_slug",
+                    fields: ["categoryId", "slug"]
+                },
+            },
         },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
+        contentBlock: {
+            name: 'ContentBlock', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, nature: {
+                    name: "nature",
+                    type: "ContentNature",
+                }, size: {
+                    name: "size",
+                    type: "BlockSize",
+                    isOptional: true,
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                }, withBorder: {
+                    name: "withBorder",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                }, gridSize: {
+                    name: "gridSize",
+                    type: "GridSize",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, alignment: {
+                    name: "alignment",
+                    type: "Alignment",
+                    isOptional: true,
+                }, caption: {
+                    name: "caption",
+                    type: "String",
+                    isOptional: true,
+                }, fileId: {
+                    name: "fileId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'file',
+                }, file: {
+                    name: "file",
+                    type: "Attachment",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'contentBlocks',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "fileId" },
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    isOptional: true,
+                }, accordionItems: {
+                    name: "accordionItems",
+                    type: "AccordionItem",
+                    isTypeDef: true,
+                    isArray: true,
+                    attributes: [{ "name": "@default", "args": [{ "value": "[]" }] }],
+                }, courseId: {
+                    name: "courseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'course',
+                }, course: {
+                    name: "course",
+                    type: "Course",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'aboutContentBlocks',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "courseId" },
+                }, admissionCourseId: {
+                    name: "admissionCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'admissionCourse',
+                }, admissionCourse: {
+                    name: "admissionCourse",
+                    type: "Course",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'admissionContentBlocks',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "admissionCourseId" },
+                }, faqItemId: {
+                    name: "faqItemId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'faqItem',
+                }, faqItem: {
+                    name: "faqItem",
+                    type: "FaqItem",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'contentBlocks',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "faqItemId" },
+                }, newsId: {
+                    name: "newsId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'news',
+                }, news: {
+                    name: "news",
+                    type: "News",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'contentBlocks',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "newsId" },
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, fileId: {
+                    name: "fileId",
+                    fields: ["fileId"]
+                },
+            },
         },
-        fileId: {
-          name: 'fileId',
-          fields: ['fileId'],
+        attachment: {
+            name: 'Attachment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, dataUrl: {
+                    name: "dataUrl",
+                    type: "String",
+                }, mimeType: {
+                    name: "mimeType",
+                    type: "String",
+                }, size: {
+                    name: "size",
+                    type: "Int",
+                }, contentBlocks: {
+                    name: "contentBlocks",
+                    type: "ContentBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'file',
+                }, professor: {
+                    name: "professor",
+                    type: "Professor",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'image',
+                }, newsFeaturedImage: {
+                    name: "newsFeaturedImage",
+                    type: "News",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'featuredImage',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            },
         },
-      },
+        logEntry: {
+            name: 'LogEntry', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'logEntries',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "userId" },
+                }, endpoint: {
+                    name: "endpoint",
+                    type: "String",
+                }, method: {
+                    name: "method",
+                    type: "String",
+                }, body: {
+                    name: "body",
+                    type: "String",
+                    isOptional: true,
+                }, params: {
+                    name: "params",
+                    type: "String",
+                    isOptional: true,
+                }, ip: {
+                    name: "ip",
+                    type: "String",
+                    isOptional: true,
+                }, userAgent: {
+                    name: "userAgent",
+                    type: "String",
+                    isOptional: true,
+                }, isError: {
+                    name: "isError",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                }, error: {
+                    name: "error",
+                    type: "String",
+                    isOptional: true,
+                }, response_headers: {
+                    name: "response_headers",
+                    type: "String",
+                    isOptional: true,
+                }, response_body: {
+                    name: "response_body",
+                    type: "String",
+                    isOptional: true,
+                }, response_status: {
+                    name: "response_status",
+                    type: "Int",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            },
+        },
+
     },
-    attachment: {
-      name: 'Attachment',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
+    typeDefs: {
+        publication: {
+            name: 'Publication', fields: {
+                title: {
+                    name: "title",
+                    type: "String",
+                }, authors: {
+                    name: "authors",
+                    type: "String",
+                    isArray: true,
+                }, date: {
+                    name: "date",
+                    type: "DateTime",
+                }, link: {
+                    name: "link",
+                    type: "String",
+                    isOptional: true,
+                },
+            },
         },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
+        researchProject: {
+            name: 'ResearchProject', fields: {
+                title: {
+                    name: "title",
+                    type: "String",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ProjectStatus",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                },
+            },
         },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
+        extensionProject: {
+            name: 'ExtensionProject', fields: {
+                title: {
+                    name: "title",
+                    type: "String",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, status: {
+                    name: "status",
+                    type: "ProjectStatus",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                },
+            },
         },
-        name: {
-          name: 'name',
-          type: 'String',
+        accordionItem: {
+            name: 'AccordionItem', fields: {
+                title: {
+                    name: "title",
+                    type: "String",
+                }, content: {
+                    name: "content",
+                    type: "String",
+                },
+            },
         },
-        dataUrl: {
-          name: 'dataUrl',
-          type: 'String',
-        },
-        mimeType: {
-          name: 'mimeType',
-          type: 'String',
-        },
-        size: {
-          name: 'size',
-          type: 'Int',
-        },
-        contentBlocks: {
-          name: 'contentBlocks',
-          type: 'ContentBlock',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'file',
-        },
-        professor: {
-          name: 'professor',
-          type: 'Professor',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'image',
-        },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
-        },
-      },
+
     },
-    logEntry: {
-      name: 'LogEntry',
-      fields: {
-        id: {
-          name: 'id',
-          type: 'String',
-          isId: true,
-          attributes: [{ name: '@default', args: [] }],
-        },
-        createdAt: {
-          name: 'createdAt',
-          type: 'DateTime',
-          attributes: [{ name: '@default', args: [] }],
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          type: 'DateTime',
-          attributes: [{ name: '@updatedAt', args: [] }],
-        },
-        userId: {
-          name: 'userId',
-          type: 'String',
-          isOptional: true,
-          isForeignKey: true,
-          relationField: 'user',
-        },
-        user: {
-          name: 'user',
-          type: 'User',
-          isDataModel: true,
-          isOptional: true,
-          backLink: 'logEntries',
-          isRelationOwner: true,
-          onDeleteAction: 'Cascade',
-          foreignKeyMapping: { id: 'userId' },
-        },
-        endpoint: {
-          name: 'endpoint',
-          type: 'String',
-        },
-        method: {
-          name: 'method',
-          type: 'String',
-        },
-        body: {
-          name: 'body',
-          type: 'String',
-          isOptional: true,
-        },
-        params: {
-          name: 'params',
-          type: 'String',
-          isOptional: true,
-        },
-        ip: {
-          name: 'ip',
-          type: 'String',
-          isOptional: true,
-        },
-        userAgent: {
-          name: 'userAgent',
-          type: 'String',
-          isOptional: true,
-        },
-        isError: {
-          name: 'isError',
-          type: 'Boolean',
-          attributes: [{ name: '@default', args: [{ value: false }] }],
-        },
-        error: {
-          name: 'error',
-          type: 'String',
-          isOptional: true,
-        },
-        response_headers: {
-          name: 'response_headers',
-          type: 'String',
-          isOptional: true,
-        },
-        response_body: {
-          name: 'response_body',
-          type: 'String',
-          isOptional: true,
-        },
-        response_status: {
-          name: 'response_status',
-          type: 'Int',
-          isOptional: true,
-        },
-      },
-      uniqueConstraints: {
-        id: {
-          name: 'id',
-          fields: ['id'],
-        },
-      },
+    deleteCascade: {
+        user: ['Professor', 'LogEntry'],
+        course: ['FaqCategory', 'ContentBlock'],
+        newsCategory: ['News'],
+        news: ['ContentBlock'],
+        faqCategory: ['FaqItem'],
+        faqItem: ['ContentBlock'],
+        attachment: ['Professor', 'ContentBlock'],
+
     },
-  },
-  typeDefs: {
-    publication: {
-      name: 'Publication',
-      fields: {
-        title: {
-          name: 'title',
-          type: 'String',
-        },
-        authors: {
-          name: 'authors',
-          type: 'String',
-          isArray: true,
-        },
-        date: {
-          name: 'date',
-          type: 'DateTime',
-        },
-        link: {
-          name: 'link',
-          type: 'String',
-          isOptional: true,
-        },
-      },
-    },
-    researchProject: {
-      name: 'ResearchProject',
-      fields: {
-        title: {
-          name: 'title',
-          type: 'String',
-        },
-        startDate: {
-          name: 'startDate',
-          type: 'DateTime',
-        },
-        endDate: {
-          name: 'endDate',
-          type: 'DateTime',
-          isOptional: true,
-        },
-        status: {
-          name: 'status',
-          type: 'ProjectStatus',
-        },
-        description: {
-          name: 'description',
-          type: 'String',
-          isOptional: true,
-        },
-      },
-    },
-    extensionProject: {
-      name: 'ExtensionProject',
-      fields: {
-        title: {
-          name: 'title',
-          type: 'String',
-        },
-        startDate: {
-          name: 'startDate',
-          type: 'DateTime',
-        },
-        status: {
-          name: 'status',
-          type: 'ProjectStatus',
-        },
-        endDate: {
-          name: 'endDate',
-          type: 'DateTime',
-          isOptional: true,
-        },
-        description: {
-          name: 'description',
-          type: 'String',
-          isOptional: true,
-        },
-      },
-    },
-    accordionItem: {
-      name: 'AccordionItem',
-      fields: {
-        title: {
-          name: 'title',
-          type: 'String',
-        },
-        content: {
-          name: 'content',
-          type: 'String',
-        },
-      },
-    },
-  },
-  deleteCascade: {
-    user: ['Professor', 'LogEntry'],
-    course: ['FaqCategory', 'ContentBlock'],
-    faqCategory: ['FaqItem'],
-    faqItem: ['ContentBlock'],
-    attachment: ['Professor', 'ContentBlock'],
-  },
-  authModel: 'User',
-}
-export default metadata
+    authModel: 'User'
+
+};
+export default metadata;

@@ -33,6 +33,35 @@ Table Course {
   faqCategories FaqCategory [not null]
 }
 
+Table NewsCategory {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  description String
+  slug String [unique, not null]
+  order Int [not null, default: 0]
+  news News [not null]
+}
+
+Table News {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  excerpt String
+  slug String [unique, not null]
+  status NewsStatus [not null, default: 'DRAFT']
+  isPinned Boolean [not null, default: false]
+  publishedAt DateTime
+  author String [not null]
+  featuredImageId String [unique]
+  featuredImage Attachment
+  contentBlocks ContentBlock [not null]
+  categoryId String [not null]
+  category NewsCategory [not null]
+}
+
 Table Professor {
   id String [pk]
   createdAt DateTime [default: `now()`, not null]
@@ -102,6 +131,8 @@ Table ContentBlock {
   admissionCourse Course
   faqItemId String
   faqItem FaqItem
+  newsId String
+  news News
 }
 
 Table Attachment {
@@ -114,6 +145,7 @@ Table Attachment {
   size Int [not null]
   contentBlocks ContentBlock
   professor Professor
+  newsFeaturedImage News
 }
 
 Table LogEntry {
@@ -152,6 +184,12 @@ Enum CourseNature {
   POST_GRADUATION
 }
 
+Enum NewsStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 Enum ProjectStatus {
   ONGOING
   FINISHED
@@ -183,6 +221,10 @@ Enum GridSize {
   FOUR
 }
 
+Ref: News.featuredImageId - Attachment.id [delete: Set Null]
+
+Ref: News.categoryId > NewsCategory.id [delete: Cascade]
+
 Ref: Professor.imageId - Attachment.id [delete: Cascade]
 
 Ref: Professor.userId - User.id [delete: Cascade]
@@ -198,5 +240,7 @@ Ref: ContentBlock.courseId > Course.id [delete: Cascade]
 Ref: ContentBlock.admissionCourseId > Course.id [delete: Cascade]
 
 Ref: ContentBlock.faqItemId > FaqItem.id [delete: Cascade]
+
+Ref: ContentBlock.newsId > News.id [delete: Cascade]
 
 Ref: LogEntry.userId > User.id [delete: Cascade]

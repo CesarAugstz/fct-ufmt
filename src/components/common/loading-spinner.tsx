@@ -5,7 +5,7 @@ interface Args {
   className?: string
 }
 
-export default function LoadingSpinner({ size = 'md', className }: Args) {
+export default function LoadingSpinner({ size = 'sm', className }: Args) {
   return (
     <div
       className={twMerge(

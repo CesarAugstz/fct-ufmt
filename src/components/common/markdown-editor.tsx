@@ -36,14 +36,6 @@ const comment: ICommand = {
   },
 }
 
-const fullscreen: ICommand = {
-  ...commands.fullscreen,
-  buttonProps: {
-    'aria-label': 'Alternar tela cheia (ctrl + 0)',
-    title: 'Alternar tela cheia (ctrl + 0)',
-  },
-}
-
 const hr: ICommand = {
   ...commands.hr,
   buttonProps: {
@@ -238,7 +230,6 @@ const getExtraCommands: () => ICommand[] = () => [
   codeLive,
   codePreview,
   commands.divider,
-  fullscreen,
 ]
 
 interface MarkdownEditorProps {

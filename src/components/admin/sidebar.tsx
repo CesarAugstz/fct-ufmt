@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Settings, Users, House, Library, Menu } from 'lucide-react'
+import { Settings, Users, House, Library, Menu, Newspaper } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
 
@@ -34,6 +34,11 @@ const routes: Route[] = [
     name: 'Cursos',
     path: '/admin/courses',
     icon: <Library className="mr-2 h-5 w-5" />,
+  },
+  {
+    name: 'Notícias',
+    path: '/admin/news',
+    icon: <Newspaper className="mr-2 h-5 w-5" />,
   },
   {
     name: 'Configurações',

@@ -64,6 +64,12 @@ enum CourseNature {
   POST_GRADUATION
 }
 
+enum NewsStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 model Course extends BaseModel {
   name String @unique
   nature CourseNature
@@ -78,6 +84,40 @@ model Course extends BaseModel {
   @@allow('read', true)
   @@allow('create,update', auth() != null)
   @@allow('delete', auth().role == 'ADMIN')
+}
+
+model NewsCategory extends BaseModel {
+  name        String   @unique
+  description String?
+  slug        String   @unique
+  order       Int      @default(0)
+  news        News[]
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth() != null)
+}
+
+model News extends BaseModel {
+  title           String
+  excerpt         String?        @db.Text
+  slug            String         @unique
+  status          NewsStatus     @default(DRAFT)
+  isPinned        Boolean        @default(false)
+  publishedAt     DateTime?
+  author          String
+  
+  featuredImageId String?        @unique
+  featuredImage   Attachment?    @relation('NewsFeaturedImage', fields: [featuredImageId], references: [id], onDelete: SetNull)
+  contentBlocks   ContentBlock[] @relation('NewsContentBlocks')
+  
+  categoryId      String
+  category        NewsCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@index([status, publishedAt])
+  @@index([categoryId, publishedAt])
+  @@index([isPinned, publishedAt])
+  @@allow('read', status == 'PUBLISHED' || auth() != null)
+  @@allow('create,update,delete', auth() != null)
 }
 
 type Publication {
@@ -219,6 +259,9 @@ model ContentBlock extends BaseModel {
   faqItemId   String?
   faqItem     FaqItem?   @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
 
+  newsId      String?
+  news        News?      @relation('NewsContentBlocks', fields: [newsId], references: [id], onDelete: Cascade)
+
   @@allow('read', true)
   @@allow('create,update,delete', auth().role != null)
 }
@@ -231,6 +274,7 @@ model Attachment extends BaseModel {
 
   contentBlocks ContentBlock? 
   professor Professor?
+  newsFeaturedImage News? @relation('NewsFeaturedImage')
 
   @@allow('read', true)
   @@allow('create,update,delete', auth().role == 'ADMIN' || auth() == professor.user)

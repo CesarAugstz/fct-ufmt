@@ -6,23 +6,69 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
-import { newsItems } from './news-data-mock'
 import { useShare } from '@/lib/hooks/share'
+import { useFindUniqueNews, useFindManyNews } from '@/lib/zenstack-hooks'
+import LoadingSpinner from '@/components/common/loading-spinner'
+import { BlockContentRenderer } from '@/components/common/block-content-renderer'
+import { dayJs } from '@/utils/dayjs'
 
 export default function NewsDetail({ id }: { id: string }) {
-  const news = newsItems.find(item => item.id === parseInt(id))
   const { share } = useShare()
 
+  const { data: news, isLoading } = useFindUniqueNews({
+    where: { id },
+    include: {
+      category: true,
+      featuredImage: true,
+      contentBlocks: {
+        include: {
+          file: true,
+        },
+        orderBy: { order: 'asc' },
+      },
+    },
+  })
+
+  const { data: relatedNews = [] } = useFindManyNews({
+    where: {
+      status: 'PUBLISHED',
+      categoryId: news?.categoryId,
+      NOT: { id },
+    },
+    include: {
+      featuredImage: true,
+    },
+    take: 3,
+    orderBy: { publishedAt: 'desc' },
+  })
+
+  const { data: allNews = [] } = useFindManyNews({
+    where: { status: 'PUBLISHED' },
+    include: { category: true },
+  })
+
   const handleShare = async () => {
+    if (!news) return
+
     const shareUrl = window.location.href
-    const shareTitle = news?.title || 'Notícia FCT'
-    const shareText = news?.excerpt || ''
+    const shareTitle = news.title
+    const shareText = news.excerpt || ''
 
     await share({
       title: shareTitle,
       text: shareText,
       url: shareUrl,
     })
+  }
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="flex justify-center items-center min-h-[400px]">
+          <LoadingSpinner className="h-8 w-8" />
+        </div>
+      </div>
+    )
   }
 
   if (!news) {
@@ -41,9 +87,9 @@ export default function NewsDetail({ id }: { id: string }) {
     )
   }
 
-  const relatedNews = newsItems
-    .filter(item => item.category === news.category && item.id !== news.id)
-    .slice(0, 3)
+  const categories = Array.from(
+    new Set(allNews.map(item => item.category.name)),
+  )
 
   return (
     <div className="min-h-screen">
@@ -66,129 +112,107 @@ export default function NewsDetail({ id }: { id: string }) {
           <div className="space-y-8">
             {/* Header */}
             <div>
-              <Badge className="mb-4">{news.category}</Badge>
+              <Badge className="mb-4">{news.category.name}</Badge>
               <h1 className="mb-4 text-4xl font-bold tracking-tight text-[#003366]">
                 {news.title}
               </h1>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center">
                   <CalendarDays className="mr-2 h-4 w-4" />
-                  {new Date(news.date).toLocaleDateString('pt-BR', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
+                  {dayJs(news.publishedAt || news.createdAt).format(
+                    'DD [de] MMMM [de] YYYY',
+                  )}
                 </div>
+                <div>Por: {news.author}</div>
               </div>
             </div>
 
             {/* Featured image */}
-            <div className="relative aspect-video w-full overflow-hidden rounded-lg">
-              <Image
-                src={
-                  news?.image ??
-                  `https://picsum.photos/seed/${Math.random() * 1000}/1000/600`
-                }
-                alt={news.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+            {news.featuredImage && (
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                <Image
+                  src={news.featuredImage.dataUrl}
+                  alt={news.title}
+                  fill
+                  className="object-cover"
+                  priority
+                  unoptimized
+                />
+              </div>
+            )}
 
-            {/* Content */}
-            <div className="prose prose-lg max-w-none">
-              <p className="lead">{news.excerpt}</p>
+            {/* Excerpt */}
+            {news.excerpt && (
+              <div className="prose prose-lg max-w-none">
+                <p className="lead text-lg text-muted-foreground">
+                  {news.excerpt}
+                </p>
+              </div>
+            )}
 
-              {/* Mock detailed content */}
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </p>
-
-              <h2>Subtítulo da Notícia</h2>
-              <p>
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
-              </p>
-
-              <ul>
-                <li>Ponto importante sobre o assunto</li>
-                <li>Outro aspecto relevante a ser considerado</li>
-                <li>Informação adicional para contextualização</li>
-              </ul>
-
-              <blockquote>
-                &quot;Citação relevante sobre o tema ou declaração de alguma
-                autoridade no assunto.&quot;
-              </blockquote>
-            </div>
+            {/* Content Blocks */}
+            <BlockContentRenderer blocks={news.contentBlocks} />
           </div>
 
           {/* Sidebar */}
           <div className="space-y-8">
             {/* Related news */}
-            <div>
-              <h2 className="mb-4 text-xl font-semibold">
-                Notícias Relacionadas
-              </h2>
-              <div className="space-y-4">
-                {relatedNews.map(item => (
-                  <Card
-                    key={item.id}
-                    className="group overflow-hidden transition-all hover:shadow-md"
-                  >
-                    <Link
-                      href={`/home/news/${item.id}`}
-                      className="flex gap-4 p-4"
+            {relatedNews.length > 0 && (
+              <div>
+                <h2 className="mb-4 text-xl font-semibold">
+                  Notícias Relacionadas
+                </h2>
+                <div className="space-y-4">
+                  {relatedNews.map(item => (
+                    <Card
+                      key={item.id}
+                      className="group overflow-hidden transition-all hover:shadow-md"
                     >
-                      <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
-                        <Image
-                          src={
-                            item.image ??
-                            `https://picsum.photos/seed/${Math.random() * 1000}/600/400`
-                          }
-                          alt={item.title}
-                          fill
-                          className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                      <div>
-                        <h3 className="line-clamp-2 text-sm font-medium group-hover:text-primary">
-                          {item.title}
-                        </h3>
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {new Date(item.date).toLocaleDateString('pt-BR', {
-                            day: 'numeric',
-                            month: 'long',
-                          })}
-                        </p>
-                      </div>
-                    </Link>
-                  </Card>
-                ))}
+                      <Link
+                        href={`/home/news/${item.id}`}
+                        className="flex gap-4 p-4"
+                      >
+                        {item.featuredImage && (
+                          <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
+                            <Image
+                              src={item.featuredImage.dataUrl}
+                              alt={item.title}
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              unoptimized
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="line-clamp-2 text-sm font-medium group-hover:text-primary">
+                            {item.title}
+                          </h3>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {dayJs(item.publishedAt || item.createdAt).format(
+                              'DD [de] MMMM',
+                            )}
+                          </p>
+                        </div>
+                      </Link>
+                    </Card>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Categories */}
             <div>
               <h2 className="mb-4 text-xl font-semibold">Categorias</h2>
               <div className="flex flex-wrap gap-2">
-                {Array.from(new Set(newsItems.map(item => item.category))).map(
-                  category => (
-                    <Badge
-                      key={category}
-                      variant="secondary"
-                      className="cursor-pointer hover:bg-secondary/80"
-                    >
-                      {category}
-                    </Badge>
-                  ),
-                )}
+                {categories.map(category => (
+                  <Badge
+                    key={category}
+                    variant="secondary"
+                    className="cursor-pointer hover:bg-secondary/80"
+                  >
+                    {category}
+                  </Badge>
+                ))}
               </div>
             </div>
           </div>

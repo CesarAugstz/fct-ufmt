@@ -27,6 +27,8 @@ interface BaseCardProps {
   onAdd?: () => void
   onUpdate?: () => void
 
+  rightButtons?: ReactNode
+
   // Dialog control
   dialogContent?: ReactNode
   isDialogOpen?: boolean
@@ -52,6 +54,7 @@ export function BaseCard({
 
   onAdd,
   onUpdate,
+  rightButtons,
 
   addButtonText = 'Adicionar',
   updateButtonText = 'Atualizar',
@@ -70,6 +73,7 @@ export function BaseCard({
           </div>
 
           <div className="flex flex-wrap gap-4">
+            {rightButtons}
             {onUpdate && (
               <Button
                 variant="secondary"

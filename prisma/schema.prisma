@@ -28,6 +28,12 @@ enum CourseNature {
   POST_GRADUATION
 }
 
+enum NewsStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 enum ProjectStatus {
   ONGOING
   FINISHED
@@ -88,6 +94,39 @@ model Course {
   admissionContentBlocks ContentBlock[] @relation("admissionContentBlocks")
   professors             Professor[]
   faqCategories          FaqCategory[]
+}
+
+model NewsCategory {
+  id          String   @id() @default(ulid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt()
+  name        String   @unique()
+  description String?
+  slug        String   @unique()
+  order       Int      @default(0)
+  news        News[]
+}
+
+model News {
+  id              String         @id() @default(ulid())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt()
+  title           String
+  excerpt         String?        @db.Text()
+  slug            String         @unique()
+  status          NewsStatus     @default(DRAFT)
+  isPinned        Boolean        @default(false)
+  publishedAt     DateTime?
+  author          String
+  featuredImageId String?        @unique()
+  featuredImage   Attachment?    @relation("NewsFeaturedImage", fields: [featuredImageId], references: [id], onDelete: SetNull)
+  contentBlocks   ContentBlock[] @relation("NewsContentBlocks")
+  categoryId      String
+  category        NewsCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([status, publishedAt])
+  @@index([categoryId, publishedAt])
+  @@index([isPinned, publishedAt])
 }
 
 model Professor {
@@ -157,18 +196,21 @@ model ContentBlock {
   admissionCourse   Course?       @relation("admissionContentBlocks", fields: [admissionCourseId], references: [id], onDelete: Cascade)
   faqItemId         String?
   faqItem           FaqItem?      @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
+  newsId            String?
+  news              News?         @relation("NewsContentBlocks", fields: [newsId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {
-  id            String        @id() @default(ulid())
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt()
-  name          String
-  dataUrl       String
-  mimeType      String
-  size          Int
-  contentBlocks ContentBlock?
-  professor     Professor?
+  id                String        @id() @default(ulid())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt()
+  name              String
+  dataUrl           String
+  mimeType          String
+  size              Int
+  contentBlocks     ContentBlock?
+  professor         Professor?
+  newsFeaturedImage News?         @relation("NewsFeaturedImage")
 }
 
 model LogEntry {
