@@ -60,14 +60,6 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
       children: graduationCourses,
     },
     {
-      name: 'Espaço Do Aluno',
-      children: [
-        { name: 'Perguntas Frequentes' },
-        { name: 'Acesso ao AVA e PA' },
-        { name: 'Polos' },
-      ],
-    },
-    {
       name: 'Extensão',
     },
     {
