@@ -161,13 +161,22 @@ export function NewsForm({ id }: NewsFormProps) {
             contentBlocks: {
               create: data?.contentBlocks
                 ?.map((block, index) => ({ ...block, order: index }))
-                .map(block => ({
-                  ...block,
-                  accordionItems: block.accordionItems || [],
-                  file: block.file ? { create: block.file } : undefined,
-                })),
+                .map(block => {
+                  if (block.file) {
+                    filesToCreate.push({
+                      ...block.file,
+                      contentBlocks: { connect: { id: block.id } },
+                    })
+                  }
+                  return {
+                    ...block,
+                    accordionItems: block.accordionItems || [],
+                    file: undefined,
+                  }
+                }),
             },
           },
+          select: { id: true },
         })
         filesToCreate.push({
           ...data.featuredImage,
