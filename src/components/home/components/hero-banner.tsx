@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 export function HeroBanner() {
   return (
@@ -24,14 +25,11 @@ export function HeroBanner() {
             Inovação e Conhecimento para Transformar o Futuro.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button className="bg-primary hover:bg-accent/90 text-white rounded-md px-6 py-3 font-medium transition-all transform hover:scale-105">
-              Conheça nossos cursos
-            </Button>
             <Button
-              variant="outline"
-              className="bg-transparent border-white text-white hover:bg-white/10 rounded-md px-6 py-3 font-medium transition-all"
+              asChild
+              className="bg-primary hover:bg-accent/90 text-white rounded-md px-6 py-3 font-medium transition-all transform hover:scale-105"
             >
-              Processo seletivo
+              <Link href="/home/courses">Conheça nossos cursos</Link>
             </Button>
           </div>
         </div>

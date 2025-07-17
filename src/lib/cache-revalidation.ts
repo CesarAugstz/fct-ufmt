@@ -14,5 +14,7 @@ export async function revalidateCourses() {
 
 export async function revalidateNews() {
   revalidateTag('news')
+  revalidateTag('latest-news')
+  revalidateTag('featured-news')
   revalidateTag('navigation')
 }
