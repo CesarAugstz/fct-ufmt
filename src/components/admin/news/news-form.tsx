@@ -28,6 +28,7 @@ import { FormBlockTextImage } from '@/components/ui/form-fields'
 import { getBlockSchema } from '@/components/ui/form-fields/blocks/blocks.schema'
 import { FormFile } from '@/components/ui/form-fields/form-file'
 import { ulid } from 'ulidx'
+import LoadingSpinner from '@/components/common/loading-spinner'
 
 const newsFormSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
@@ -57,7 +58,8 @@ interface NewsFormProps {
 }
 export function NewsForm({ id }: NewsFormProps) {
   const router = useRouter()
-  const { mutateAsync: upsertAttachment } = useUpsertAttachment()
+  const { mutateAsync: upsertAttachment, isPending: isUpsertingAttachment } =
+    useUpsertAttachment()
   const { data: categories = [] } = useFindManyNewsCategory({
     orderBy: { name: 'asc' },
   })
@@ -364,10 +366,19 @@ export function NewsForm({ id }: NewsFormProps) {
               </Button>
               <Button
                 type="submit"
-                disabled={createNews.isPending || updateNews.isPending}
+                disabled={
+                  createNews.isPending ||
+                  updateNews.isPending ||
+                  isUpsertingAttachment
+                }
                 variant="default"
               >
                 {!id ? 'Criar Notícia' : 'Salvar Alterações'}
+                {createNews.isPending ||
+                updateNews.isPending ||
+                isUpsertingAttachment ? (
+                  <LoadingSpinner />
+                ) : null}
               </Button>
             </div>
           </form>
