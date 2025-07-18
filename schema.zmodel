@@ -277,7 +277,7 @@ model Attachment extends BaseModel {
   newsFeaturedImage News? @relation('NewsFeaturedImage')
 
   @@allow('read', true)
-  @@allow('create,update,delete', auth().role == 'ADMIN' || auth() == professor.user)
+  @@allow('create,update,delete', auth() != null)
 }
 
 model LogEntry extends BaseModel {
