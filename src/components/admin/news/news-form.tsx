@@ -39,16 +39,18 @@ const newsFormSchema = z.object({
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED'] as const),
   isPinned: z.boolean(),
   contentBlocks: z.array(getBlockSchema()).optional(),
-  featuredImage: z.object(
-    {
-      id: z.ulid(),
-      name: z.string(),
-      dataUrl: z.string(),
-      mimeType: z.string(),
-      size: z.number(),
-    },
-    { message: 'Imagem de capa é obrigatória' },
-  ),
+  featuredImage: z
+    .object(
+      {
+        id: z.ulid(),
+        name: z.string(),
+        dataUrl: z.string(),
+        mimeType: z.string(),
+        size: z.number(),
+      },
+      { message: 'Imagem de capa é obrigatória' },
+    )
+    .nullish(),
 })
 
 type NewsFormData = z.infer<typeof newsFormSchema>
@@ -180,10 +182,11 @@ export function NewsForm({ id }: NewsFormProps) {
           },
           select: { id: true },
         })
-        filesToCreate.push({
-          ...data.featuredImage,
-          newsFeaturedImage: { connect: { id: created?.id } },
-        })
+        if (data.featuredImage)
+          filesToCreate.push({
+            ...data.featuredImage,
+            newsFeaturedImage: { connect: { id: created?.id } },
+          })
       } else if (news) {
         await updateNews.mutateAsync({
           where: { id: news.id },
@@ -196,11 +199,15 @@ export function NewsForm({ id }: NewsFormProps) {
             status: data.status,
             isPinned: data.isPinned,
             featuredImage: {
-              upsert: {
-                where: { id: news.featuredImage?.id ?? ulid() },
-                update: {},
-                create: data.featuredImage,
-              },
+              ...(data.featuredImage
+                ? {
+                    upsert: {
+                      where: { id: data.featuredImage?.id ?? ulid() },
+                      update: {},
+                      create: data.featuredImage,
+                    },
+                  }
+                : { disconnect: true }),
             },
             contentBlocks: {
               deleteMany: { id: { in: blocksToDelete } },

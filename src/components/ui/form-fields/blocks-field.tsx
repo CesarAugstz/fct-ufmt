@@ -101,7 +101,7 @@ export function BlocksField({ blocks, onChange }: BlocksFieldProps) {
   )
 
   return (
-    <div className="relative border border-input rounded-md bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:border-transparent transition-all">
+    <div className="relative border border-input rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:border-transparent transition-all">
       <div className="p-3">
         <div className="grid grid-cols-12 gap-2">
           {blocks.map((block, index) => (

@@ -143,7 +143,7 @@ export function FileField({
         ref={inputRef}
       />
 
-      <div className="relative flex items-center gap-3 min-h-[40px] p-3 rounded-md border bg-background">
+      <div className="relative flex items-center gap-3 min-h-[40px] p-3 rounded-md border">
         <Button
           type="button"
           variant="outline"
