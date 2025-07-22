@@ -12,6 +12,9 @@ const prisma = new PrismaClient()
 
 const shouldClean = process.argv.includes('--clean')
 const seedAll = process.argv.includes('--all')
+const adminPassword = process.argv
+  .find(arg => arg.startsWith('--password='))
+  ?.split('=')[1]
 
 async function cleanDatabase() {
   console.log('🧹 Cleaning database...')
@@ -24,18 +27,20 @@ async function cleanDatabase() {
 async function main() {
   if (shouldClean) await cleanDatabase()
 
-  await prisma.user.upsert({
-    where: {
-      email: 'dev.caugustoaf@gmail.com',
-    },
-    create: {
-      name: 'Cesar Filho',
-      email: 'dev.caugustoaf@gmail.com',
-      password: bcrypt.hashSync('password123'),
-      role: 'ADMIN',
-    },
-    update: {},
-  })
+  if (adminPassword) {
+    await prisma.user.upsert({
+      where: {
+        email: 'dev.caugustoaf@gmail.com',
+      },
+      create: {
+        name: 'Cesar Filho',
+        email: 'dev.caugustoaf@gmail.com',
+        password: bcrypt.hashSync(adminPassword),
+        role: 'ADMIN',
+      },
+      update: {},
+    })
+  }
 
   const courses: Prisma.CourseCreateInput[] = [
     {
