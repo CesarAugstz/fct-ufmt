@@ -198,6 +198,8 @@ model ContentBlock {
   faqItem           FaqItem?      @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
   newsId            String?
   news              News?         @relation("NewsContentBlocks", fields: [newsId], references: [id], onDelete: Cascade)
+  managementId      String?
+  management        Management?   @relation(fields: [managementId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {
@@ -211,6 +213,13 @@ model Attachment {
   contentBlocks     ContentBlock?
   professor         Professor?
   newsFeaturedImage News?         @relation("NewsFeaturedImage")
+}
+
+model Management {
+  id            String         @id() @default(ulid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  contentBlocks ContentBlock[]
 }
 
 model LogEntry {

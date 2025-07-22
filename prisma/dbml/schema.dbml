@@ -133,6 +133,8 @@ Table ContentBlock {
   faqItem FaqItem
   newsId String
   news News
+  managementId String
+  management Management
 }
 
 Table Attachment {
@@ -146,6 +148,13 @@ Table Attachment {
   contentBlocks ContentBlock
   professor Professor
   newsFeaturedImage News
+}
+
+Table Management {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  contentBlocks ContentBlock [not null]
 }
 
 Table LogEntry {
@@ -242,5 +251,7 @@ Ref: ContentBlock.admissionCourseId > Course.id [delete: Cascade]
 Ref: ContentBlock.faqItemId > FaqItem.id [delete: Cascade]
 
 Ref: ContentBlock.newsId > News.id [delete: Cascade]
+
+Ref: ContentBlock.managementId > Management.id [delete: Cascade]
 
 Ref: LogEntry.userId > User.id [delete: Cascade]

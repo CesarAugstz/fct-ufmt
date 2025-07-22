@@ -262,6 +262,9 @@ model ContentBlock extends BaseModel {
   newsId      String?
   news        News?      @relation('NewsContentBlocks', fields: [newsId], references: [id], onDelete: Cascade)
 
+  managementId String?
+  management   Management? @relation(fields: [managementId], references: [id], onDelete: Cascade)
+
   @@allow('read', true)
   @@allow('create,update,delete', auth().role != null)
 }
@@ -275,6 +278,13 @@ model Attachment extends BaseModel {
   contentBlocks ContentBlock? 
   professor Professor?
   newsFeaturedImage News? @relation('NewsFeaturedImage')
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth() != null)
+}
+
+model Management extends BaseModel {
+  contentBlocks ContentBlock[]
 
   @@allow('read', true)
   @@allow('create,update,delete', auth() != null)

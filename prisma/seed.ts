@@ -91,6 +91,13 @@ async function main() {
     ),
   )
 
+  const existingManagement = await prisma.management.findFirst()
+  if (!existingManagement) {
+    await prisma.management.create({
+      data: {},
+    })
+  }
+
   if (!seedAll) return
 
   console.log('🧑‍🏫 Creating professors...')

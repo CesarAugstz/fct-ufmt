@@ -31,3 +31,5 @@ export const getBlockSchema = () => {
       .nullish(),
   })
 }
+
+export type BlockSchema = z.infer<ReturnType<typeof getBlockSchema>>

@@ -33,7 +33,7 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
       href: '/home',
       children: [
         { name: 'História' },
-        { name: 'Gestão' },
+        { name: 'Gestão', href: '/home/management' },
         { name: 'Docentes', href: '/home/professors' },
         { name: 'Técnicos' },
         { name: 'Contatos' },

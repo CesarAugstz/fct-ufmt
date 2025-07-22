@@ -5,7 +5,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { Prisma, ContentBlock } from '@zenstackhq/runtime/models'
+import type { Prisma, Management } from '@zenstackhq/runtime/models'
 import type {
   UseMutationOptions,
   UseQueryOptions,
@@ -37,12 +37,12 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from '@tanstack/react-query'
 
-export function useCreateContentBlock(
+export function useCreateManagement(
   options?: Omit<
     UseMutationOptions<
-      ContentBlock | undefined,
+      Management | undefined,
       DefaultError,
-      Prisma.ContentBlockCreateArgs
+      Prisma.ManagementCreateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -50,14 +50,14 @@ export function useCreateContentBlock(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ContentBlockCreateArgs,
+    Prisma.ManagementCreateArgs,
     DefaultError,
-    ContentBlock,
+    Management,
     true
   >(
-    'ContentBlock',
+    'Management',
     'POST',
-    `${endpoint}/contentBlock/create`,
+    `${endpoint}/management/create`,
     metadata,
     options,
     fetch,
@@ -65,33 +65,33 @@ export function useCreateContentBlock(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ContentBlockCreateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ContentBlockCreateArgs>,
+    mutateAsync: async <T extends Prisma.ManagementCreateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.ManagementCreateArgs>,
       options?: Omit<
         UseMutationOptions<
-          | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+          | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
           | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ContentBlockCreateArgs>
+          Prisma.SelectSubset<T, Prisma.ManagementCreateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+        | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useCreateManyContentBlock(
+export function useCreateManyManagement(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.ContentBlockCreateManyArgs
+      Prisma.ManagementCreateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -99,14 +99,14 @@ export function useCreateManyContentBlock(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ContentBlockCreateManyArgs,
+    Prisma.ManagementCreateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'ContentBlock',
+    'Management',
     'POST',
-    `${endpoint}/contentBlock/createMany`,
+    `${endpoint}/management/createMany`,
     metadata,
     options,
     fetch,
@@ -114,13 +114,13 @@ export function useCreateManyContentBlock(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ContentBlockCreateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ContentBlockCreateManyArgs>,
+    mutateAsync: async <T extends Prisma.ManagementCreateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.ManagementCreateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ContentBlockCreateManyArgs>
+          Prisma.SelectSubset<T, Prisma.ManagementCreateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -135,35 +135,35 @@ export function useCreateManyContentBlock(
   return mutation
 }
 
-export function useFindManyContentBlock<
-  TArgs extends Prisma.ContentBlockFindManyArgs,
+export function useFindManyManagement<
+  TArgs extends Prisma.ManagementFindManyArgs,
   TQueryFnData = Array<
-    Prisma.ContentBlockGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.ManagementGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementFindManyArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findMany`,
+    'Management',
+    `${endpoint}/management/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useInfiniteFindManyContentBlock<
-  TArgs extends Prisma.ContentBlockFindManyArgs,
-  TQueryFnData = Array<Prisma.ContentBlockGetPayload<TArgs>>,
+export function useInfiniteFindManyManagement<
+  TArgs extends Prisma.ManagementFindManyArgs,
+  TQueryFnData = Array<Prisma.ManagementGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementFindManyArgs>,
   options?: Omit<
     UseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -172,23 +172,23 @@ export function useInfiniteFindManyContentBlock<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findMany`,
+    'Management',
+    `${endpoint}/management/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindManyContentBlock<
-  TArgs extends Prisma.ContentBlockFindManyArgs,
+export function useSuspenseFindManyManagement<
+  TArgs extends Prisma.ManagementFindManyArgs,
   TQueryFnData = Array<
-    Prisma.ContentBlockGetPayload<TArgs> & { $optimistic?: boolean }
+    Prisma.ManagementGetPayload<TArgs> & { $optimistic?: boolean }
   >,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementFindManyArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -197,21 +197,21 @@ export function useSuspenseFindManyContentBlock<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findMany`,
+    'Management',
+    `${endpoint}/management/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseInfiniteFindManyContentBlock<
-  TArgs extends Prisma.ContentBlockFindManyArgs,
-  TQueryFnData = Array<Prisma.ContentBlockGetPayload<TArgs>>,
+export function useSuspenseInfiniteFindManyManagement<
+  TArgs extends Prisma.ManagementFindManyArgs,
+  TQueryFnData = Array<Prisma.ManagementGetPayload<TArgs>>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindManyArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementFindManyArgs>,
   options?: Omit<
     UseSuspenseInfiniteQueryOptions<TQueryFnData, TError, InfiniteData<TData>>,
     'queryKey' | 'initialPageParam'
@@ -220,45 +220,41 @@ export function useSuspenseInfiniteFindManyContentBlock<
   options = options ?? { getNextPageParam: () => null }
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseInfiniteModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findMany`,
+    'Management',
+    `${endpoint}/management/findMany`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindUniqueContentBlock<
-  TArgs extends Prisma.ContentBlockFindUniqueArgs,
-  TQueryFnData = Prisma.ContentBlockGetPayload<TArgs> & {
-    $optimistic?: boolean
-  },
+export function useFindUniqueManagement<
+  TArgs extends Prisma.ManagementFindUniqueArgs,
+  TQueryFnData = Prisma.ManagementGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.ManagementFindUniqueArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findUnique`,
+    'Management',
+    `${endpoint}/management/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindUniqueContentBlock<
-  TArgs extends Prisma.ContentBlockFindUniqueArgs,
-  TQueryFnData = Prisma.ContentBlockGetPayload<TArgs> & {
-    $optimistic?: boolean
-  },
+export function useSuspenseFindUniqueManagement<
+  TArgs extends Prisma.ManagementFindUniqueArgs,
+  TQueryFnData = Prisma.ManagementGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindUniqueArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.ManagementFindUniqueArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -267,45 +263,41 @@ export function useSuspenseFindUniqueContentBlock<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findUnique`,
+    'Management',
+    `${endpoint}/management/findUnique`,
     args,
     options,
     fetch,
   )
 }
 
-export function useFindFirstContentBlock<
-  TArgs extends Prisma.ContentBlockFindFirstArgs,
-  TQueryFnData = Prisma.ContentBlockGetPayload<TArgs> & {
-    $optimistic?: boolean
-  },
+export function useFindFirstManagement<
+  TArgs extends Prisma.ManagementFindFirstArgs,
+  TQueryFnData = Prisma.ManagementGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementFindFirstArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findFirst`,
+    'Management',
+    `${endpoint}/management/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseFindFirstContentBlock<
-  TArgs extends Prisma.ContentBlockFindFirstArgs,
-  TQueryFnData = Prisma.ContentBlockGetPayload<TArgs> & {
-    $optimistic?: boolean
-  },
+export function useSuspenseFindFirstManagement<
+  TArgs extends Prisma.ManagementFindFirstArgs,
+  TQueryFnData = Prisma.ManagementGetPayload<TArgs> & { $optimistic?: boolean },
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockFindFirstArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementFindFirstArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -314,20 +306,20 @@ export function useSuspenseFindFirstContentBlock<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/findFirst`,
+    'Management',
+    `${endpoint}/management/findFirst`,
     args,
     options,
     fetch,
   )
 }
 
-export function useUpdateContentBlock(
+export function useUpdateManagement(
   options?: Omit<
     UseMutationOptions<
-      ContentBlock | undefined,
+      Management | undefined,
       DefaultError,
-      Prisma.ContentBlockUpdateArgs
+      Prisma.ManagementUpdateArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -335,14 +327,14 @@ export function useUpdateContentBlock(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ContentBlockUpdateArgs,
+    Prisma.ManagementUpdateArgs,
     DefaultError,
-    ContentBlock,
+    Management,
     true
   >(
-    'ContentBlock',
+    'Management',
     'PUT',
-    `${endpoint}/contentBlock/update`,
+    `${endpoint}/management/update`,
     metadata,
     options,
     fetch,
@@ -350,33 +342,33 @@ export function useUpdateContentBlock(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ContentBlockUpdateArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ContentBlockUpdateArgs>,
+    mutateAsync: async <T extends Prisma.ManagementUpdateArgs>(
+      args: Prisma.SelectSubset<T, Prisma.ManagementUpdateArgs>,
       options?: Omit<
         UseMutationOptions<
-          | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+          | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
           | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ContentBlockUpdateArgs>
+          Prisma.SelectSubset<T, Prisma.ManagementUpdateArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+        | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useUpdateManyContentBlock(
+export function useUpdateManyManagement(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.ContentBlockUpdateManyArgs
+      Prisma.ManagementUpdateManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -384,14 +376,14 @@ export function useUpdateManyContentBlock(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ContentBlockUpdateManyArgs,
+    Prisma.ManagementUpdateManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'ContentBlock',
+    'Management',
     'PUT',
-    `${endpoint}/contentBlock/updateMany`,
+    `${endpoint}/management/updateMany`,
     metadata,
     options,
     fetch,
@@ -399,13 +391,13 @@ export function useUpdateManyContentBlock(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ContentBlockUpdateManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ContentBlockUpdateManyArgs>,
+    mutateAsync: async <T extends Prisma.ManagementUpdateManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.ManagementUpdateManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ContentBlockUpdateManyArgs>
+          Prisma.SelectSubset<T, Prisma.ManagementUpdateManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -420,12 +412,12 @@ export function useUpdateManyContentBlock(
   return mutation
 }
 
-export function useUpsertContentBlock(
+export function useUpsertManagement(
   options?: Omit<
     UseMutationOptions<
-      ContentBlock | undefined,
+      Management | undefined,
       DefaultError,
-      Prisma.ContentBlockUpsertArgs
+      Prisma.ManagementUpsertArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -433,14 +425,14 @@ export function useUpsertContentBlock(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ContentBlockUpsertArgs,
+    Prisma.ManagementUpsertArgs,
     DefaultError,
-    ContentBlock,
+    Management,
     true
   >(
-    'ContentBlock',
+    'Management',
     'POST',
-    `${endpoint}/contentBlock/upsert`,
+    `${endpoint}/management/upsert`,
     metadata,
     options,
     fetch,
@@ -448,33 +440,33 @@ export function useUpsertContentBlock(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ContentBlockUpsertArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ContentBlockUpsertArgs>,
+    mutateAsync: async <T extends Prisma.ManagementUpsertArgs>(
+      args: Prisma.SelectSubset<T, Prisma.ManagementUpsertArgs>,
       options?: Omit<
         UseMutationOptions<
-          | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+          | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
           | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ContentBlockUpsertArgs>
+          Prisma.SelectSubset<T, Prisma.ManagementUpsertArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+        | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteContentBlock(
+export function useDeleteManagement(
   options?: Omit<
     UseMutationOptions<
-      ContentBlock | undefined,
+      Management | undefined,
       DefaultError,
-      Prisma.ContentBlockDeleteArgs
+      Prisma.ManagementDeleteArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -482,14 +474,14 @@ export function useDeleteContentBlock(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ContentBlockDeleteArgs,
+    Prisma.ManagementDeleteArgs,
     DefaultError,
-    ContentBlock,
+    Management,
     true
   >(
-    'ContentBlock',
+    'Management',
     'DELETE',
-    `${endpoint}/contentBlock/delete`,
+    `${endpoint}/management/delete`,
     metadata,
     options,
     fetch,
@@ -497,33 +489,33 @@ export function useDeleteContentBlock(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ContentBlockDeleteArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ContentBlockDeleteArgs>,
+    mutateAsync: async <T extends Prisma.ManagementDeleteArgs>(
+      args: Prisma.SelectSubset<T, Prisma.ManagementDeleteArgs>,
       options?: Omit<
         UseMutationOptions<
-          | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+          | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
           | undefined,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ContentBlockDeleteArgs>
+          Prisma.SelectSubset<T, Prisma.ManagementDeleteArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
       >,
     ) => {
       return (await _mutation.mutateAsync(args, options as any)) as
-        | CheckSelect<T, ContentBlock, Prisma.ContentBlockGetPayload<T>>
+        | CheckSelect<T, Management, Prisma.ManagementGetPayload<T>>
         | undefined
     },
   }
   return mutation
 }
 
-export function useDeleteManyContentBlock(
+export function useDeleteManyManagement(
   options?: Omit<
     UseMutationOptions<
       Prisma.BatchPayload,
       DefaultError,
-      Prisma.ContentBlockDeleteManyArgs
+      Prisma.ManagementDeleteManyArgs
     > &
       ExtraMutationOptions,
     'mutationFn'
@@ -531,14 +523,14 @@ export function useDeleteManyContentBlock(
 ) {
   const { endpoint, fetch } = getHooksContext()
   const _mutation = useModelMutation<
-    Prisma.ContentBlockDeleteManyArgs,
+    Prisma.ManagementDeleteManyArgs,
     DefaultError,
     Prisma.BatchPayload,
     false
   >(
-    'ContentBlock',
+    'Management',
     'DELETE',
-    `${endpoint}/contentBlock/deleteMany`,
+    `${endpoint}/management/deleteMany`,
     metadata,
     options,
     fetch,
@@ -546,13 +538,13 @@ export function useDeleteManyContentBlock(
   )
   const mutation = {
     ..._mutation,
-    mutateAsync: async <T extends Prisma.ContentBlockDeleteManyArgs>(
-      args: Prisma.SelectSubset<T, Prisma.ContentBlockDeleteManyArgs>,
+    mutateAsync: async <T extends Prisma.ManagementDeleteManyArgs>(
+      args: Prisma.SelectSubset<T, Prisma.ManagementDeleteManyArgs>,
       options?: Omit<
         UseMutationOptions<
           Prisma.BatchPayload,
           DefaultError,
-          Prisma.SelectSubset<T, Prisma.ContentBlockDeleteManyArgs>
+          Prisma.SelectSubset<T, Prisma.ManagementDeleteManyArgs>
         > &
           ExtraMutationOptions,
         'mutationFn'
@@ -567,33 +559,33 @@ export function useDeleteManyContentBlock(
   return mutation
 }
 
-export function useAggregateContentBlock<
-  TArgs extends Prisma.ContentBlockAggregateArgs,
-  TQueryFnData = Prisma.GetContentBlockAggregateType<TArgs>,
+export function useAggregateManagement<
+  TArgs extends Prisma.ManagementAggregateArgs,
+  TQueryFnData = Prisma.GetManagementAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ContentBlockAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.ManagementAggregateArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/aggregate`,
+    'Management',
+    `${endpoint}/management/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseAggregateContentBlock<
-  TArgs extends Prisma.ContentBlockAggregateArgs,
-  TQueryFnData = Prisma.GetContentBlockAggregateType<TArgs>,
+export function useSuspenseAggregateManagement<
+  TArgs extends Prisma.ManagementAggregateArgs,
+  TQueryFnData = Prisma.GetManagementAggregateType<TArgs>,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args: Prisma.SelectSubset<TArgs, Prisma.ContentBlockAggregateArgs>,
+  args: Prisma.SelectSubset<TArgs, Prisma.ManagementAggregateArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -602,23 +594,23 @@ export function useSuspenseAggregateContentBlock<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/aggregate`,
+    'Management',
+    `${endpoint}/management/aggregate`,
     args,
     options,
     fetch,
   )
 }
 
-export function useGroupByContentBlock<
-  TArgs extends Prisma.ContentBlockGroupByArgs,
+export function useGroupByManagement<
+  TArgs extends Prisma.ManagementGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.ContentBlockGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.ContentBlockGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.ManagementGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.ManagementGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -671,18 +663,18 @@ export function useGroupByContentBlock<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.ContentBlockGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.ManagementGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.ContentBlockGroupByOutputType]: P extends '_count'
+            keyof Prisma.ManagementGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.ContentBlockGroupByOutputType[P]
+                  Prisma.ManagementGroupByOutputType[P]
                 >
             : Prisma.GetScalarType<
                 TArgs[P],
-                Prisma.ContentBlockGroupByOutputType[P]
+                Prisma.ManagementGroupByOutputType[P]
               >
         }
       >
@@ -692,11 +684,7 @@ export function useGroupByContentBlock<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<
-      TArgs,
-      Prisma.ContentBlockGroupByArgs,
-      OrderByArg
-    > &
+    Prisma.SubsetIntersection<TArgs, Prisma.ManagementGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
@@ -704,23 +692,23 @@ export function useGroupByContentBlock<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/groupBy`,
+    'Management',
+    `${endpoint}/management/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseGroupByContentBlock<
-  TArgs extends Prisma.ContentBlockGroupByArgs,
+export function useSuspenseGroupByManagement<
+  TArgs extends Prisma.ManagementGroupByArgs,
   HasSelectOrTake extends Prisma.Or<
     Prisma.Extends<'skip', Prisma.Keys<TArgs>>,
     Prisma.Extends<'take', Prisma.Keys<TArgs>>
   >,
   OrderByArg extends Prisma.True extends HasSelectOrTake
-    ? { orderBy: Prisma.ContentBlockGroupByArgs['orderBy'] }
-    : { orderBy?: Prisma.ContentBlockGroupByArgs['orderBy'] },
+    ? { orderBy: Prisma.ManagementGroupByArgs['orderBy'] }
+    : { orderBy?: Prisma.ManagementGroupByArgs['orderBy'] },
   OrderFields extends Prisma.ExcludeUnderscoreKeys<
     Prisma.Keys<Prisma.MaybeTupleToUnion<TArgs['orderBy']>>
   >,
@@ -773,18 +761,18 @@ export function useSuspenseGroupByContentBlock<
               }[OrderFields],
   TQueryFnData = {} extends InputErrors
     ? Array<
-        PickEnumerable<Prisma.ContentBlockGroupByOutputType, TArgs['by']> & {
+        PickEnumerable<Prisma.ManagementGroupByOutputType, TArgs['by']> & {
           [P in keyof TArgs &
-            keyof Prisma.ContentBlockGroupByOutputType]: P extends '_count'
+            keyof Prisma.ManagementGroupByOutputType]: P extends '_count'
             ? TArgs[P] extends boolean
               ? number
               : Prisma.GetScalarType<
                   TArgs[P],
-                  Prisma.ContentBlockGroupByOutputType[P]
+                  Prisma.ManagementGroupByOutputType[P]
                 >
             : Prisma.GetScalarType<
                 TArgs[P],
-                Prisma.ContentBlockGroupByOutputType[P]
+                Prisma.ManagementGroupByOutputType[P]
               >
         }
       >
@@ -794,11 +782,7 @@ export function useSuspenseGroupByContentBlock<
 >(
   args: Prisma.SelectSubset<
     TArgs,
-    Prisma.SubsetIntersection<
-      TArgs,
-      Prisma.ContentBlockGroupByArgs,
-      OrderByArg
-    > &
+    Prisma.SubsetIntersection<TArgs, Prisma.ManagementGroupByArgs, OrderByArg> &
       InputErrors
   >,
   options?: Omit<
@@ -809,55 +793,55 @@ export function useSuspenseGroupByContentBlock<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/groupBy`,
+    'Management',
+    `${endpoint}/management/groupBy`,
     args,
     options,
     fetch,
   )
 }
 
-export function useCountContentBlock<
-  TArgs extends Prisma.ContentBlockCountArgs,
+export function useCountManagement<
+  TArgs extends Prisma.ManagementCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.ContentBlockCountAggregateOutputType
+          Prisma.ManagementCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementCountArgs>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/count`,
+    'Management',
+    `${endpoint}/management/count`,
     args,
     options,
     fetch,
   )
 }
 
-export function useSuspenseCountContentBlock<
-  TArgs extends Prisma.ContentBlockCountArgs,
+export function useSuspenseCountManagement<
+  TArgs extends Prisma.ManagementCountArgs,
   TQueryFnData = TArgs extends { select: any }
     ? TArgs['select'] extends true
       ? number
       : Prisma.GetScalarType<
           TArgs['select'],
-          Prisma.ContentBlockCountAggregateOutputType
+          Prisma.ManagementCountAggregateOutputType
         >
     : number,
   TData = TQueryFnData,
   TError = DefaultError,
 >(
-  args?: Prisma.SelectSubset<TArgs, Prisma.ContentBlockCountArgs>,
+  args?: Prisma.SelectSubset<TArgs, Prisma.ManagementCountArgs>,
   options?: Omit<
     UseSuspenseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey'
@@ -866,48 +850,23 @@ export function useSuspenseCountContentBlock<
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useSuspenseModelQuery<TQueryFnData, TData, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/count`,
+    'Management',
+    `${endpoint}/management/count`,
     args,
     options,
     fetch,
   )
 }
-import type {
-  ContentNature,
-  BlockSize,
-  GridSize,
-  Alignment,
-} from '@zenstackhq/runtime/models'
 
-export function useCheckContentBlock<TError = DefaultError>(
-  args: {
-    operation: PolicyCrudKind
-    where?: {
-      id?: string
-      nature?: ContentNature
-      size?: BlockSize
-      order?: number
-      withBorder?: boolean
-      gridSize?: GridSize
-      alignment?: Alignment
-      caption?: string
-      fileId?: string
-      content?: string
-      courseId?: string
-      admissionCourseId?: string
-      faqItemId?: string
-      newsId?: string
-      managementId?: string
-    }
-  },
+export function useCheckManagement<TError = DefaultError>(
+  args: { operation: PolicyCrudKind; where?: { id?: string } },
   options?: Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> &
     ExtraQueryOptions,
 ) {
   const { endpoint, fetch } = getHooksContext()
   return useModelQuery<boolean, boolean, TError>(
-    'ContentBlock',
-    `${endpoint}/contentBlock/check`,
+    'Management',
+    `${endpoint}/management/check`,
     args,
     options,
     fetch,
