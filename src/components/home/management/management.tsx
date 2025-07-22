@@ -1,17 +1,10 @@
 import { BlockContentRenderer } from '@/components/common/block-content-renderer'
 import HeaderMadrid from '@/components/common/header-madrid'
 import { Block } from '@/components/ui/form-fields/blocks-field'
-import { db } from '@/server/db'
+import { getManagementData } from '@/lib/server-cached/management-data'
 
 export default async function Management() {
-  const content = await db.management.findFirst({
-    include: {
-      contentBlocks: {
-        include: { file: true },
-        orderBy: { order: 'asc' },
-      },
-    },
-  })
+  const content = await getManagementData()
 
   if (!content) {
     return (
@@ -28,7 +21,7 @@ export default async function Management() {
         subtitle="Conheça a gestão da FCT"
         showBackButton
         backButtonLabel="Voltar para home"
-        backButtonHref="/"
+        backButtonHref="/home"
         showShareButton
         shareData={{
           title: 'Gestão da FCT',

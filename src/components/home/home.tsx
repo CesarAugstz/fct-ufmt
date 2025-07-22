@@ -3,7 +3,7 @@ import { HeroBanner } from './components/hero-banner'
 import QuickLinksSection from './components/content-tabs/components/quick-links-section'
 import CardHeroMadrid from '../common/card-hero-madrid'
 import NewsPreview from './components/news-preview/news-preview'
-import { getFeaturedNews, getLatestNews } from '@/lib/news-data'
+import { getFeaturedNews, getLatestNews } from '@/lib/server-cached/news-data'
 
 export default async function Home() {
   const latestNews = await getLatestNews()

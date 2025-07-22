@@ -11,6 +11,7 @@ import { useCallback } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateContentBlocks } from '@/lib/hooks/update-content-blocks'
 import FormButtons from '../form-buttons'
+import { revalidateManagement } from '@/lib/cache-revalidation'
 
 const formSchema = z.object({
   contentBlocks: z.array(getBlockSchema()).optional(),
@@ -45,6 +46,7 @@ export default function Management() {
           values.contentBlocks ?? [],
           management?.contentBlocks,
         )
+        await revalidateManagement()
 
         toast.success('Gestão atualizada com sucesso!')
       } catch (error) {
