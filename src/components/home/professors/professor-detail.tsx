@@ -112,21 +112,29 @@ export default function ProfessorDetail({ id }: { id: string }) {
             <div className="prose prose-lg max-w-none">
               <p className="lead">{professor.summary}</p>
 
-              <h2>Áreas de Pesquisa</h2>
-              <ul>
-                {professor.researchAreas.map(area => (
-                  <li key={area}>{area}</li>
-                ))}
-              </ul>
+              {professor.researchAreas.length > 0 && (
+                <>
+                  <h2>Áreas de Pesquisa</h2>
+                  <ul>
+                    {professor.researchAreas.map(area => (
+                      <li key={area}>{area}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
 
-              <h2>Especialidades</h2>
-              <div className="flex flex-wrap gap-2 not-prose">
-                {professor.specialties.map(specialty => (
-                  <Badge key={specialty} variant="outline">
-                    {specialty}
-                  </Badge>
-                ))}
-              </div>
+              {professor.specialties.length > 0 && (
+                <>
+                  <h2>Especialidades</h2>
+                  <div className="flex flex-wrap gap-2 not-prose">
+                    {professor.specialties.map(specialty => (
+                      <Badge key={specialty} variant="outline">
+                        {specialty}
+                      </Badge>
+                    ))}
+                  </div>
+                </>
+              )}
 
               {professor.publications?.length > 0 && (
                 <>
@@ -248,47 +256,53 @@ export default function ProfessorDetail({ id }: { id: string }) {
           </div>
 
           <div className="space-y-6">
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4">
-                Informações de Contato
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span>Horário de Atendimento:</span>
-                </div>
-                <p className="text-sm text-muted-foreground pl-6">
-                  {professor.officeHours}
-                </p>
-              </div>
-            </Card>
-
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4">
-                Métricas Acadêmicas
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
+            {professor.officeHours && (
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4">
+                  Informações de Contato
+                </h3>
+                <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <Book className="h-4 w-4 text-muted-foreground" />
-                    <span>Publicações:</span>
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <span>Horário de Atendimento:</span>
                   </div>
-                  <span className="font-semibold">
-                    {professor.publications?.length || 0}
-                  </span>
+                  <p className="text-sm text-muted-foreground pl-6">
+                    {professor.officeHours}
+                  </p>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            )}
 
-            <Button className="w-full" asChild>
-              <a
-                href={professor.lattes || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver Currículo Lattes
-              </a>
-            </Button>
+            {professor.publications?.length > 0 && (
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4">
+                  Métricas Acadêmicas
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Book className="h-4 w-4 text-muted-foreground" />
+                      <span>Publicações:</span>
+                    </div>
+                    <span className="font-semibold">
+                      {professor.publications?.length || 0}
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {professor.lattes && (
+              <Button className="w-full" asChild>
+                <a
+                  href={professor.lattes || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ver Currículo Lattes
+                </a>
+              </Button>
+            )}
           </div>
         </div>
       </div>
