@@ -19,6 +19,8 @@ export function useUpdateContentBlocks({
     blocks: BlockSchema[],
     oldBlocks?: BlockSchema[],
   ) => {
+    if (!managementId) throw new Error('No relation id provided')
+
     const blocksToDelete = oldBlocks
       ?.filter(block => !blocks.find(b => b.id === block.id))
       .map(block => block.id)
