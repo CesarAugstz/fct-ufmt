@@ -331,12 +331,12 @@ const metadata = {
                     isArray: true,
                 }, researchProjects: {
                     name: "researchProjects",
-                    type: "ResearchProject",
+                    type: "ProfessorResearchProject",
                     isTypeDef: true,
                     isArray: true,
                 }, extensionProjects: {
                     name: "extensionProjects",
-                    type: "ExtensionProject",
+                    type: "ProfessorExtensionProject",
                     isTypeDef: true,
                     isArray: true,
                 }, imageId: {
@@ -625,6 +625,20 @@ const metadata = {
                     backLink: 'contentBlocks',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "managementId" },
+                }, projectId: {
+                    name: "projectId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'project',
+                }, project: {
+                    name: "project",
+                    type: "Project",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'contentBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "projectId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -710,6 +724,45 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'management',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            },
+        },
+        project: {
+            name: 'Project', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, type: {
+                    name: "type",
+                    type: "ProjectType",
+                }, contentBlocks: {
+                    name: "contentBlocks",
+                    type: "ContentBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'project',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -819,8 +872,8 @@ const metadata = {
                 },
             },
         },
-        researchProject: {
-            name: 'ResearchProject', fields: {
+        professorResearchProject: {
+            name: 'ProfessorResearchProject', fields: {
                 title: {
                     name: "title",
                     type: "String",
@@ -841,8 +894,8 @@ const metadata = {
                 },
             },
         },
-        extensionProject: {
-            name: 'ExtensionProject', fields: {
+        professorExtensionProject: {
+            name: 'ProfessorExtensionProject', fields: {
                 title: {
                     name: "title",
                     type: "String",
@@ -885,6 +938,7 @@ const metadata = {
         faqItem: ['ContentBlock'],
         attachment: ['Professor', 'ContentBlock'],
         management: ['ContentBlock'],
+        project: ['ContentBlock'],
 
     },
     authModel: 'User'

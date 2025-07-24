@@ -56,9 +56,7 @@ export function FormTextarea({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem
-          className={twMerge(className, span ? `col-span-${span}` : '')}
-        >
+        <FormItem className={twMerge(className)} span={span}>
           <FormLabel>
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}

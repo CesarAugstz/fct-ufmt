@@ -20,7 +20,7 @@ export default async function AdminLayout({
       <Sidebar />
       <Header />
       <main className=" pt-20 pb-4 px-4 md:pl-72">
-        <div className="fixed top-22 right-4 left-72 bottom-4 overflow-y-scroll bg-muted/30 rounded-xl p-1">
+        <div className="fixed top-22 right-4 left-4 md:left-72 bottom-4 overflow-y-scroll bg-muted/30 rounded-xl p-1">
           {children}
         </div>
       </main>

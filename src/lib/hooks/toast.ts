@@ -13,7 +13,7 @@ export function useToast() {
   function info(message: string, options?: ExternalToast) {
     toast.info(message, options)
   }
-  function exception(error: any) {
+  function exception(error: any, fallbackMessage?: string) {
     switch (true) {
       case error?.info?.rejectedByPolicy:
         return toast.error('Você não tem permissão para executar esta ação.')
@@ -33,7 +33,9 @@ export function useToast() {
         return toast.error(error.error.message)
 
       default:
-        return toast.error('An error occurred. Please try again.')
+        return toast.error(
+          fallbackMessage || 'Ocorreu um erro. Por favor, tente novamente.',
+        )
     }
   }
   return {

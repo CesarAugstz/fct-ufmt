@@ -12,9 +12,9 @@ const prisma = new PrismaClient()
 
 const shouldClean = process.argv.includes('--clean')
 const seedAll = process.argv.includes('--all')
-const adminPassword = process.argv
-  .find(arg => arg.startsWith('--password='))
-  ?.split('=')[1]
+const adminPassword =
+  process.argv.find(arg => arg.startsWith('--password='))?.split('=')[1] ||
+  'admin'
 
 async function cleanDatabase() {
   console.log('🧹 Cleaning database...')

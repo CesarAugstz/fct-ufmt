@@ -55,9 +55,7 @@ export function FormText({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem
-          className={twMerge(className, span ? `col-span-${span}` : '')}
-        >
+        <FormItem className={twMerge(className)} span={span}>
           <FormLabel>
             {customLabel}
             {label}

@@ -65,6 +65,11 @@ enum GridSize {
   FOUR
 }
 
+enum ProjectType {
+  EXTENSION
+  RESEARCH
+}
+
 model User {
   id                      String     @id() @default(ulid())
   createdAt               DateTime   @default(now())
@@ -200,6 +205,8 @@ model ContentBlock {
   news              News?         @relation("NewsContentBlocks", fields: [newsId], references: [id], onDelete: Cascade)
   managementId      String?
   management        Management?   @relation(fields: [managementId], references: [id], onDelete: Cascade)
+  projectId         String?
+  project           Project?      @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {
@@ -219,6 +226,16 @@ model Management {
   id            String         @id() @default(ulid())
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt()
+  contentBlocks ContentBlock[]
+}
+
+model Project {
+  id            String         @id() @default(ulid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  title         String
+  description   String?
+  type          ProjectType
   contentBlocks ContentBlock[]
 }
 

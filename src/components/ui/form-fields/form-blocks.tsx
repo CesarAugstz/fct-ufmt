@@ -45,7 +45,7 @@ export function FormBlocks<
   })
 
   return (
-    <FormItem className={twMerge(className, span ? `col-span-${span}` : '')}>
+    <FormItem span={span} className={twMerge(className)}>
       {label && (
         <div className="flex items-center gap-2">
           <FormLabel>

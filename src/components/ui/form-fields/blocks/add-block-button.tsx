@@ -11,7 +11,7 @@ interface AddBlockButtonProps {
 
 export function AddBlockButton({ onAdd }: AddBlockButtonProps) {
   return (
-    <div className="flex gap-2 justify-center">
+    <div className="flex flex-wrap gap-2 justify-center">
       <ToolTipMadrid
         onClick={() => onAdd(ContentNature.TEXT)}
         content="Adiciona um novo bloco de texto"

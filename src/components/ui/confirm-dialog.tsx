@@ -11,15 +11,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import LoadingSpinner from '../common/loading-spinner'
 
 interface ConfirmDialogProps {
   open: boolean
-  onOpenChange: (open: boolean) => void
+  onOpenChange?: (open: boolean) => void
   title?: string
   description?: string
   confirmLabel?: string
   cancelLabel?: string
   onConfirm: () => void
+  isLoading?: boolean
   variant?: 'default' | 'destructive'
 }
 
@@ -30,6 +32,7 @@ export function ConfirmDialog({
   description = 'Você tem certeza?',
   confirmLabel = 'Confirmar',
   cancelLabel = 'Cancelar',
+  isLoading,
   onConfirm,
   variant = 'default',
 }: ConfirmDialogProps) {
@@ -50,7 +53,7 @@ export function ConfirmDialog({
                 : ''
             }
           >
-            {confirmLabel}
+            {isLoading ? <LoadingSpinner /> : confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

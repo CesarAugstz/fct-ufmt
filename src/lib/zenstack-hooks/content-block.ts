@@ -329,7 +329,7 @@ export function useSuspenseCountContentBlock<TArgs extends Prisma.ContentBlockCo
 }
 import type { ContentNature, BlockSize, GridSize, Alignment } from '@zenstackhq/runtime/models';
 
-export function useCheckContentBlock<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; nature?: ContentNature; size?: BlockSize; order?: number; withBorder?: boolean; gridSize?: GridSize; alignment?: Alignment; caption?: string; fileId?: string; content?: string; courseId?: string; admissionCourseId?: string; faqItemId?: string; newsId?: string; managementId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckContentBlock<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; nature?: ContentNature; size?: BlockSize; order?: number; withBorder?: boolean; gridSize?: GridSize; alignment?: Alignment; caption?: string; fileId?: string; content?: string; courseId?: string; admissionCourseId?: string; faqItemId?: string; newsId?: string; managementId?: string; projectId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ContentBlock', `${endpoint}/contentBlock/check`, args, options, fetch);
 }

@@ -132,7 +132,7 @@ enum ProjectStatus {
   FINISHED
 }
 
-type ResearchProject {
+type ProfessorResearchProject {
   title       String
   startDate   DateTime
   endDate     DateTime?
@@ -140,7 +140,7 @@ type ResearchProject {
   description String?
 }
 
-type ExtensionProject {
+type ProfessorExtensionProject {
   title       String
   startDate   DateTime
   status      ProjectStatus
@@ -157,8 +157,8 @@ model Professor extends BaseModel {
   officeHours       String?
   lattes            String?
   publications      Publication[]      @json
-  researchProjects  ResearchProject[]  @json
-  extensionProjects ExtensionProject[] @json 
+  researchProjects  ProfessorResearchProject[]  @json
+  extensionProjects ProfessorExtensionProject[] @json 
 
   imageId           String?            @unique
   image             Attachment? @relation(fields: [imageId], references: [id], onDelete: Cascade)
@@ -265,6 +265,9 @@ model ContentBlock extends BaseModel {
   managementId String?
   management   Management? @relation(fields: [managementId], references: [id], onDelete: Cascade)
 
+  projectId   String?
+  project     Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
   @@allow('read', true)
   @@allow('create,update,delete', auth().role != null)
 }
@@ -289,6 +292,22 @@ model Management extends BaseModel {
   @@allow('read', true)
   @@allow('create,update,delete', auth() != null)
 }
+
+enum ProjectType {
+  EXTENSION
+  RESEARCH
+}
+
+model Project extends BaseModel {
+  title String
+  description String?
+  type ProjectType
+  contentBlocks ContentBlock[]
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth() != null)
+}
+
 
 model LogEntry extends BaseModel {
   userId String?

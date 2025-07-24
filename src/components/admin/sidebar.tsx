@@ -11,6 +11,7 @@ import {
   Menu,
   Newspaper,
   ShieldUser,
+  PanelsTopLeft,
 } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
@@ -52,6 +53,11 @@ const routes: Route[] = [
     name: 'Gestão',
     path: '/admin/management',
     icon: <ShieldUser className="mr-2 h-5 w-5" />,
+  },
+  {
+    name: 'Projetos',
+    path: '/admin/projects',
+    icon: <PanelsTopLeft className="mr-2 h-5 w-5" />,
   },
   {
     name: 'Configurações',

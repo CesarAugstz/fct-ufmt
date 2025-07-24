@@ -7,10 +7,12 @@ import { ulid } from 'ulidx'
 
 interface UpdateContentBlocksParams {
   managementId?: string
+  projectId?: string
 }
 
 export function useUpdateContentBlocks({
   managementId,
+  projectId,
 }: UpdateContentBlocksParams = {}) {
   const upsertMutation = useUpsertContentBlock()
   const deleteMutation = useDeleteManyContentBlock()
@@ -19,7 +21,7 @@ export function useUpdateContentBlocks({
     blocks: BlockSchema[],
     oldBlocks?: BlockSchema[],
   ) => {
-    if (!managementId) throw new Error('No relation id provided')
+    if (!managementId && !projectId) throw new Error('No relation id provided')
 
     const blocksToDelete = oldBlocks
       ?.filter(block => !blocks.find(b => b.id === block.id))
@@ -36,6 +38,7 @@ export function useUpdateContentBlocks({
             ...(managementId
               ? { management: { connect: { id: managementId } } }
               : {}),
+            ...(projectId ? { project: { connect: { id: projectId } } } : {}),
             accordionItems: block.accordionItems || [],
             file: {
               upsert: {
@@ -53,6 +56,7 @@ export function useUpdateContentBlocks({
           },
           create: {
             ...block,
+            ...(projectId ? { project: { connect: { id: projectId } } } : {}),
             ...(managementId
               ? { management: { connect: { id: managementId } } }
               : {}),
