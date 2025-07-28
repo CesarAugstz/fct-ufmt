@@ -4,6 +4,8 @@ import Script from 'next/script'
 import './globals.css'
 import { Providers } from '@/components/providers/providers'
 import { Toaster } from '@/components/ui/sonner'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Montserrat({
   variable: '--font-inter',
@@ -27,6 +29,9 @@ export default function RootLayout({
           {children}
         </Providers>
         <Toaster richColors position="bottom-center" />
+
+        <Analytics />
+        <SpeedInsights />
 
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
