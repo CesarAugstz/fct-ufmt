@@ -46,8 +46,6 @@ model User extends BaseModel {
   professor Professor?
   logEntries LogEntry[]
 
-  @@deny('all', auth() == null)
-  
   @@allow('create', auth().role == 'USER' && (role == 'USER' || role == 'PROFESSOR'))
   
   @@allow('create', auth().role == 'ADMIN')
