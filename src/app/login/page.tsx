@@ -109,9 +109,7 @@ export default function LoginPage() {
         <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
           <div className="w-full max-w-md space-y-6">
             <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold">
-                Bem vindo(a) de volta Professor(a)
-              </h1>
+              <h1 className="text-3xl font-bold">Seja bem vindo(a)</h1>
               <p className="text-muted-foreground">
                 Acesse sua conta para continuar
               </p>

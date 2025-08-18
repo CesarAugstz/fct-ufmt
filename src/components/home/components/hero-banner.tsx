@@ -19,11 +19,8 @@ export function HeroBanner() {
       <div className="container mx-auto px-4 py-10 md:py-18 relative z-10">
         <div className="max-w-3xl h-[40vh] sm:h-[70vh] flex flex-col justify-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-            Formando profissionais e pesquisadores em Computação
+            Educação que conecta ciência, tecnologia e sociedade
           </h1>
-          <p className="text-lg md:text-xl opacity-90 mb-8 leading-relaxed">
-            Inovação e Conhecimento para Transformar o Futuro.
-          </p>
           <div className="flex flex-wrap gap-4">
             <Button
               asChild
