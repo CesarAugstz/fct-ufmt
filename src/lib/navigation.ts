@@ -1,5 +1,6 @@
 import { db } from '@/server/db'
-import { CourseNature } from '@prisma/client'
+import { CourseNature, ProjectType } from '@prisma/client'
+import { unstable_cache } from 'next/cache'
 
 export type Section = {
   name: string
@@ -18,6 +19,23 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
       name: 'asc',
     },
   })
+
+  const projects = await db.project.findMany({
+    select: {
+      title: true,
+      type: true,
+      slug: true,
+    },
+    orderBy: { title: 'asc' },
+  })
+
+  const extensionProjects = projects
+    ?.filter(p => p.type === ProjectType.EXTENSION)
+    ?.map(p => ({ name: p.title, href: `/home/projects/${p.slug}` }))
+
+  const researchProjects = projects
+    ?.filter(p => p.type === ProjectType.RESEARCH)
+    ?.map(p => ({ name: p.title, href: `/home/projects/${p.slug}` }))
 
   const graduationCourses = courses
     ?.filter(c => c.nature === CourseNature.GRADUATION)
@@ -50,21 +68,38 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
     {
       name: 'Estágios',
     },
-    {
-      name: 'Pós-Graduação',
-      children: postGraduationCourses,
-    },
-    {
-      name: 'Graduação',
-      href: '/home/courses',
-      children: graduationCourses,
-    },
-    {
-      name: 'Extensão',
-    },
-    {
-      name: 'Pesquisa',
-    },
+    ...(postGraduationCourses?.length
+      ? [
+          {
+            name: 'Pós-Graduação',
+            children: postGraduationCourses,
+          },
+        ]
+      : []),
+    ...(graduationCourses?.length
+      ? [
+          {
+            name: 'Graduação',
+            children: graduationCourses,
+          },
+        ]
+      : []),
+    ...(extensionProjects?.length
+      ? [
+          {
+            name: 'Extensão',
+            children: extensionProjects,
+          },
+        ]
+      : []),
+    ...(researchProjects?.length
+      ? [
+          {
+            name: 'Pesquisa',
+            children: researchProjects,
+          },
+        ]
+      : []),
     {
       name: 'Agendas',
     },
@@ -73,4 +108,11 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
   return sections
 }
 
-export const getNavigationSections = getNavigationSectionsUncached
+export const getNavigationSections = unstable_cache(
+  async () => getNavigationSectionsUncached(),
+  ['navigation'],
+  {
+    tags: ['navigation'],
+    revalidate: 60 * 60,
+  },
+)

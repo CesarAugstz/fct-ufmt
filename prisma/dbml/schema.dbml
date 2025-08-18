@@ -167,6 +167,7 @@ Table Project {
   description String
   type ProjectType [not null]
   contentBlocks ContentBlock [not null]
+  slug String [unique, not null]
 }
 
 Table LogEntry {

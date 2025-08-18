@@ -301,6 +301,7 @@ model Project extends BaseModel {
   description String?
   type ProjectType
   contentBlocks ContentBlock[]
+  slug String @unique
 
   @@allow('read', true)
   @@allow('create,update,delete', auth() != null)

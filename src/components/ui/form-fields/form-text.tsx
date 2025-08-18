@@ -28,6 +28,7 @@ export interface FormTextProps {
   span?: number
   autoFocus?: boolean
   tabIndex?: number
+  disabled?: boolean
 }
 
 export function FormText({
@@ -47,6 +48,7 @@ export function FormText({
   span,
   autoFocus = false,
   tabIndex,
+  disabled,
 }: FormTextProps) {
   const { control } = useFormContext()
 
@@ -67,6 +69,7 @@ export function FormText({
               autoFocus={autoFocus}
               showPasswordToggle={showPasswordToggle}
               placeholder={placeholder}
+              disabled={disabled}
               {...field}
               onBlur={onBlur}
               type={type}

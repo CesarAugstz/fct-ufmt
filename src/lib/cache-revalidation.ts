@@ -13,6 +13,11 @@ export async function revalidateNews() {
   revalidateTag('featured-news')
 }
 
+export async function revalidateProjects() {
+  revalidateTag('navigation')
+  revalidateTag('projects')
+}
+
 export async function revalidateManagement() {
   revalidateTag('management')
 }

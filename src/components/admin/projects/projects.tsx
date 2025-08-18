@@ -7,6 +7,7 @@ import ProjectAddModal from './project-add-modal'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { useToast } from '@/lib/hooks/toast'
 import { useRouter } from 'next/navigation'
+import { revalidateProjects } from '@/lib/cache-revalidation'
 
 interface ProjectsProps {
   className?: string
@@ -36,6 +37,7 @@ export default function Projects({ className }: ProjectsProps) {
       toast.exception(error, 'Erro ao excluir projeto')
     } finally {
       setProjectIdToDelete(null)
+      await revalidateProjects()
     }
   }, [deleteProject, projectIdToDelete, toast])
 

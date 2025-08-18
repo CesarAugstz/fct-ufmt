@@ -16,12 +16,15 @@ import { FormSelect, FormText, FormTextarea } from '@/components/ui/form-fields'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import FormGrid from '@/components/ui/form-fields/form-grid'
 import { useRouter } from 'next/navigation'
+import { formatToSlug } from '@/lib/formatters/slug.formatter'
+import { revalidateProjects } from '@/lib/cache-revalidation'
 
 const projectSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
   description: z.string().nullish(),
   type: z.enum(ProjectType),
   contentBlocks: z.array(getBlockSchema()).optional(),
+  slug: z.string().nullish(),
 })
 type ProjectSchema = z.infer<typeof projectSchema>
 
@@ -54,8 +57,20 @@ export default function ProjectForm({
       type: project?.type ?? ProjectType.RESEARCH,
       description: project?.description,
       contentBlocks: project?.contentBlocks ?? [],
+      slug: project?.slug,
     },
   })
+
+  const onChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      const formatted = formatToSlug(value)
+      if (form.getValues('slug') === formatted) return
+
+      form.setValue('slug', formatted)
+    },
+    [form],
+  )
 
   const handleSubmit = useCallback(
     async (values: ProjectSchema) => {
@@ -65,9 +80,11 @@ export default function ProjectForm({
           data: {
             title: values.title,
             type: values.type,
+            slug: values.slug ?? '',
             description: values.description,
           },
         })
+        await revalidateProjects()
         await updateContentBlocks(
           values.contentBlocks ?? [],
           project?.contentBlocks,
@@ -105,7 +122,14 @@ export default function ProjectForm({
             className="space-y-6"
           >
             <FormGrid>
-              <FormText name="title" label="Título" required span={3} />
+              <FormText
+                name="title"
+                label="Título"
+                onChange={onChangeTitle}
+                required
+                span={3}
+              />
+              <FormText name="slug" label="Slug" disabled span={3} />
               <FormSelect
                 name="type"
                 label="Tipo"

@@ -237,6 +237,7 @@ model Project {
   description   String?
   type          ProjectType
   contentBlocks ContentBlock[]
+  slug          String         @unique()
 }
 
 model LogEntry {

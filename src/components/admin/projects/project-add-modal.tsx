@@ -15,10 +15,13 @@ import { useCallback, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import FormButtons from '../form-buttons'
+import { formatToSlug } from '@/lib/formatters/slug.formatter'
+import { revalidateProjects } from '@/lib/cache-revalidation'
 
 const createProjectSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
   type: z.enum(ProjectType),
+  slug: z.string().min(1, 'Slug é obrigatório'),
 })
 
 type CreateProjectSchema = z.infer<typeof createProjectSchema>
@@ -42,6 +45,7 @@ export default function ProjectAddModal({
     defaultValues: {
       title: '',
       type: ProjectType.RESEARCH,
+      slug: '',
     },
   })
 
@@ -58,9 +62,11 @@ export default function ProjectAddModal({
           data: {
             title: values.title,
             type: values.type,
+            slug: values.slug,
           },
         })
         toast.success('Projeto criado com sucesso')
+        await revalidateProjects()
         onClose()
       } catch (e) {
         console.error(e)
@@ -68,6 +74,17 @@ export default function ProjectAddModal({
       }
     },
     [createProject, onClose, toast],
+  )
+
+  const onChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      const formatted = formatToSlug(value)
+      if (form.getValues('slug') === formatted) return
+
+      form.setValue('slug', formatted)
+    },
+    [form],
   )
 
   return (
@@ -87,7 +104,15 @@ export default function ProjectAddModal({
               name="title"
               label="Título"
               placeholder="Título do projeto"
+              onChange={onChangeTitle}
               required
+            />
+
+            <FormText
+              name="slug"
+              label="Slug"
+              placeholder="Slug do projeto"
+              disabled
             />
 
             <FormSelect

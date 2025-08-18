@@ -329,7 +329,7 @@ export function useSuspenseCountProject<TArgs extends Prisma.ProjectCountArgs, T
 }
 import type { ProjectType } from '@zenstackhq/runtime/models';
 
-export function useCheckProject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; title?: string; description?: string; type?: ProjectType }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckProject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; title?: string; description?: string; type?: ProjectType; slug?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Project', `${endpoint}/project/check`, args, options, fetch);
 }

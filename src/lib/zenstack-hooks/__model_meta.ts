@@ -763,11 +763,17 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'project',
+                }, slug: {
+                    name: "slug",
+                    type: "String",
                 },
             }, uniqueConstraints: {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, slug: {
+                    name: "slug",
+                    fields: ["slug"]
                 },
             },
         },

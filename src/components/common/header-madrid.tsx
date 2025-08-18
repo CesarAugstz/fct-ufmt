@@ -7,7 +7,7 @@ import { useShare } from '@/lib/hooks/share'
 
 interface HeaderMadridProps {
   title?: string
-  subtitle?: string
+  subtitle?: string | null
   showBackButton?: boolean
   backButtonLabel?: string
   backButtonHref?: string
@@ -72,9 +72,11 @@ export default function HeaderMadrid({
               {title}
             </h1>
 
-            <p className="text-xl text-primary-foreground/80 mb-6 leading-relaxed">
-              {subtitle}
-            </p>
+            {subtitle && (
+              <p className="text-xl text-primary-foreground/80 mb-6 leading-relaxed">
+                {subtitle}
+              </p>
+            )}
           </div>
         </div>
       </div>
