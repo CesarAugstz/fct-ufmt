@@ -8,11 +8,13 @@ import { ulid } from 'ulidx'
 interface UpdateContentBlocksParams {
   managementId?: string
   projectId?: string
+  genericPageId?: string
 }
 
 export function useUpdateContentBlocks({
   managementId,
   projectId,
+  genericPageId,
 }: UpdateContentBlocksParams = {}) {
   const upsertMutation = useUpsertContentBlock()
   const deleteMutation = useDeleteManyContentBlock()
@@ -21,7 +23,8 @@ export function useUpdateContentBlocks({
     blocks: BlockSchema[],
     oldBlocks?: BlockSchema[],
   ) => {
-    if (!managementId && !projectId) throw new Error('No relation id provided')
+    if (!managementId && !projectId && !genericPageId)
+      throw new Error('No relation id provided')
 
     const blocksToDelete = oldBlocks
       ?.filter(block => !blocks.find(b => b.id === block.id))
@@ -39,6 +42,9 @@ export function useUpdateContentBlocks({
               ? { management: { connect: { id: managementId } } }
               : {}),
             ...(projectId ? { project: { connect: { id: projectId } } } : {}),
+            ...(genericPageId
+              ? { genericPage: { connect: { id: genericPageId } } }
+              : {}),
             accordionItems: block.accordionItems || [],
             file: {
               upsert: {
@@ -59,6 +65,9 @@ export function useUpdateContentBlocks({
             ...(projectId ? { project: { connect: { id: projectId } } } : {}),
             ...(managementId
               ? { management: { connect: { id: managementId } } }
+              : {}),
+            ...(genericPageId
+              ? { genericPage: { connect: { id: genericPageId } } }
               : {}),
             accordionItems: block.accordionItems || [],
             file: block.file ? { create: block.file } : undefined,

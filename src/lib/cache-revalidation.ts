@@ -21,3 +21,13 @@ export async function revalidateProjects() {
 export async function revalidateManagement() {
   revalidateTag('management')
 }
+
+export async function revalidateGenericPages() {
+  revalidateTag('generic-pages')
+  revalidateTag('navigation')
+}
+
+export async function revalidateSections() {
+  revalidateTag('sections')
+  revalidateTag('navigation')
+}

@@ -16,6 +16,8 @@ export * from './content-block';
 export * from './attachment';
 export * from './management';
 export * from './project';
+export * from './section';
+export * from './generic-page';
 export * from './log-entry';
 export { getQueryKey } from '@zenstackhq/tanstack-query/runtime-v5';
 export { Provider } from '@zenstackhq/tanstack-query/runtime-v5/react';

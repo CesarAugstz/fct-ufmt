@@ -207,6 +207,8 @@ model ContentBlock {
   management        Management?   @relation(fields: [managementId], references: [id], onDelete: Cascade)
   projectId         String?
   project           Project?      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  genericPageId     String?
+  genericPage       GenericPage?  @relation(fields: [genericPageId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {
@@ -238,6 +240,29 @@ model Project {
   type          ProjectType
   contentBlocks ContentBlock[]
   slug          String         @unique()
+}
+
+model Section {
+  id              String        @id() @default(ulid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt()
+  title           String
+  pages           GenericPage[] @relation("SectionPages")
+  parentSectionId String?
+  parentSection   Section?      @relation("SectionHierarchy", fields: [parentSectionId], references: [id], onDelete: Cascade)
+  subSections     Section[]     @relation("SectionHierarchy")
+}
+
+model GenericPage {
+  id            String         @id() @default(ulid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt()
+  title         String
+  description   String?
+  slug          String         @unique()
+  contentBlocks ContentBlock[]
+  sectionId     String
+  section       Section        @relation(name: "SectionPages", fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model LogEntry {

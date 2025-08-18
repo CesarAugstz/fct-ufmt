@@ -639,6 +639,20 @@ const metadata = {
                     backLink: 'contentBlocks',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "projectId" },
+                }, genericPageId: {
+                    name: "genericPageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'genericPage',
+                }, genericPage: {
+                    name: "genericPage",
+                    type: "GenericPage",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'contentBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "genericPageId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -766,6 +780,112 @@ const metadata = {
                 }, slug: {
                     name: "slug",
                     type: "String",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, slug: {
+                    name: "slug",
+                    fields: ["slug"]
+                },
+            },
+        },
+        section: {
+            name: 'Section', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, pages: {
+                    name: "pages",
+                    type: "GenericPage",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'section',
+                }, parentSectionId: {
+                    name: "parentSectionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parentSection',
+                }, parentSection: {
+                    name: "parentSection",
+                    type: "Section",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'subSections',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "parentSectionId" },
+                }, subSections: {
+                    name: "subSections",
+                    type: "Section",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'parentSection',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            },
+        },
+        genericPage: {
+            name: 'GenericPage', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, slug: {
+                    name: "slug",
+                    type: "String",
+                }, contentBlocks: {
+                    name: "contentBlocks",
+                    type: "ContentBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'genericPage',
+                }, sectionId: {
+                    name: "sectionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'section',
+                }, section: {
+                    name: "section",
+                    type: "Section",
+                    isDataModel: true,
+                    backLink: 'pages',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "sectionId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -945,6 +1065,8 @@ const metadata = {
         attachment: ['Professor', 'ContentBlock'],
         management: ['ContentBlock'],
         project: ['ContentBlock'],
+        section: ['GenericPage'],
+        genericPage: ['ContentBlock'],
 
     },
     authModel: 'User'
