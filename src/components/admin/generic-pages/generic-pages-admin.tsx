@@ -41,13 +41,13 @@ import { useToast } from '@/lib/hooks/toast'
 import { GenericPage } from '@zenstackhq/runtime/models'
 import Link from 'next/link'
 import { BaseCard } from '@/components/ui/base-card'
+import { revalidateGenericPages } from '@/lib/cache-revalidation'
 
 export default function GenericPagesAdmin() {
   const [isSectionModalOpen, setIsSectionModalOpen] = useState(false)
   const [isPageFormOpen, setIsPageFormOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [deletingPage, setDeletingPage] = useState<GenericPage | null>(null)
-  const [editingPage, setEditingPage] = useState<GenericPage | null>(null)
   const toast = useToast()
 
   const { mutate: deletePage } = useDeleteGenericPage()
@@ -74,7 +74,6 @@ export default function GenericPagesAdmin() {
   })
 
   const handleAddPage = () => {
-    setEditingPage(null)
     setIsPageFormOpen(true)
   }
 
@@ -84,7 +83,6 @@ export default function GenericPagesAdmin() {
 
   const handleFormSuccess = () => {
     setIsPageFormOpen(false)
-    setEditingPage(null)
   }
 
   const handleConfirmDeletePage = () => {
@@ -93,9 +91,10 @@ export default function GenericPagesAdmin() {
     deletePage(
       { where: { id: deletingPage.id } },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success('Página excluída com sucesso!')
           setDeletingPage(null)
+          await revalidateGenericPages()
         },
         onError: error => {
           console.error('Page delete error:', error)
@@ -273,7 +272,6 @@ export default function GenericPagesAdmin() {
         isOpen={isPageFormOpen}
         onClose={() => setIsPageFormOpen(false)}
         onSuccess={handleFormSuccess}
-        page={editingPage}
       />
 
       {/* Delete Confirmation */}

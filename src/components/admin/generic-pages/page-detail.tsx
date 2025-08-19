@@ -1,6 +1,10 @@
 'use client'
 
-import { useFindUniqueGenericPage } from '@/lib/zenstack-hooks'
+import {
+  useFindManySection,
+  useFindUniqueGenericPage,
+  useUpdateGenericPage,
+} from '@/lib/zenstack-hooks'
 import { BaseCard } from '@/components/ui/base-card'
 import { useToast } from '@/lib/hooks/toast'
 import { Form, FormProvider, useForm } from 'react-hook-form'
@@ -12,14 +16,20 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateContentBlocks } from '@/lib/hooks/update-content-blocks'
 import FormButtons from '../form-buttons'
 import { revalidateGenericPages } from '@/lib/cache-revalidation'
-import { Badge } from '@/components/ui/badge'
-import { ExternalLink, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import LoadingSpinner from '@/components/common/loading-spinner'
+import { useRouter } from 'next/navigation'
+import { FormSelect, FormText } from '@/components/ui/form-fields'
+import { formatToSlug } from '@/lib/formatters/slug.formatter'
 
 const formSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  slug: z.string().optional(),
   contentBlocks: z.array(getBlockSchema()).optional(),
+  sectionId: z.ulid().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -44,17 +54,39 @@ export default function PageDetail({ pageId }: PageDetailProps) {
     },
   })
 
+  const { data: sections } = useFindManySection()
+
+  const router = useRouter()
+
   const { updateContentBlocks, isLoading: isUpdatingBlocks } =
     useUpdateContentBlocks({ genericPageId: page?.id })
 
+  const { mutateAsync: updateGenericPage, isPending: isUpdatingPage } =
+    useUpdateGenericPage()
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    values: { contentBlocks: page?.contentBlocks ?? [] },
+    values: {
+      title: page?.title,
+      description: page?.description ?? '',
+      slug: page?.slug ?? '',
+      sectionId: page?.sectionId,
+      contentBlocks: page?.contentBlocks ?? [],
+    },
   })
 
   const onSubmit = useCallback(
     async (values: FormValues) => {
       try {
+        await updateGenericPage({
+          where: { id: pageId },
+          data: {
+            title: values.title,
+            description: values.description,
+            slug: values.slug,
+            sectionId: values.sectionId,
+          },
+        })
         await updateContentBlocks(
           values.contentBlocks ?? [],
           page?.contentBlocks,
@@ -67,7 +99,23 @@ export default function PageDetail({ pageId }: PageDetailProps) {
         toast.error('Erro ao atualizar página')
       }
     },
-    [page?.contentBlocks, toast, updateContentBlocks],
+    [
+      page?.contentBlocks,
+      pageId,
+      toast,
+      updateContentBlocks,
+      updateGenericPage,
+    ],
+  )
+
+  const handleTitleChange = useCallback(
+    (title: string) => {
+      const formatted = formatToSlug(title)
+      if (form.getValues('slug') === formatted) return
+
+      form.setValue('slug', formatted)
+    },
+    [form],
   )
 
   if (isLoading) {
@@ -98,78 +146,52 @@ export default function PageDetail({ pageId }: PageDetailProps) {
   }
 
   return (
-    <>
-      <div className="space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/admin/generic-pages">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Voltar
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">
-                {page.title}
-              </h1>
-              <div className="flex items-center gap-2 mt-2">
-                <Badge variant="secondary">{page.section.title}</Badge>
-                <code className="bg-muted px-2 py-1 rounded text-sm">
-                  /{page.slug}
-                </code>
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/pages/${page.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Visualizar
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        {page.description && (
-          <p className="text-muted-foreground">{page.description}</p>
-        )}
-
-        {/* Content Blocks Form */}
-        <BaseCard
-          title="Conteúdo da Página"
-          description="Gerencie o conteúdo desta página através dos blocos abaixo"
+    <BaseCard
+      onBack={() => router.back()}
+      title="Editar Página"
+      description="Gerencie a página"
+    >
+      <FormProvider {...form}>
+        <Form
+          onSubmit={() =>
+            form.handleSubmit(onSubmit, e =>
+              console.log('error', e, form.getValues()),
+            )()
+          }
+          className="space-y-6"
         >
-          <FormProvider {...form}>
-            <Form
-              onSubmit={() =>
-                form.handleSubmit(onSubmit, e =>
-                  console.log('error', e, form.getValues()),
-                )()
-              }
-              className="space-y-6"
-            >
-              <FormBlocks
-                name="contentBlocks"
-                label="Conteúdo em Blocos"
-                required
-                span={4}
-              />
-            </Form>
+          <FormText
+            onChange={e => handleTitleChange(e.target.value)}
+            name="title"
+            label="Título"
+            required
+            span={4}
+          />
+          <FormText name="slug" label="Slug" disabled span={4} />
 
-            <FormButtons
-              isSubmitting={isUpdatingBlocks}
-              onCancel={() => form.reset()}
-              onSubmit={() => form.handleSubmit(onSubmit)()}
-            />
-          </FormProvider>
-        </BaseCard>
-      </div>
-    </>
+          <FormSelect
+            name="sectionId"
+            label="Seção"
+            required
+            span={4}
+            options={
+              sections?.map(s => ({ value: s.id, label: s.title })) ?? []
+            }
+          />
+          <FormBlocks
+            name="contentBlocks"
+            label="Conteúdo em Blocos"
+            required
+            span={4}
+          />
+        </Form>
+
+        <FormButtons
+          isSubmitting={isUpdatingBlocks || isUpdatingPage}
+          onCancel={() => form.reset()}
+          onSubmit={() => form.handleSubmit(onSubmit)()}
+        />
+      </FormProvider>
+    </BaseCard>
   )
 }

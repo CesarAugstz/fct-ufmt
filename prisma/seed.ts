@@ -14,7 +14,7 @@ const shouldClean = process.argv.includes('--clean')
 const seedAll = process.argv.includes('--all')
 const adminPassword =
   process.argv.find(arg => arg.startsWith('--password='))?.split('=')[1] ||
-  'admin'
+  'admin123'
 
 async function cleanDatabase() {
   console.log('🧹 Cleaning database...')

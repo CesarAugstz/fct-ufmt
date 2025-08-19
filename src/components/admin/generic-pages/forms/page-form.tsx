@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -14,29 +14,13 @@ import {
 import { Button } from '@/components/ui/button'
 import { FormText } from '@/components/ui/form-fields/form-text'
 import { FormTextarea } from '@/components/ui/form-fields/form-textarea'
-import {
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+
 import LoadingSpinner from '@/components/common/loading-spinner'
-import {
-  useCreateGenericPage,
-  useUpdateGenericPage,
-  useFindManySection,
-} from '@/lib/zenstack-hooks'
+import { useCreateGenericPage, useFindManySection } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
-import { GenericPage } from '@zenstackhq/runtime/models'
 import { revalidateGenericPages } from '@/lib/cache-revalidation'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
+import { FormSelect } from '@/components/ui/form-fields'
 
 const formSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
@@ -57,21 +41,17 @@ interface PageFormProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
-  page?: GenericPage | null
 }
 
 export default function PageForm({
   isOpen,
   onClose,
   onSuccess,
-  page,
 }: PageFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const isEditMode = !!page
   const toast = useToast()
 
   const { mutate: createPage } = useCreateGenericPage()
-  const { mutate: updatePage } = useUpdateGenericPage()
 
   const { data: sections } = useFindManySection({
     orderBy: { title: 'asc' },
@@ -85,56 +65,34 @@ export default function PageForm({
   const methods = useForm<PageFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: page?.title || '',
-      description: page?.description || '',
-      slug: page?.slug || '',
-      sectionId: page?.sectionId || '',
+      title: '',
+      description: '',
+      slug: '',
+      sectionId: '',
     },
   })
 
   const onSubmit = async (values: PageFormValues) => {
     setIsSubmitting(true)
 
-    if (isEditMode && page) {
-      updatePage(
-        {
-          where: { id: page.id },
-          data: values,
+    createPage(
+      {
+        data: values,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Página criada com sucesso!')
+          revalidateGenericPages()
+          onSuccess()
+          setIsSubmitting(false)
         },
-        {
-          onSuccess: () => {
-            toast.success('Página atualizada com sucesso!')
-            revalidateGenericPages()
-            onSuccess()
-            setIsSubmitting(false)
-          },
-          onError: error => {
-            console.error('Page update error:', error)
-            toast.error('Erro ao atualizar página')
-            setIsSubmitting(false)
-          },
+        onError: error => {
+          console.error('Page creation error:', error)
+          toast.error('Erro ao criar página')
+          setIsSubmitting(false)
         },
-      )
-    } else {
-      createPage(
-        {
-          data: values,
-        },
-        {
-          onSuccess: () => {
-            toast.success('Página criada com sucesso!')
-            revalidateGenericPages()
-            onSuccess()
-            setIsSubmitting(false)
-          },
-          onError: error => {
-            console.error('Page creation error:', error)
-            toast.error('Erro ao criar página')
-            setIsSubmitting(false)
-          },
-        },
-      )
-    }
+      },
+    )
   }
 
   const handleClose = () => {
@@ -142,25 +100,22 @@ export default function PageForm({
     onClose()
   }
 
-  const handleTitleChange = (title: string) => {
-    methods.setValue('title', title)
-    if (!isEditMode && !methods.getValues('slug')) {
-      methods.setValue('slug', formatToSlug(title))
-    }
-  }
+  const handleTitleChange = useCallback(
+    (title: string) => {
+      const formatted = formatToSlug(title)
+      if (methods.getValues('slug') === formatted) return
+
+      methods.setValue('slug', formatted)
+    },
+    [methods],
+  )
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {isEditMode ? 'Editar Página' : 'Nova Página'}
-          </DialogTitle>
-          <DialogDescription>
-            {isEditMode
-              ? 'Edite as informações da página.'
-              : 'Crie uma nova página no site.'}
-          </DialogDescription>
+          <DialogTitle>Nova Página</DialogTitle>
+          <DialogDescription>Crie uma nova página no site</DialogDescription>
         </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
@@ -176,7 +131,7 @@ export default function PageForm({
               name="slug"
               label="Slug"
               placeholder="slug-da-pagina"
-              required
+              disabled
               description="URL amigável para a página"
             />
 
@@ -187,32 +142,18 @@ export default function PageForm({
               rows={3}
             />
 
-            <FormItem>
-              <FormLabel>Seção *</FormLabel>
-              <FormControl>
-                <Select
-                  value={methods.watch('sectionId')}
-                  onValueChange={value => methods.setValue('sectionId', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione uma seção" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sections?.map(section => (
-                      <SelectItem key={section.id} value={section.id}>
-                        {section.title}
-                        {section.parentSection && (
-                          <span className="text-muted-foreground text-xs ml-2">
-                            (em {section.parentSection.title})
-                          </span>
-                        )}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormSelect
+              name="sectionId"
+              label="Seção"
+              placeholder="Selecione uma seção"
+              required
+              options={
+                sections?.map(section => ({
+                  value: section.id,
+                  label: section.title,
+                })) ?? []
+              }
+            />
 
             <div className="flex justify-end gap-2 pt-4">
               <Button type="button" variant="outline" onClick={handleClose}>
@@ -220,7 +161,7 @@ export default function PageForm({
               </Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <LoadingSpinner className="mr-2 h-4 w-4" />}
-                {isEditMode ? 'Salvar' : 'Criar'}
+                Salvar
               </Button>
             </div>
           </form>

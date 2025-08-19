@@ -10,7 +10,7 @@ import {
   CardFooter,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { PlusCircle, RefreshCw } from 'lucide-react'
+import { ArrowLeft, PlusCircle, RefreshCw } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 
 interface BaseCardProps {
@@ -26,6 +26,7 @@ interface BaseCardProps {
   // Action buttons
   onAdd?: () => void
   onUpdate?: () => void
+  onBack?: () => void
 
   rightButtons?: ReactNode
 
@@ -54,6 +55,7 @@ export function BaseCard({
 
   onAdd,
   onUpdate,
+  onBack,
   rightButtons,
 
   addButtonText = 'Adicionar',
@@ -67,9 +69,16 @@ export function BaseCard({
     <Card className={twMerge('w-full h-full overflow-y-scroll', className)}>
       {!hideHeader && (
         <CardHeader className="flex flex-wrap gap-2 flex-row items-center justify-between">
-          <div>
-            <CardTitle>{title}</CardTitle>
-            {description && <CardDescription>{description}</CardDescription>}
+          <div className="flex gap-2">
+            {onBack && (
+              <ArrowLeft className="text-sm" onClick={onBack}>
+                Voltar
+              </ArrowLeft>
+            )}
+            <div>
+              <CardTitle>{title}</CardTitle>
+              {description && <CardDescription>{description}</CardDescription>}
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-4">

@@ -23,6 +23,7 @@ import { Plus, Edit, Trash2, FolderTree, Folder, File } from 'lucide-react'
 import { useFindManySection, useDeleteSection } from '@/lib/zenstack-hooks'
 import { useToast } from '@/lib/hooks/toast'
 import { Section } from '@zenstackhq/runtime/models'
+import { revalidateSections } from '@/lib/cache-revalidation'
 
 type SectionWithRelations = Section & {
   subSections?: SectionWithRelations[]
@@ -97,9 +98,10 @@ export default function SectionManagementModal({
     deleteSection(
       { where: { id: deletingSection.id } },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success('Seção excluída com sucesso!')
           setDeletingSection(null)
+          await revalidateSections()
         },
         onError: error => {
           console.error('Section delete error:', error)

@@ -29,6 +29,51 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
     orderBy: { title: 'asc' },
   })
 
+  const genericSections = await db.section.findMany({
+    where: { parentSectionId: null },
+    select: {
+      slug: true,
+      title: true,
+      subSections: {
+        select: {
+          slug: true,
+          title: true,
+          pages: {
+            select: {
+              slug: true,
+              title: true,
+            },
+          },
+        },
+      },
+      pages: {
+        select: {
+          slug: true,
+          title: true,
+        },
+      },
+    },
+    orderBy: { title: 'asc' },
+  })
+
+  const genericSectionsMapped = genericSections.map(s => ({
+    name: s.title,
+    children: [
+      ...s.subSections.map(ss => ({
+        name: ss.title,
+        href: `/home/${s.slug}/${ss.slug}`,
+        children: ss.pages.map(p => ({
+          name: p.title,
+          href: `/home/${s.slug}/${ss.slug}/${p.slug}`,
+        })),
+      })),
+      ...s.pages.map(p => ({
+        name: p.title,
+        href: `/home/${s.slug}/${p.slug}`,
+      })),
+    ],
+  }))
+
   const extensionProjects = projects
     ?.filter(p => p.type === ProjectType.EXTENSION)
     ?.map(p => ({ name: p.title, href: `/home/projects/${p.slug}` }))
@@ -103,6 +148,7 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
     {
       name: 'Agendas',
     },
+    ...genericSectionsMapped,
   ]
 
   return sections

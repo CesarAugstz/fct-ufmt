@@ -9,8 +9,8 @@ export default async function GenericPage({
   subtitle,
 }: {
   content: Block[]
-  title: string
-  subtitle?: string
+  title?: string | null
+  subtitle?: string | null
 }) {
   if (!content) {
     return (

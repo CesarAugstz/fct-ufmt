@@ -247,6 +247,7 @@ model Section {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt()
   title           String
+  slug            String        @unique()
   pages           GenericPage[] @relation("SectionPages")
   parentSectionId String?
   parentSection   Section?      @relation("SectionHierarchy", fields: [parentSectionId], references: [id], onDelete: Cascade)

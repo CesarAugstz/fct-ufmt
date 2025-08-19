@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -35,9 +35,11 @@ import {
 import { useToast } from '@/lib/hooks/toast'
 import { Section } from '@zenstackhq/runtime/models'
 import { revalidateSections } from '@/lib/cache-revalidation'
+import { formatToSlug } from '@/lib/formatters/slug.formatter'
 
 const formSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
+  slug: z.string().min(1, 'Slug é obrigatório'),
   parentSectionId: z.string().optional().nullable(),
 })
 
@@ -75,6 +77,7 @@ export default function SectionForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: section?.title || '',
+      slug: section?.slug || '',
       parentSectionId: section?.parentSectionId || null,
     },
   })
@@ -158,6 +161,17 @@ export default function SectionForm({
     onClose()
   }
 
+  const onChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      const formatted = formatToSlug(value)
+      if (methods.getValues('slug') === formatted) return
+
+      methods.setValue('slug', formatted)
+    },
+    [methods],
+  )
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md">
@@ -178,7 +192,10 @@ export default function SectionForm({
               label="Título da Seção"
               placeholder="Digite o título da seção"
               required
+              onChange={onChangeTitle}
             />
+
+            <FormText name="slug" label="Slug da Seção" disabled />
 
             <FormItem>
               <FormLabel>Seção Pai (Opcional)</FormLabel>

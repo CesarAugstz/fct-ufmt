@@ -312,6 +312,7 @@ model Project extends BaseModel {
 
 model Section extends BaseModel {
   title String
+  slug String @unique
   pages GenericPage[] @relation("SectionPages")
 
   parentSectionId String?

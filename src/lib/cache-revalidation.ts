@@ -30,4 +30,5 @@ export async function revalidateGenericPages() {
 export async function revalidateSections() {
   revalidateTag('sections')
   revalidateTag('navigation')
+  revalidateTag('generic-pages')
 }

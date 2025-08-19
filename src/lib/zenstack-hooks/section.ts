@@ -328,7 +328,7 @@ export function useSuspenseCountSection<TArgs extends Prisma.SectionCountArgs, T
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Section', `${endpoint}/section/count`, args, options, fetch);
 }
 
-export function useCheckSection<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; title?: string; parentSectionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSection<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; title?: string; slug?: string; parentSectionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Section', `${endpoint}/section/check`, args, options, fetch);
 }

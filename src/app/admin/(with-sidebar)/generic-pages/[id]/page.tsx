@@ -1,11 +1,10 @@
 import PageDetail from '@/components/admin/generic-pages/page-detail'
 
-interface PageProps {
-  params: {
-    id: string
-  }
-}
-
-export default function GenericPageDetailPage({ params }: PageProps) {
-  return <PageDetail pageId={params.id} />
+export default async function GenericPageDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  return <PageDetail pageId={id} />
 }

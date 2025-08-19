@@ -809,6 +809,9 @@ const metadata = {
                 }, title: {
                     name: "title",
                     type: "String",
+                }, slug: {
+                    name: "slug",
+                    type: "String",
                 }, pages: {
                     name: "pages",
                     type: "GenericPage",
@@ -840,6 +843,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, slug: {
+                    name: "slug",
+                    fields: ["slug"]
                 },
             },
         },
