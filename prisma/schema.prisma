@@ -212,16 +212,19 @@ model ContentBlock {
 }
 
 model Attachment {
-  id                String        @id() @default(ulid())
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt()
-  name              String
-  dataUrl           String
-  mimeType          String
-  size              Int
-  contentBlocks     ContentBlock?
-  professor         Professor?
-  newsFeaturedImage News?         @relation("NewsFeaturedImage")
+  id                 String        @id() @default(ulid())
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt()
+  name               String
+  dataUrl            String
+  mimeType           String
+  size               Int
+  contentBlocks      ContentBlock?
+  professor          Professor?
+  newsFeaturedImage  News?         @relation("NewsFeaturedImage")
+  bannerImage        CollegeData?  @relation("CollegeDataBannerImage")
+  secondBannerImages CollegeData[] @relation("CollegeDataSecondBannerImages")
+  collegeLogo        CollegeData?  @relation("CollegeDataLogo")
 }
 
 model Management {
@@ -264,6 +267,35 @@ model GenericPage {
   contentBlocks ContentBlock[]
   sectionId     String
   section       Section        @relation(name: "SectionPages", fields: [sectionId], references: [id], onDelete: Cascade)
+}
+
+model CollegeData {
+  id                      String       @id() @default(ulid())
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt()
+  name                    String?
+  acronym                 String?
+  description             String?
+  logoId                  String?      @unique()
+  logo                    Attachment?  @relation(name: "CollegeDataLogo", fields: [logoId], references: [id], onDelete: Cascade)
+  bannerTitle             String?
+  bannerSubtitle          String?
+  bannerButtonLabel       String?
+  bannerImageId           String?      @unique()
+  bannerImage             Attachment?  @relation(name: "CollegeDataBannerImage", fields: [bannerImageId], references: [id], onDelete: Cascade)
+  secondBannerTitle       String?
+  secondBannerSubtitle    String?
+  secondBannerButtonLabel String?
+  secondBannerImages      Attachment[] @relation("CollegeDataSecondBannerImages")
+  quickLinks              Json
+  bannerNumbersTitle      String?
+  bannerNumbersSubtitle   String?
+  bannerNumbersItems      Json
+  locationItems           String[]
+  contactItems            String[]
+  usefulLinksItems        Json
+  instagram               String?
+  youtube                 String?
 }
 
 model LogEntry {

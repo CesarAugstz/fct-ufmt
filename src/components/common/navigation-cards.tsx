@@ -6,8 +6,8 @@ export interface NavigationCardsProps {
   cards: CardItem[]
   className?: string
   cardsClassName?: string
-  title?: string
-  description?: string
+  title?: string | null
+  description?: string | null
 }
 
 export default function NavigationCards({

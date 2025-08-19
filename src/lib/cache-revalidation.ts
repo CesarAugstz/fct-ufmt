@@ -32,3 +32,8 @@ export async function revalidateSections() {
   revalidateTag('navigation')
   revalidateTag('generic-pages')
 }
+
+export async function revalidateCollegeData() {
+  revalidateTag('college-data')
+  revalidateTag('home')
+}

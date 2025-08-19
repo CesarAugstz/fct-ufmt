@@ -1,6 +1,8 @@
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 import { CourseNature, Prisma, PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
+import fs from 'fs'
+import path from 'path'
 import { generateProfessorData } from './professor-generator'
 import { getRandomProfessorImage } from './mock-images'
 import {
@@ -16,11 +18,27 @@ const adminPassword =
   process.argv.find(arg => arg.startsWith('--password='))?.split('=')[1] ||
   'admin123'
 
+// Function to convert image to base64
+function getImageAsBase64(imagePath: string): string {
+  try {
+    const fullPath = path.join(process.cwd(), 'public', imagePath)
+    const imageBuffer = fs.readFileSync(fullPath)
+    const base64 = imageBuffer.toString('base64')
+    const mimeType = imagePath.endsWith('.png') ? 'image/png' : 'image/jpeg'
+    return `data:${mimeType};base64,${base64}`
+  } catch (error) {
+    console.warn(`Could not read image ${imagePath}:`, error)
+    return ''
+  }
+}
+
 async function cleanDatabase() {
   console.log('🧹 Cleaning database...')
   await prisma.professor.deleteMany()
   await prisma.user.deleteMany()
   await prisma.course.deleteMany()
+  await prisma.management.deleteMany()
+  await prisma.collegeData.deleteMany()
   console.log('✅ Database cleaned')
 }
 
@@ -102,6 +120,168 @@ async function main() {
       data: {},
     })
   }
+
+  console.log('🏛️ Creating college data...')
+
+  const bannerImageBase64 = getImageAsBase64('bg.png')
+  const bannerImage = await prisma.attachment.upsert({
+    where: { id: 'banner-bg' },
+    update: {},
+    create: {
+      id: 'banner-bg',
+      name: 'bg.png',
+      dataUrl: bannerImageBase64,
+      mimeType: 'image/png',
+      size: bannerImageBase64.length,
+    },
+  })
+
+  await prisma.collegeData.upsert({
+    where: { id: 'default' },
+    update: {},
+    create: {
+      id: 'default',
+      name: 'Faculdade de Ciências e Tecnologia',
+      acronym: 'FCT',
+      description:
+        'A FCT da UFMT é referência em ensino, pesquisa e extensão na área de Tecnologia da Informação.',
+
+      // Banner data
+      bannerTitle: 'Educação que conecta ciência, tecnologia e sociedade',
+      bannerButtonLabel: 'Conheça nossos cursos',
+
+      // Second banner data
+      secondBannerTitle: 'A Faculdade de Ciência e Tecnologia',
+      secondBannerSubtitle:
+        'Localizado no Campus Universitário da UFMT em Cuiabá, o Instituto de Ciência e Tecnologia é referência na formação de profissionais da área de tecnologia no estado de Mato Grosso.',
+      secondBannerButtonLabel: 'Saiba mais sobre a História da FCT',
+
+      // Connect banner image
+      bannerImage: {
+        connect: { id: bannerImage.id },
+      },
+
+      // Quick links data
+      quickLinks: [
+        {
+          title: 'Portal Acadêmico',
+          subtitle: 'Acesse o portal acadêmico da UFMT',
+          icon: 'MonitorCog',
+          url: 'https://portal.setec.ufmt.br/ufmt-setec-portal-academico/',
+        },
+        {
+          title: 'Acessos SEI',
+          subtitle: 'Sistema Eletrônico de Informações',
+          icon: 'FileText',
+          url: 'https://sei.ufmt.br/sei/controlador_externo.php?acao=usuario_externo_logar&acao_origem=usuario_externo_enviar_cadastro&id_orgao_acesso_externo=0',
+        },
+        {
+          title: 'Reserva de Salas',
+          subtitle: 'Agende salas e recursos',
+          icon: 'Calendar',
+          url: 'https://academico-siga.ufmt.br/ufmt.sirefi',
+        },
+        {
+          title: 'Suporte',
+          subtitle: 'Entre em contato com o suporte',
+          icon: 'Settings',
+          url: 'https://wa.me/556536158078',
+        },
+        {
+          title: 'Painel de Indicadores',
+          subtitle: 'Visualize estatísticas e dados',
+          icon: 'FileUser',
+          url: '#',
+        },
+        {
+          title: 'Localização',
+          subtitle: 'Veja como chegar à FCT-UFMT',
+          icon: 'Map',
+          url: 'https://maps.app.goo.gl/Rvrw2gXvc3E65edu9',
+        },
+      ],
+
+      // Stats section data
+      bannerNumbersTitle: 'FCT em Números',
+      bannerNumbersSubtitle:
+        'Conheça alguns números que representam nossa excelência em ensino, pesquisa e extensão.',
+      bannerNumbersItems: [
+        {
+          title: 'Cursos de Graduação',
+          value: 2,
+          suffix: '',
+        },
+        {
+          title: 'Programa de Mestrado',
+          value: 1,
+          suffix: '',
+        },
+        {
+          title: 'Docentes',
+          value: 30,
+          suffix: '+',
+        },
+        {
+          title: 'Estudantes',
+          value: 500,
+          suffix: '+',
+        },
+      ],
+
+      // Contact and location data
+      locationItems: [
+        'Av. Fernando Corrêa da Costa, nº 2367',
+        'Bairro Boa Esperança',
+        'Cuiabá - MT, CEP: 78060-900',
+      ],
+      contactItems: [
+        '(65) 3615-8078',
+        'diretoria.fct@ufmt.br',
+        'Segunda a Sexta, 8h às 18h',
+      ],
+
+      // Useful links
+      usefulLinksItems: [
+        {
+          title: 'Portal da UFMT',
+          url: 'https://sistemas.ufmt.br/ufmt.portalsistemas',
+        },
+        {
+          title: 'Biblioteca Central',
+          url: '#',
+        },
+        {
+          title: 'Ouvidoria',
+          url: '#',
+        },
+        {
+          title: 'Mapa do Site',
+          url: '#',
+        },
+        {
+          title: 'Calendário Acadêmico',
+          url: '#',
+        },
+        {
+          title: 'Editais',
+          url: '#',
+        },
+        {
+          title: 'Eventos',
+          url: '#',
+        },
+        {
+          title: 'Notícias',
+          url: '#',
+        },
+      ],
+
+      // Social media
+      instagram: 'https://www.instagram.com/fct.ufmt/',
+      youtube: 'https://www.youtube.com/@DiretoriadaFCT',
+    },
+  })
+  console.log('✅ College data created')
 
   if (!seedAll) return
 

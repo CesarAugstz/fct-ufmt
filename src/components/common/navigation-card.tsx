@@ -14,7 +14,7 @@ export interface CardItem {
   href?: string
   color?: string
   iconSize?: number
-  description?: string
+  description?: string | null
 }
 
 interface NavigationCardProps {

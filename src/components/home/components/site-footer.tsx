@@ -12,7 +12,6 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { commonData } from '@/data/common.data'
 
@@ -140,20 +139,6 @@ function FooterLinks() {
           <FooterLink href="#" label="Eventos" />
           <FooterLink href="#" label="Notícias" />
         </ul>
-      </div>
-
-      <div className="mt-6">
-        <h3 className="text-lg font-bold mb-4">Newsletter</h3>
-        <div className="flex">
-          <Input
-            type="email"
-            placeholder="Seu e-mail"
-            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 rounded-l-md"
-          />
-          <Button className="bg-[#0088cc] hover:bg-[#0088cc]/90 text-white rounded-l-none">
-            Inscrever
-          </Button>
-        </div>
       </div>
     </div>
   )

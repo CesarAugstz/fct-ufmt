@@ -709,6 +709,24 @@ const metadata = {
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'featuredImage',
+                }, bannerImage: {
+                    name: "bannerImage",
+                    type: "CollegeData",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'bannerImage',
+                }, secondBannerImages: {
+                    name: "secondBannerImages",
+                    type: "CollegeData",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'secondBannerImages',
+                }, collegeLogo: {
+                    name: "collegeLogo",
+                    type: "CollegeData",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'logo',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -903,6 +921,144 @@ const metadata = {
                 },
             },
         },
+        collegeData: {
+            name: 'CollegeData', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    isOptional: true,
+                }, acronym: {
+                    name: "acronym",
+                    type: "String",
+                    isOptional: true,
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, logoId: {
+                    name: "logoId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'logo',
+                }, logo: {
+                    name: "logo",
+                    type: "Attachment",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'collegeLogo',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "logoId" },
+                }, bannerTitle: {
+                    name: "bannerTitle",
+                    type: "String",
+                    isOptional: true,
+                }, bannerSubtitle: {
+                    name: "bannerSubtitle",
+                    type: "String",
+                    isOptional: true,
+                }, bannerButtonLabel: {
+                    name: "bannerButtonLabel",
+                    type: "String",
+                    isOptional: true,
+                }, bannerImageId: {
+                    name: "bannerImageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'bannerImage',
+                }, bannerImage: {
+                    name: "bannerImage",
+                    type: "Attachment",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'bannerImage',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "bannerImageId" },
+                }, secondBannerTitle: {
+                    name: "secondBannerTitle",
+                    type: "String",
+                    isOptional: true,
+                }, secondBannerSubtitle: {
+                    name: "secondBannerSubtitle",
+                    type: "String",
+                    isOptional: true,
+                }, secondBannerButtonLabel: {
+                    name: "secondBannerButtonLabel",
+                    type: "String",
+                    isOptional: true,
+                }, secondBannerImages: {
+                    name: "secondBannerImages",
+                    type: "Attachment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'secondBannerImages',
+                }, quickLinks: {
+                    name: "quickLinks",
+                    type: "QuickLink",
+                    isTypeDef: true,
+                    isArray: true,
+                }, bannerNumbersTitle: {
+                    name: "bannerNumbersTitle",
+                    type: "String",
+                    isOptional: true,
+                }, bannerNumbersSubtitle: {
+                    name: "bannerNumbersSubtitle",
+                    type: "String",
+                    isOptional: true,
+                }, bannerNumbersItems: {
+                    name: "bannerNumbersItems",
+                    type: "BannerNumber",
+                    isTypeDef: true,
+                    isArray: true,
+                }, locationItems: {
+                    name: "locationItems",
+                    type: "String",
+                    isArray: true,
+                }, contactItems: {
+                    name: "contactItems",
+                    type: "String",
+                    isArray: true,
+                }, usefulLinksItems: {
+                    name: "usefulLinksItems",
+                    type: "TextLink",
+                    isTypeDef: true,
+                    isArray: true,
+                }, instagram: {
+                    name: "instagram",
+                    type: "String",
+                    isOptional: true,
+                }, youtube: {
+                    name: "youtube",
+                    type: "String",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, logoId: {
+                    name: "logoId",
+                    fields: ["logoId"]
+                }, bannerImageId: {
+                    name: "bannerImageId",
+                    fields: ["bannerImageId"]
+                },
+            },
+        },
         logEntry: {
             name: 'LogEntry', fields: {
                 id: {
@@ -1059,6 +1215,52 @@ const metadata = {
                 },
             },
         },
+        quickLink: {
+            name: 'QuickLink', fields: {
+                title: {
+                    name: "title",
+                    type: "String",
+                }, subtitle: {
+                    name: "subtitle",
+                    type: "String",
+                    isOptional: true,
+                }, icon: {
+                    name: "icon",
+                    type: "String",
+                    isOptional: true,
+                }, url: {
+                    name: "url",
+                    type: "String",
+                },
+            },
+        },
+        bannerNumber: {
+            name: 'BannerNumber', fields: {
+                title: {
+                    name: "title",
+                    type: "String",
+                }, value: {
+                    name: "value",
+                    type: "Int",
+                }, suffix: {
+                    name: "suffix",
+                    type: "String",
+                    isOptional: true,
+                },
+            },
+        },
+        textLink: {
+            name: 'TextLink', fields: {
+                title: {
+                    name: "title",
+                    type: "String",
+                }, url: {
+                    name: "url",
+                    type: "String",
+                    isOptional: true,
+                },
+            },
+        },
 
     },
     deleteCascade: {
@@ -1068,7 +1270,7 @@ const metadata = {
         news: ['ContentBlock'],
         faqCategory: ['FaqItem'],
         faqItem: ['ContentBlock'],
-        attachment: ['Professor', 'ContentBlock'],
+        attachment: ['Professor', 'ContentBlock', 'CollegeData'],
         management: ['ContentBlock'],
         project: ['ContentBlock'],
         section: ['GenericPage'],

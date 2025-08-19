@@ -152,6 +152,9 @@ Table Attachment {
   contentBlocks ContentBlock
   professor Professor
   newsFeaturedImage News
+  bannerImage CollegeData
+  secondBannerImages CollegeData [not null]
+  collegeLogo CollegeData
 }
 
 Table Management {
@@ -196,6 +199,35 @@ Table GenericPage {
   section Section [not null]
 }
 
+Table CollegeData {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String
+  acronym String
+  description String
+  logoId String [unique]
+  logo Attachment
+  bannerTitle String
+  bannerSubtitle String
+  bannerButtonLabel String
+  bannerImageId String [unique]
+  bannerImage Attachment
+  secondBannerTitle String
+  secondBannerSubtitle String
+  secondBannerButtonLabel String
+  secondBannerImages Attachment [not null]
+  quickLinks Json [not null]
+  bannerNumbersTitle String
+  bannerNumbersSubtitle String
+  bannerNumbersItems Json [not null]
+  locationItems String[] [not null]
+  contactItems String[] [not null]
+  usefulLinksItems Json [not null]
+  instagram String
+  youtube String
+}
+
 Table LogEntry {
   id String [pk]
   createdAt DateTime [default: `now()`, not null]
@@ -218,6 +250,11 @@ Table LogEntry {
 Table CourseToProfessor {
   professorsId String [ref: > Professor.id]
   coursesId String [ref: > Course.id]
+}
+
+Table CollegeDataSecondBannerImages {
+  secondbannerimagesId String [ref: > CollegeData.id]
+  secondbannerimagesId String [ref: > Attachment.id]
 }
 
 Enum Role {
@@ -305,5 +342,9 @@ Ref: ContentBlock.genericPageId > GenericPage.id [delete: Cascade]
 Ref: Section.parentSectionId - Section.id [delete: Cascade]
 
 Ref: GenericPage.sectionId > Section.id [delete: Cascade]
+
+Ref: CollegeData.logoId - Attachment.id [delete: Cascade]
+
+Ref: CollegeData.bannerImageId - Attachment.id [delete: Cascade]
 
 Ref: LogEntry.userId > User.id [delete: Cascade]

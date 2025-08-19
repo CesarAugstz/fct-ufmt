@@ -282,6 +282,9 @@ model Attachment extends BaseModel {
   contentBlocks ContentBlock? 
   professor Professor?
   newsFeaturedImage News? @relation('NewsFeaturedImage')
+  bannerImage CollegeData? @relation('CollegeDataBannerImage')
+  secondBannerImages CollegeData[] @relation('CollegeDataSecondBannerImages')
+  collegeLogo CollegeData? @relation('CollegeDataLogo')
 
   @@allow('read', true)
   @@allow('create,update,delete', auth() != null)
@@ -332,6 +335,59 @@ model GenericPage extends BaseModel {
 
   sectionId String
   section   Section @relation(name: "SectionPages", fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@allow('read', true)
+  @@allow('create,update,delete', auth() != null)
+}
+
+type QuickLink {
+  title String
+  subtitle String?
+  icon  String?
+  url   String
+}
+
+type BannerNumber {
+  title String
+  value Int
+  suffix String?
+}
+
+type TextLink {
+  title String
+  url   String?
+}
+
+model CollegeData extends BaseModel {
+  name String?
+  acronym String?
+  description String?
+  logoId String? @unique
+  logo   Attachment? @relation(name: "CollegeDataLogo", fields: [logoId], references: [id], onDelete: Cascade)
+
+  bannerTitle String?
+  bannerSubtitle String?
+  bannerButtonLabel String?
+  bannerImageId String? @unique
+  bannerImage   Attachment? @relation(name: "CollegeDataBannerImage", fields: [bannerImageId], references: [id], onDelete: Cascade)
+
+  secondBannerTitle String?
+  secondBannerSubtitle String?
+  secondBannerButtonLabel String?
+  secondBannerImages   Attachment[] @relation("CollegeDataSecondBannerImages")
+
+  quickLinks QuickLink[] @json
+
+  bannerNumbersTitle String?
+  bannerNumbersSubtitle String?
+  bannerNumbersItems BannerNumber[] @json
+
+  locationItems String[]
+  contactItems String[]
+  usefulLinksItems TextLink[] @json
+
+  instagram String?
+  youtube String?
 
   @@allow('read', true)
   @@allow('create,update,delete', auth() != null)

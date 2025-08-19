@@ -79,7 +79,7 @@ function FormItem({
   ...props
 }: React.ComponentProps<'div'> & { span?: number }) {
   const id = React.useId()
-  const spanClass = `col-span-4 ${span ? `md:col-span-${span}` : ''}`
+  const spanClass = `col-span-4 ${span ? `md:col-span-${span}` : 'md:col-span-2'}`
 
   return (
     <FormItemContext.Provider value={{ id }}>

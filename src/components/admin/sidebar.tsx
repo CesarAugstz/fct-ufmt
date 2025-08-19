@@ -66,10 +66,9 @@ const routes: Route[] = [
     icon: <StickyNote className="mr-2 h-5 w-5" />,
   },
   {
-    name: 'Configurações',
-    path: '/admin/settings',
+    name: 'Dados Gerais',
+    path: '/admin/college-data',
     icon: <Settings className="mr-2 h-5 w-5" />,
-    disabled: true,
   },
 ] as const
 

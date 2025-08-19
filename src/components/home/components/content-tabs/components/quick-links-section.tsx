@@ -1,65 +1,44 @@
-import NavigationCards, {
-  NavigationCardsProps,
-} from '@/components/common/navigation-cards'
+import NavigationCards from '@/components/common/navigation-cards'
 import SeiLogo from '@/components/logos/sei.logo'
+import { Icon } from '@/components/ui/icon'
+import { QuickLink } from '@zenstackhq/runtime/models'
 import { Calendar, FileUser, Map, MonitorCog, Settings } from 'lucide-react'
 
-export default function QuickLinksSection() {
+interface QuickLinksSectionProps {
+  quickLinks?: QuickLink[]
+}
+
+export default function QuickLinksSection({
+  quickLinks,
+}: QuickLinksSectionProps) {
   const cardClassName = 'size-8 md:size-12'
 
-  const cards: NavigationCardsProps['cards'] = [
-    {
-      id: 'portal-academico',
-      icon: <MonitorCog className={cardClassName} />,
-      title: 'Portal Acadêmico',
-      description: 'Acesse o portal acadêmico da UFMT',
-      href: 'https://portal.setec.ufmt.br/ufmt-setec-portal-academico/',
-      color: 'blue',
-    },
-    {
-      id: 'sei',
-      href: 'https://sei.ufmt.br/sei/controlador_externo.php?acao=usuario_externo_logar&acao_origem=usuario_externo_enviar_cadastro&id_orgao_acesso_externo=0',
-      icon: <SeiLogo className={cardClassName} />,
-      title: 'Acessos SEI',
-      description: 'Sistema Eletrônico de Informações',
-      color: 'amber',
-    },
-    {
-      id: 'reserva-salas',
-      href: 'https://academico-siga.ufmt.br/ufmt.sirefi',
-      icon: <Calendar className={cardClassName} />,
-      title: 'Reserva de Salas',
-      description: 'Agende salas e recursos',
-      color: 'green',
-    },
-    {
-      id: 'suporte',
-      href: 'https://wa.me/556536158078',
-      icon: <Settings className={cardClassName} />,
-      title: 'Suporte',
-      description: 'Entre em contato com o suporte',
-      color: 'red',
-    },
-    {
-      id: 'painel-indicadores',
-      icon: <FileUser className={cardClassName} />,
-      title: 'Painel de Indicadores',
-      description: 'Visualize estatísticas e dados',
-      color: 'purple',
-    },
-    {
-      id: 'localizacao',
-      icon: <Map className={cardClassName} />,
-      title: 'Localização',
-      description: 'Veja como chegar à FCT-UFMT',
-      href: 'https://maps.app.goo.gl/Rvrw2gXvc3E65edu9',
-      color: 'indigo',
-    },
-  ] as const
+  // TODO: put generic icon component
+  const iconMap = {
+    MonitorCog: <MonitorCog className={cardClassName} />,
+    SeiLogo: <SeiLogo className={cardClassName} />,
+    Calendar: <Calendar className={cardClassName} />,
+    Settings: <Settings className={cardClassName} />,
+    FileUser: <FileUser className={cardClassName} />,
+    Map: <Map className={cardClassName} />,
+  }
+
+  const cards = quickLinks?.map(link => ({
+    id: link.title,
+    icon: <Icon name={link.icon ?? ''} className={cardClassName} />,
+    title: link.title,
+    description: link.subtitle,
+    href: link.url,
+    color: 'blue' as const,
+  }))
+
+  if (!cards || cards.length === 0) {
+    return null
+  }
 
   return (
     <NavigationCards
-      cards={cards}
+      cards={cards || []}
       title="Links Rápidos"
       description="Acesse diretamente os sistemas e recursos mais utilizados"
     />
