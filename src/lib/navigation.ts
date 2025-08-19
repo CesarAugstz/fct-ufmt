@@ -104,9 +104,6 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
       ],
     },
     {
-      name: 'Inovatec',
-    },
-    {
       name: 'Notícias',
       href: '/home/news',
     },
