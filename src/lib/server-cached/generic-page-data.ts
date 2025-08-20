@@ -53,9 +53,9 @@ export const getGenericPageData = unstable_cache(
       },
     })
   },
-  ['project'],
+  ['generic-pages'],
   {
-    tags: ['project'],
+    tags: ['generic-pages'],
     revalidate: 60 * 60,
   },
 )
