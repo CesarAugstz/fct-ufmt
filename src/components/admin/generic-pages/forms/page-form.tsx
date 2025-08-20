@@ -32,7 +32,7 @@ const formSchema = z.object({
       /^[a-z0-9-]+$/,
       'Slug deve conter apenas letras minúsculas, números e hífens',
     ),
-  sectionId: z.string().min(1, 'Seção é obrigatória'),
+  sectionId: z.string().optional(),
 })
 
 type PageFormValues = z.infer<typeof formSchema>
@@ -75,9 +75,14 @@ export default function PageForm({
   const onSubmit = async (values: PageFormValues) => {
     setIsSubmitting(true)
 
+    const data = {
+      ...values,
+      sectionId: values.sectionId || null,
+    }
+
     createPage(
       {
-        data: values,
+        data,
       },
       {
         onSuccess: () => {
@@ -145,14 +150,13 @@ export default function PageForm({
             <FormSelect
               name="sectionId"
               label="Seção"
-              placeholder="Selecione uma seção"
-              required
-              options={
-                sections?.map(section => ({
+              placeholder="Selecione uma seção (opcional para páginas raiz)"
+              options={[
+                ...(sections?.map(section => ({
                   value: section.id,
                   label: section.title,
-                })) ?? []
-              }
+                })) ?? []),
+              ]}
             />
 
             <div className="flex justify-end gap-2 pt-4">

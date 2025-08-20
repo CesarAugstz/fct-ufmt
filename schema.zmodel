@@ -333,8 +333,8 @@ model GenericPage extends BaseModel {
   slug String @unique
   contentBlocks ContentBlock[]
 
-  sectionId String
-  section   Section @relation(name: "SectionPages", fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String?
+  section   Section? @relation(name: "SectionPages", fields: [sectionId], references: [id], onDelete: Cascade)
 
   @@allow('read', true)
   @@allow('create,update,delete', auth() != null)

@@ -6,29 +6,56 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/common/theme-toggle'
 import Link from 'next/link'
-import { commonData } from '@/data/common.data'
 
-export function Header() {
+interface HeaderProps {
+  collegeData?: {
+    name?: string | null
+    acronym?: string | null
+    logo?: {
+      id: string
+      dataUrl: string
+      name: string
+    } | null
+    instagram?: string | null
+    youtube?: string | null
+  } | null
+}
+
+export function Header({ collegeData }: HeaderProps) {
   return (
     <header className="bg-gradient-to-r from-[#002347] to-[#003366] text-white py-4 shadow-md">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
-        <Link href="/home" className="flex items-center mb-4 md:mb-0">
-          <div className="mr-3">
-            <div className="bg-white p-2 rounded-lg shadow-lg">
-              <Image
-                src="/placeholder.svg?height=60&width=60"
-                alt="Logo FCT"
-                width={60}
-                height={60}
-                className="rounded"
-              />
-            </div>
-          </div>
-          <div className="text-lg font-bold">
-            <div>FACULDADE DE</div>
-            <div>CIÊNCIA E TECNOLOGIA</div>
-          </div>
-        </Link>
+        {(collegeData?.logo || collegeData?.name) && (
+          <Link href="/home" className="flex items-center mb-4 md:mb-0">
+            {collegeData?.logo && (
+              <div className="mr-3">
+                <div className="bg-white p-2 rounded-lg shadow-lg">
+                  <Image
+                    src={collegeData.logo.dataUrl}
+                    alt={collegeData.logo.name}
+                    width={60}
+                    height={60}
+                    className="rounded"
+                  />
+                </div>
+              </div>
+            )}
+            {collegeData?.name && (
+              <div className="text-lg font-bold">
+                {collegeData.name.includes(' ') ? (
+                  <>
+                    <div>
+                      {collegeData.name.split(' ').slice(0, 2).join(' ')}
+                    </div>
+                    <div>{collegeData.name.split(' ').slice(2).join(' ')}</div>
+                  </>
+                ) : (
+                  <div>{collegeData.name}</div>
+                )}
+              </div>
+            )}
+          </Link>
+        )}
 
         <div className="w-full md:w-1/2 lg:w-2/5 relative">
           <div className="relative">
@@ -47,24 +74,30 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex space-x-4 mt-4 md:mt-0">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
-            onClick={() => window.open(commonData.instagram, '_blank')}
-          >
-            <Instagram className="h-5 w-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => window.open(commonData.youtube, '_blank')}
-            className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
-          >
-            <Youtube className="h-5 w-5" />
-          </Button>
-        </div>
+        {(collegeData?.instagram || collegeData?.youtube) && (
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            {collegeData?.instagram && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
+                onClick={() => window.open(collegeData.instagram!, '_blank')}
+              >
+                <Instagram className="h-5 w-5" />
+              </Button>
+            )}
+            {collegeData?.youtube && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => window.open(collegeData.youtube!, '_blank')}
+                className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
+              >
+                <Youtube className="h-5 w-5" />
+              </Button>
+            )}
+          </div>
+        )}
         <ThemeToggle className="" buttonProps={{ variant: 'ghost' }} />
       </div>
     </header>

@@ -1079,6 +1079,7 @@ const metadata = {
         sectionId: {
           name: 'sectionId',
           type: 'String',
+          isOptional: true,
           isForeignKey: true,
           relationField: 'section',
         },
@@ -1086,6 +1087,7 @@ const metadata = {
           name: 'section',
           type: 'Section',
           isDataModel: true,
+          isOptional: true,
           backLink: 'pages',
           isRelationOwner: true,
           foreignKeyMapping: { id: 'sectionId' },

@@ -29,7 +29,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   slug: z.string().optional(),
   contentBlocks: z.array(getBlockSchema()).optional(),
-  sectionId: z.ulid().optional(),
+  sectionId: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -70,7 +70,7 @@ export default function PageDetail({ pageId }: PageDetailProps) {
       title: page?.title,
       description: page?.description ?? '',
       slug: page?.slug ?? '',
-      sectionId: page?.sectionId,
+      sectionId: page?.sectionId ?? '',
       contentBlocks: page?.contentBlocks ?? [],
     },
   })
@@ -84,7 +84,7 @@ export default function PageDetail({ pageId }: PageDetailProps) {
             title: values.title,
             description: values.description,
             slug: values.slug,
-            sectionId: values.sectionId,
+            sectionId: values.sectionId || null,
           },
         })
         await updateContentBlocks(
@@ -172,11 +172,11 @@ export default function PageDetail({ pageId }: PageDetailProps) {
           <FormSelect
             name="sectionId"
             label="Seção"
-            required
             span={4}
-            options={
-              sections?.map(s => ({ value: s.id, label: s.title })) ?? []
-            }
+            placeholder="Selecione uma seção (opcional para páginas raiz)"
+            options={[
+              ...(sections?.map(s => ({ value: s.id, label: s.title })) ?? []),
+            ]}
           />
           <FormBlocks
             name="contentBlocks"

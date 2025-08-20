@@ -4,6 +4,23 @@ import { db } from '@/server/db'
 export const getGenericPageData = unstable_cache(
   async (slugs: string[]) => {
     console.log('getGenericPageData', slugs)
+
+    if (slugs.length === 1) {
+      const slug = slugs[0]
+      return await db.genericPage.findFirst({
+        where: {
+          slug,
+          sectionId: null,
+        },
+        include: {
+          contentBlocks: {
+            include: { file: true },
+            orderBy: { order: 'asc' },
+          },
+        },
+      })
+    }
+
     if (slugs.length < 2) return null
 
     console.log('where', {

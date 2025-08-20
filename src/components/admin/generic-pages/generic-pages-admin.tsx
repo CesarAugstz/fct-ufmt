@@ -65,7 +65,7 @@ export default function GenericPagesAdmin() {
     orderBy: { title: 'asc' },
     include: {
       section: {
-        select: { id: true, title: true },
+        select: { id: true, title: true, slug: true },
       },
       _count: {
         select: { contentBlocks: true },
@@ -192,10 +192,12 @@ export default function GenericPagesAdmin() {
                         </TableCell>
 
                         <TableCell>
-                          {page.section && (
+                          {page.section ? (
                             <Badge variant="secondary">
                               {page.section.title}
                             </Badge>
+                          ) : (
+                            <Badge variant="outline">Página raiz</Badge>
                           )}
                         </TableCell>
 
@@ -232,7 +234,11 @@ export default function GenericPagesAdmin() {
 
                               <DropdownMenuItem asChild>
                                 <Link
-                                  href={`/pages/${page.slug}`}
+                                  href={
+                                    page.section
+                                      ? `/home/${page.section.slug}/${page.slug}`
+                                      : `/home/${page.slug}`
+                                  }
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >

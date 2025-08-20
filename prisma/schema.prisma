@@ -265,8 +265,8 @@ model GenericPage {
   description   String?
   slug          String         @unique()
   contentBlocks ContentBlock[]
-  sectionId     String
-  section       Section        @relation(name: "SectionPages", fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId     String?
+  section       Section?       @relation(name: "SectionPages", fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model CollegeData {

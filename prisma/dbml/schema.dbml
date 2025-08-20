@@ -195,8 +195,8 @@ Table GenericPage {
   description String
   slug String [unique, not null]
   contentBlocks ContentBlock [not null]
-  sectionId String [not null]
-  section Section [not null]
+  sectionId String
+  section Section
 }
 
 Table CollegeData {

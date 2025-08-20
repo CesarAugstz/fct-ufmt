@@ -141,7 +141,7 @@ async function main() {
     update: {},
     create: {
       id: 'default',
-      name: 'Faculdade de Ciências e Tecnologia',
+      name: 'Faculdade de Ciência e Tecnologia',
       acronym: 'FCT',
       description:
         'A FCT da UFMT é referência em ensino, pesquisa e extensão na área de Tecnologia da Informação.',
@@ -168,36 +168,42 @@ async function main() {
           subtitle: 'Acesse o portal acadêmico da UFMT',
           icon: 'MonitorCog',
           url: 'https://portal.setec.ufmt.br/ufmt-setec-portal-academico/',
+          color: 'blue',
         },
         {
           title: 'Acessos SEI',
           subtitle: 'Sistema Eletrônico de Informações',
-          icon: 'FileText',
+          icon: 'SeiLogo',
           url: 'https://sei.ufmt.br/sei/controlador_externo.php?acao=usuario_externo_logar&acao_origem=usuario_externo_enviar_cadastro&id_orgao_acesso_externo=0',
+          color: 'green',
         },
         {
           title: 'Reserva de Salas',
           subtitle: 'Agende salas e recursos',
           icon: 'Calendar',
           url: 'https://academico-siga.ufmt.br/ufmt.sirefi',
+          color: 'orange',
         },
         {
           title: 'Suporte',
           subtitle: 'Entre em contato com o suporte',
           icon: 'Settings',
           url: 'https://wa.me/556536158078',
+          color: 'red',
         },
         {
           title: 'Painel de Indicadores',
           subtitle: 'Visualize estatísticas e dados',
           icon: 'FileUser',
           url: '#',
+          color: 'purple',
         },
         {
           title: 'Localização',
           subtitle: 'Veja como chegar à FCT-UFMT',
           icon: 'Map',
           url: 'https://maps.app.goo.gl/Rvrw2gXvc3E65edu9',
+          color: 'yellow',
         },
       ],
 

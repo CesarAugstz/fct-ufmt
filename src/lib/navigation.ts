@@ -56,6 +56,15 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
     orderBy: { title: 'asc' },
   })
 
+  const rootPages = await db.genericPage.findMany({
+    where: { sectionId: null },
+    select: {
+      slug: true,
+      title: true,
+    },
+    orderBy: { title: 'asc' },
+  })
+
   const genericSectionsMapped = genericSections.map(s => ({
     name: s.title,
     children: [
@@ -90,17 +99,21 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
     ?.filter(c => c.nature === CourseNature.POST_GRADUATION)
     ?.map(c => ({ name: c.name, href: `/home/courses/${c.slug}` }))
 
+  const genericSectionsAFaculdade =
+    genericSectionsMapped.find(s => s.name === 'A Faculdade')?.children ?? []
+
+  const genericSectionsMappedFiltered = genericSectionsMapped.filter(
+    s => s.name !== 'A Faculdade',
+  )
+
   const sections: Section[] = [
     {
       name: 'A Faculdade',
       href: '/home',
       children: [
-        { name: 'História' },
         { name: 'Gestão', href: '/home/management' },
         { name: 'Docentes', href: '/home/professors' },
-        { name: 'Técnicos' },
-        { name: 'Contatos' },
-        { name: 'Tour 360º' },
+        ...genericSectionsAFaculdade,
       ],
     },
     {
@@ -145,7 +158,11 @@ async function getNavigationSectionsUncached(): Promise<Section[]> {
     {
       name: 'Agendas',
     },
-    ...genericSectionsMapped,
+    ...genericSectionsMappedFiltered,
+    ...rootPages.map(page => ({
+      name: page.title,
+      href: `/home/${page.slug}`,
+    })),
   ]
 
   return sections
@@ -156,6 +173,6 @@ export const getNavigationSections = unstable_cache(
   ['navigation'],
   {
     tags: ['navigation'],
-    revalidate: 60 * 60,
+    revalidate: 1,
   },
 )
