@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { HexColorPicker, HslColorPicker } from 'react-colorful'
-import { formatHex, oklch } from 'culori'
 import {
   Popover,
   PopoverContent,
@@ -12,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Palette, Pipette } from 'lucide-react'
+import { Palette, Pipette, X } from 'lucide-react'
 
 interface ColorPickerProps {
   value: string
@@ -120,72 +119,124 @@ export function ColorPicker({
 }: ColorPickerProps) {
   const [hslValue, setHslValue] = useState(() => hexToHsl(value))
   const [inputValue, setInputValue] = useState(value)
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+  const [tempColor, setTempColor] = useState(value)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    setInputValue(value)
-    let hexColor = ''
-    if (value.startsWith('oklch')) {
-      hexColor = formatHex(oklch(value) ?? '') ?? ''
+    if (!open) {
+      setInputValue(value)
+      setTempColor(value)
+      setHslValue(hexToHsl(value))
     }
-    if (hexColor) {
-      setInputValue(hexColor)
-      onChange(hexColor)
-    }
-    setHslValue(hexToHsl(value))
-  }, [onChange, value])
+  }, [value, open])
 
   const handleColorSelect = (color: string) => {
     setInputValue(color)
-    onChange(color)
+    setTempColor(color)
+    setHslValue(hexToHsl(color))
   }
 
   const handleHexChange = (newColor: string) => {
     setInputValue(newColor)
-    onChange(newColor)
+    setTempColor(newColor)
+    setHslValue(hexToHsl(newColor))
   }
 
   const handleHslChange = (hsl: { h: number; s: number; l: number }) => {
     setHslValue(hsl)
     const hexColor = hslToHex(hsl.h, hsl.s, hsl.l)
     setInputValue(hexColor)
-    onChange(hexColor)
+    setTempColor(hexColor)
   }
 
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue)
     if (newValue.match(/^#[0-9A-Fa-f]{6}$/)) {
-      onChange(newValue)
+      setTempColor(newValue)
+      setHslValue(hexToHsl(newValue))
     }
   }
 
   const handleInputBlur = () => {
-    onChange(inputValue)
-    setInputValue(value)
+    if (inputValue.match(/^#[0-9A-Fa-f]{6}$/)) {
+      setTempColor(inputValue)
+      setHslValue(hexToHsl(inputValue))
+    } else {
+      setInputValue(tempColor)
+    }
+  }
+
+  const handleExternalInputChange = (newValue: string) => {
+    setInputValue(newValue)
+    if (newValue.match(/^#[0-9A-Fa-f]{6}$/)) {
+      setTempColor(newValue)
+      setHslValue(hexToHsl(newValue))
+      onChange(newValue)
+    }
+  }
+
+  const handleExternalInputBlur = () => {
+    if (inputValue.match(/^#[0-9A-Fa-f]{6}$/)) {
+      setTempColor(inputValue)
+      setHslValue(hexToHsl(inputValue))
+      onChange(inputValue)
+    } else {
+      setInputValue(tempColor)
+    }
+  }
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen && tempColor !== value) {
+      onChange(tempColor)
+    }
+    setOpen(newOpen)
   }
 
   return (
     <div className="space-y-2">
       {label && <Label>{label}</Label>}
       <div className="flex gap-2">
-        <Popover open={isPopoverOpen}>
+        <Popover open={open} onOpenChange={handleOpenChange}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               className="w-12 h-10 p-0 border-2 rounded-lg hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md"
-              style={{ backgroundColor: value }}
+              style={{ backgroundColor: tempColor }}
               disabled={disabled}
-              onClick={() => setIsPopoverOpen(true)}
             >
               <Pipette className="h-3 w-3 text-white/80" />
               <span className="sr-only">Escolher cor</span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-96 p-0" align="start">
+          <PopoverContent
+            className="w-96 p-0"
+            align="start"
+            onPointerDownOutside={e => {
+              if (
+                !e.target ||
+                !(e.target as Element).closest(
+                  '[data-radix-popper-content-wrapper]',
+                )
+              ) {
+                handleOpenChange(false)
+              }
+            }}
+          >
             <div className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Palette className="h-4 w-4" />
-                <h4 className="font-medium">Seletor de Cores</h4>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Palette className="h-4 w-4" />
+                  <h4 className="font-medium">Seletor de Cores</h4>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                  onClick={() => handleOpenChange(false)}
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">Fechar</span>
+                </Button>
               </div>
 
               <Tabs defaultValue="hex" className="w-full">
@@ -197,7 +248,7 @@ export function ColorPicker({
                 <TabsContent value="hex" className="space-y-4">
                   <div className="flex justify-center">
                     <HexColorPicker
-                      color={value}
+                      color={tempColor}
                       onChange={handleHexChange}
                       style={{
                         width: '220px',
@@ -224,11 +275,11 @@ export function ColorPicker({
               <div className="flex items-center gap-3 mt-4 p-3 bg-muted/50 rounded-lg">
                 <div
                   className="w-12 h-12 rounded-lg border-2 border-border shadow-sm"
-                  style={{ backgroundColor: value }}
+                  style={{ backgroundColor: tempColor }}
                 />
                 <div className="flex-1">
                   <div className="text-sm font-medium">
-                    {value.toUpperCase()}
+                    {tempColor.toUpperCase()}
                   </div>
                   <div className="text-xs text-muted-foreground">
                     HSL({hslValue.h}, {hslValue.s}%, {hslValue.l}%)
@@ -273,8 +324,8 @@ export function ColorPicker({
 
         <Input
           value={inputValue}
-          onChange={e => handleInputChange(e.target.value)}
-          onBlur={handleInputBlur}
+          onChange={e => handleExternalInputChange(e.target.value)}
+          onBlur={handleExternalInputBlur}
           placeholder="#000000"
           className="flex-1 font-mono"
           disabled={disabled}

@@ -39,6 +39,7 @@ async function cleanDatabase() {
   await prisma.course.deleteMany()
   await prisma.management.deleteMany()
   await prisma.collegeData.deleteMany()
+  await prisma.personalization.deleteMany()
   console.log('✅ Database cleaned')
 }
 
