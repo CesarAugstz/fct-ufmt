@@ -7,49 +7,45 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 import { useShare } from '@/lib/hooks/share'
-import { useFindUniqueNews, useFindManyNews } from '@/lib/zenstack-hooks'
-import LoadingSpinner from '@/components/common/loading-spinner'
 import { BlockContentRenderer } from '@/components/common/block-content-renderer'
 import { dayJs } from '@/utils/dayjs'
+import type { Block } from '@/components/ui/form-fields/blocks/types'
+import type { AttachmentType } from '@/types/attachment.type'
+import type { ContentBlock } from '@prisma/client'
 
-export default function NewsDetail({ slug }: { slug: string }) {
+type NewsDetailData = {
+  news: {
+    id: string
+    title: string
+    excerpt: string | null
+    slug: string
+    author: string
+    publishedAt: Date | null
+    createdAt: Date
+    category: {
+      name: string
+    }
+    featuredImage: AttachmentType | null
+    contentBlocks: (ContentBlock & {
+      file: AttachmentType | null
+    })[]
+  }
+  relatedNews: Array<{
+    id: string
+    title: string
+    slug: string
+    publishedAt: Date | null
+    createdAt: Date
+    featuredImage: AttachmentType | null
+  }>
+  categories: string[]
+}
+
+export default function NewsDetail({ data }: { data: NewsDetailData }) {
   const { share } = useShare()
-
-  const { data: news, isLoading } = useFindUniqueNews({
-    where: { slug },
-    include: {
-      category: true,
-      featuredImage: true,
-      contentBlocks: {
-        include: {
-          file: true,
-        },
-        orderBy: { order: 'asc' },
-      },
-    },
-  })
-
-  const { data: relatedNews = [] } = useFindManyNews({
-    where: {
-      status: 'PUBLISHED',
-      categoryId: news?.categoryId,
-      NOT: { slug },
-    },
-    include: {
-      featuredImage: true,
-    },
-    take: 3,
-    orderBy: { publishedAt: 'desc' },
-  })
-
-  const { data: allNews = [] } = useFindManyNews({
-    where: { status: 'PUBLISHED' },
-    include: { category: true },
-  })
+  const { news, relatedNews, categories } = data
 
   const handleShare = async () => {
-    if (!news) return
-
     const shareUrl = window.location.href
     const shareTitle = news.title
     const shareText = news.excerpt || ''
@@ -61,35 +57,27 @@ export default function NewsDetail({ slug }: { slug: string }) {
     })
   }
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex justify-center items-center min-h-[400px]">
-          <LoadingSpinner className="h-8 w-8" />
-        </div>
-      </div>
-    )
-  }
-
-  if (!news) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">Notícia não encontrada</h1>
-          <p className="mt-2 text-muted-foreground">
-            A notícia que você está procurando não existe ou foi removida.
-          </p>
-          <Button asChild className="mt-4">
-            <Link href="/home/news">Voltar para notícias</Link>
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
-  const categories = Array.from(
-    new Set(allNews.map(item => item.category.name)),
-  )
+  const blocksAsBlocks: Block[] = news.contentBlocks.map(block => ({
+    id: block.id,
+    nature: block.nature as 'TEXT' | 'IMAGE' | 'ACCORDION',
+    order: block.order,
+    withBorder: block.withBorder,
+    gridSize: block.gridSize,
+    ...(block.nature === 'TEXT' && {
+      content: block.content,
+    }),
+    ...(block.nature === 'IMAGE' && {
+      caption: block.caption,
+      size: block.size,
+      alignment: block.alignment,
+      file: block.file,
+    }),
+    ...(block.nature === 'ACCORDION' && {
+      accordionItems:
+        (block.accordionItems as Array<{ title: string; content: string }>) ||
+        [],
+    }),
+  })) as Block[]
 
   return (
     <div className="min-h-screen">
@@ -107,10 +95,8 @@ export default function NewsDetail({ slug }: { slug: string }) {
           </Button>
         </div>
 
-        {/* Main content */}
         <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
           <div className="space-y-8">
-            {/* Header */}
             <div>
               <Badge className="mb-4">{news.category.name}</Badge>
               <h1 className="mb-4 text-4xl font-bold tracking-tight text-primary">
@@ -127,7 +113,6 @@ export default function NewsDetail({ slug }: { slug: string }) {
               </div>
             </div>
 
-            {/* Featured image */}
             {news.featuredImage && (
               <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                 <Image
@@ -141,7 +126,6 @@ export default function NewsDetail({ slug }: { slug: string }) {
               </div>
             )}
 
-            {/* Excerpt */}
             {news.excerpt && (
               <div className="prose prose-lg max-w-none">
                 <p className="lead text-lg text-muted-foreground">
@@ -150,13 +134,10 @@ export default function NewsDetail({ slug }: { slug: string }) {
               </div>
             )}
 
-            {/* Content Blocks */}
-            <BlockContentRenderer blocks={news.contentBlocks} />
+            <BlockContentRenderer blocks={blocksAsBlocks} />
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-8">
-            {/* Related news */}
             {relatedNews.length > 0 && (
               <div>
                 <h2 className="mb-4 text-xl font-semibold">
@@ -169,7 +150,7 @@ export default function NewsDetail({ slug }: { slug: string }) {
                       className="group overflow-hidden transition-all hover:shadow-md"
                     >
                       <Link
-                        href={`/home/news/${item.id}`}
+                        href={`/home/news/${item.slug}`}
                         className="flex gap-4 p-4"
                       >
                         {item.featuredImage && (
@@ -200,7 +181,6 @@ export default function NewsDetail({ slug }: { slug: string }) {
               </div>
             )}
 
-            {/* Categories */}
             <div>
               <h2 className="mb-4 text-xl font-semibold">Categorias</h2>
               <div className="flex flex-wrap gap-2">
