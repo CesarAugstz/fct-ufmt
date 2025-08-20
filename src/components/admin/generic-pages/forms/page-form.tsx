@@ -85,9 +85,9 @@ export default function PageForm({
         data,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success('Página criada com sucesso!')
-          revalidateGenericPages()
+          await revalidateGenericPages()
           onSuccess()
           setIsSubmitting(false)
         },

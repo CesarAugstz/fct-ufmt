@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import LoadingSpinner from '@/components/common/loading-spinner'
 import { useRouter } from 'next/navigation'
-import { FormSelect, FormText } from '@/components/ui/form-fields'
+import { FormSelect, FormText, FormTextarea } from '@/components/ui/form-fields'
 import { formatToSlug } from '@/lib/formatters/slug.formatter'
 
 const formSchema = z.object({
@@ -178,6 +178,14 @@ export default function PageDetail({ pageId }: PageDetailProps) {
               ...(sections?.map(s => ({ value: s.id, label: s.title })) ?? []),
             ]}
           />
+
+          <FormTextarea
+            name="description"
+            label="Descrição"
+            placeholder="Digite uma breve descrição da página"
+            rows={3}
+          />
+
           <FormBlocks
             name="contentBlocks"
             label="Conteúdo em Blocos"
