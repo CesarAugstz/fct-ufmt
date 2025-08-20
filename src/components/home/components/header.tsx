@@ -1,10 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import { Search, Instagram, Youtube } from 'lucide-react'
+import { Instagram, Youtube } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/common/theme-toggle'
+import { SearchDropdown } from '@/components/common/search-dropdown'
 import Link from 'next/link'
 
 interface HeaderProps {
@@ -57,21 +57,8 @@ export function Header({ collegeData }: HeaderProps) {
           </Link>
         )}
 
-        <div className="w-full md:w-1/2 lg:w-2/5 relative">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="O que você procura?"
-              className="w-full py-2 px-4 pr-10 rounded-full border-accent focus:ring-2 focus:ring-blue-300 transition-all"
-            />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-0 top-0 h-full text-gray-400 hover:text-primary"
-            >
-              <Search className="h-4 w-4" />
-            </Button>
-          </div>
+        <div className="w-full md:w-1/2 lg:w-2/5">
+          <SearchDropdown placeholder="O que você procura?" />
         </div>
 
         {(collegeData?.instagram || collegeData?.youtube) && (

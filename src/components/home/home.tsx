@@ -14,15 +14,6 @@ export default async function Home() {
     getCollegeData(),
   ])
 
-  console.dir(
-    {
-      latestNews,
-      featuredNews,
-      collegeData,
-    },
-    { depth: null },
-  )
-
   return (
     <div className="min-h-screen flex flex-col">
       <HeroBanner
