@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from '@/utils/zod'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
@@ -191,23 +190,20 @@ export default function PersonalizationForm({
 }: PersonalizationFormProps) {
   const form = useForm<PersonalizationFormData>({
     resolver: zodResolver(personalizationFormSchema),
-    defaultValues: personalization || defaultColors,
+    values: { ...defaultColors, ...personalization },
   })
 
   const onSubmit = async (data: PersonalizationFormData) => {
     try {
       console.log('Personalization data:', data)
-      toast.success('Personalização salva com sucesso!')
       onSuccess(data)
     } catch (error) {
       console.error('Erro ao salvar personalização:', error)
-      toast.error('Erro ao salvar personalização')
     }
   }
 
   const resetToDefaults = () => {
     form.reset(defaultColors)
-    toast.success('Valores resetados para o padrão')
   }
 
   const ColorField = ({

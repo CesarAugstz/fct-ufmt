@@ -299,12 +299,6 @@ export const usePersonalizationStore = create<PersonalizationStore>()(
     }),
     {
       name: 'personalization-storage',
-      onRehydrateStorage: () => state => {
-        if (state) {
-          state.setIsLoaded(true)
-          state.applyColors()
-        }
-      },
     },
   ),
 )

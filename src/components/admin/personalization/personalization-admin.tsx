@@ -16,9 +16,7 @@ import { mapPersonalizationToColors } from '@/utils/mappers/personalization-mapp
 export default function PersonalizationAdmin() {
   const { setColors, applyColors } = usePersonalizationStore()
 
-  const { data: personalization, isLoading } = useFindFirstPersonalization({
-    where: { isActive: true },
-  })
+  const { data: personalization, isLoading } = useFindFirstPersonalization()
 
   const { mutate: upsertPersonalization } = useUpsertPersonalization({
     onSuccess: data => {
@@ -36,32 +34,16 @@ export default function PersonalizationAdmin() {
   })
 
   const handleFormSuccess = (data: PersonalizationColors) => {
-    if (personalization?.id) {
-      upsertPersonalization({
-        where: { id: personalization.id },
-        update: {
-          ...data,
-          isActive: true,
-        },
-        create: {
-          ...data,
-          isActive: true,
-        },
-      })
-    } else {
-      upsertPersonalization({
-        where: { id: 'default-personalization' },
-        update: {
-          ...data,
-          isActive: true,
-        },
-        create: {
-          id: 'default-personalization',
-          ...data,
-          isActive: true,
-        },
-      })
-    }
+    upsertPersonalization({
+      where: { id: personalization?.id || 'default' },
+      update: {
+        ...data,
+      },
+      create: {
+        id: 'default',
+        ...data,
+      },
+    })
   }
 
   if (isLoading) {

@@ -6,14 +6,14 @@ import { ArrowLeft, Share2 } from 'lucide-react'
 import { useShare } from '@/lib/hooks/share'
 
 interface HeaderMadridProps {
-  title?: string
+  title?: string | null
   subtitle?: string | null
   showBackButton?: boolean
   backButtonLabel?: string
   backButtonHref?: string
   showShareButton?: boolean
   shareData?: {
-    title?: string
+    title?: string | null
     text?: string
     url?: string
   }

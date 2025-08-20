@@ -1,9 +1,9 @@
 import Chance from 'chance'
 import { Prisma, Role } from '@prisma/client'
 import {
-  ExtensionProject,
+  ProfessorExtensionProject,
+  ProfessorResearchProject,
   Publication,
-  ResearchProject,
 } from '@zenstackhq/runtime/models'
 import { InputJsonValue } from '@prisma/client/runtime/library'
 
@@ -158,8 +158,8 @@ function generatePublications(): Publication[] {
   return publications
 }
 
-function generateResearchProjects(): ResearchProject[] {
-  const projects: ResearchProject[] = []
+function generateResearchProjects(): ProfessorResearchProject[] {
+  const projects: ProfessorResearchProject[] = []
   const count = chance.integer({ min: 2, max: 5 })
 
   for (let i = 0; i < count; i++) {
@@ -179,8 +179,8 @@ function generateResearchProjects(): ResearchProject[] {
   return projects
 }
 
-function generateExtensionProjects(): ExtensionProject[] {
-  const projects: ExtensionProject[] = []
+function generateExtensionProjects(): ProfessorExtensionProject[] {
+  const projects: ProfessorExtensionProject[] = []
   const count = chance.integer({ min: 1, max: 4 })
 
   for (let i = 0; i < count; i++) {
