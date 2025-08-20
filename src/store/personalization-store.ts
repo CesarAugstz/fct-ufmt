@@ -152,7 +152,10 @@ export const defaultColors: PersonalizationColors = {
 interface PersonalizationStore {
   colors: PersonalizationColors
   isLoaded: boolean
-  setColors: (colors: Partial<PersonalizationColors>) => void
+  setColors: (
+    colors: Partial<PersonalizationColors>,
+    skipDOMUpdate?: boolean,
+  ) => void
   resetToDefaults: () => void
   setIsLoaded: (loaded: boolean) => void
   applyColors: () => void
@@ -163,10 +166,12 @@ export const usePersonalizationStore = create<PersonalizationStore>()(
     (set, get) => ({
       colors: defaultColors,
       isLoaded: false,
-      setColors: newColors => {
+      setColors: (newColors, skipDOMUpdate = false) => {
         const updatedColors = { ...get().colors, ...newColors }
         set({ colors: updatedColors })
-        get().applyColors()
+        if (!skipDOMUpdate) {
+          get().applyColors()
+        }
       },
       resetToDefaults: () => {
         set({ colors: { ...defaultColors } })

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { HexColorPicker, HslColorPicker } from 'react-colorful'
+import { formatHex, oklch } from 'culori'
 import {
   Popover,
   PopoverContent,
@@ -119,11 +120,20 @@ export function ColorPicker({
 }: ColorPickerProps) {
   const [hslValue, setHslValue] = useState(() => hexToHsl(value))
   const [inputValue, setInputValue] = useState(value)
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
   useEffect(() => {
     setInputValue(value)
+    let hexColor = ''
+    if (value.startsWith('oklch')) {
+      hexColor = formatHex(oklch(value) ?? '') ?? ''
+    }
+    if (hexColor) {
+      setInputValue(hexColor)
+      onChange(hexColor)
+    }
     setHslValue(hexToHsl(value))
-  }, [value])
+  }, [onChange, value])
 
   const handleColorSelect = (color: string) => {
     setInputValue(color)
@@ -150,24 +160,22 @@ export function ColorPicker({
   }
 
   const handleInputBlur = () => {
-    if (inputValue.match(/^#[0-9A-Fa-f]{6}$/)) {
-      onChange(inputValue)
-    } else {
-      setInputValue(value)
-    }
+    onChange(inputValue)
+    setInputValue(value)
   }
 
   return (
     <div className="space-y-2">
       {label && <Label>{label}</Label>}
       <div className="flex gap-2">
-        <Popover>
+        <Popover open={isPopoverOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               className="w-12 h-10 p-0 border-2 rounded-lg hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md"
               style={{ backgroundColor: value }}
               disabled={disabled}
+              onClick={() => setIsPopoverOpen(true)}
             >
               <Pipette className="h-3 w-3 text-white/80" />
               <span className="sr-only">Escolher cor</span>

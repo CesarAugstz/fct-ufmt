@@ -6,16 +6,22 @@ import { QueryProvider } from '@/components/providers/query-provider'
 import { PersonalizationProvider } from '@/components/providers/personalization-provider'
 import { Provider as JotaiProvider } from 'jotai'
 import { MuiThemeProvider } from './mui-theme-provider'
+import { PersonalizationColors } from '@/store/personalization-store'
 
 interface ProvidersProps {
   children: ReactNode
+  initialColors?: PersonalizationColors
   themeProps?: {
     enableSystem?: boolean
     defaultTheme?: string
   }
 }
 
-export function Providers({ children, themeProps }: ProvidersProps) {
+export function Providers({
+  children,
+  initialColors,
+  themeProps,
+}: ProvidersProps) {
   return (
     <ThemeProvider
       attribute="class"
@@ -26,7 +32,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <JotaiProvider>
         <MuiThemeProvider>
           <QueryProvider>
-            <PersonalizationProvider>
+            <PersonalizationProvider initialColors={initialColors}>
               <AuthProvider>{children}</AuthProvider>
             </PersonalizationProvider>
           </QueryProvider>

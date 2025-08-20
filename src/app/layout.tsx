@@ -6,6 +6,10 @@ import { Providers } from '@/components/providers/providers'
 import { Toaster } from '@/components/ui/sonner'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { db } from '@/server/db'
+import { generateCSSVariables } from '@/lib/css-generator'
+import { mapPersonalizationToColors } from '@/utils/mappers/personalization-mapper'
+import { defaultColors } from '@/store/personalization-store'
 
 const inter = Montserrat({
   variable: '--font-inter',
@@ -17,15 +21,42 @@ export const metadata: Metadata = {
   description: 'FCT - UFMT',
 }
 
-export default function RootLayout({
+async function getPersonalizationColors() {
+  try {
+    const personalization = await db.personalization.findFirst()
+    return personalization
+      ? mapPersonalizationToColors(personalization)
+      : defaultColors
+  } catch {
+    return defaultColors
+  }
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const colors = await getPersonalizationColors()
+  console.log('colors', {
+    colors,
+    css: generateCSSVariables(colors),
+  })
+
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: generateCSSVariables(colors),
+          }}
+        />
+      </head>
       <body className={inter.className}>
-        <Providers themeProps={{ enableSystem: true, defaultTheme: 'system' }}>
+        <Providers
+          themeProps={{ enableSystem: true, defaultTheme: 'system' }}
+          initialColors={colors}
+        >
           {children}
         </Providers>
         <Toaster richColors position="bottom-center" />
