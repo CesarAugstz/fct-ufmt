@@ -23,10 +23,13 @@ import { searchContains } from '@/lib/utils'
 import { useFindManyNews, useFindManyNewsCategory } from '@/lib/zenstack-hooks'
 import LoadingSpinner from '@/components/common/loading-spinner'
 import { dayJs } from '@/utils/dayjs'
+import { useCollegeDataStore } from '@/store/college-data-store'
 
 export default function News() {
   const [activeTab, setActiveTab] = useState('Todos')
   const [searchTerm, setSearchTerm] = useState('')
+
+  const collegeData = useCollegeDataStore(data => data.collegeData)
 
   const { data: categories = [], isLoading: categoriesLoading } =
     useFindManyNewsCategory({
@@ -88,7 +91,8 @@ export default function News() {
           </div>
         </div>
         <p className="text-lg text-muted-foreground">
-          Fique por dentro das últimas notícias, eventos e recursos da FCT
+          Fique por dentro das últimas notícias, eventos e recursos da{' '}
+          {collegeData?.acronym}
         </p>
       </div>
 

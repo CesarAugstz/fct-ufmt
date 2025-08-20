@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
+import { useCollegeDataStore } from '@/store/college-data-store'
 
 interface Route {
   name: string
@@ -81,6 +82,8 @@ const routes: Route[] = [
 function SidebarContent({ onClick }: { onClick?: () => void }) {
   const pathname = usePathname()
 
+  const collegeData = useCollegeDataStore(data => data.collegeData)
+
   const activeRoute = routes.findLast(route =>
     pathname.includes(route.path),
   )?.path
@@ -89,7 +92,9 @@ function SidebarContent({ onClick }: { onClick?: () => void }) {
     <div className="flex flex-col h-full">
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-center">
-          <h1 className="text-2xl font-bold text-foreground">FCT</h1>
+          <h1 className="text-2xl font-bold text-foreground">
+            {collegeData?.acronym}
+          </h1>
         </div>
       </div>
 

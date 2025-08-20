@@ -7,6 +7,8 @@ import { PersonalizationProvider } from '@/components/providers/personalization-
 import { Provider as JotaiProvider } from 'jotai'
 import { MuiThemeProvider } from './mui-theme-provider'
 import { PersonalizationColors } from '@/store/personalization-store'
+import { CollegeData } from '@prisma/client'
+import { CollegeDataProvider } from './college-data-provider'
 
 interface ProvidersProps {
   children: ReactNode
@@ -15,12 +17,14 @@ interface ProvidersProps {
     enableSystem?: boolean
     defaultTheme?: string
   }
+  collegeData?: CollegeData | null
 }
 
 export function Providers({
   children,
   initialColors,
   themeProps,
+  collegeData,
 }: ProvidersProps) {
   return (
     <ThemeProvider
@@ -33,7 +37,9 @@ export function Providers({
         <MuiThemeProvider>
           <QueryProvider>
             <PersonalizationProvider initialColors={initialColors}>
-              <AuthProvider>{children}</AuthProvider>
+              <CollegeDataProvider collegeData={collegeData}>
+                <AuthProvider>{children}</AuthProvider>
+              </CollegeDataProvider>
             </PersonalizationProvider>
           </QueryProvider>
         </MuiThemeProvider>

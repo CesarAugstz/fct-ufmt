@@ -10,6 +10,7 @@ import { db } from '@/server/db'
 import { generateCSSVariables } from '@/lib/css-generator'
 import { mapPersonalizationToColors } from '@/utils/mappers/personalization-mapper'
 import { defaultColors } from '@/store/personalization-store'
+import { getCollegeData } from '@/lib/server-cached/college-data'
 
 const inter = Montserrat({
   variable: '--font-inter',
@@ -38,10 +39,8 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const colors = await getPersonalizationColors()
-  console.log('colors', {
-    colors,
-    css: generateCSSVariables(colors),
-  })
+
+  const collegeData = await getCollegeData()
 
   return (
     <html lang="pt-BR" suppressHydrationWarning>
@@ -56,6 +55,7 @@ export default async function RootLayout({
         <Providers
           themeProps={{ enableSystem: true, defaultTheme: 'system' }}
           initialColors={colors}
+          collegeData={collegeData}
         >
           {children}
         </Providers>
