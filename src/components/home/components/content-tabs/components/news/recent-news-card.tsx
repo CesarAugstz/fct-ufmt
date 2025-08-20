@@ -1,7 +1,7 @@
-import Image from "next/image"
-import { ArrowRight, Calendar } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import Image from 'next/image'
+import { ArrowRight, Calendar } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface RecentNewsCardProps {
   index: number
@@ -27,11 +27,15 @@ export function RecentNewsCard({ index }: RecentNewsCardProps) {
             Aula inaugural do Mestrado em Computação Aplicada
           </h3>
           <p className="text-gray-600 mb-4 line-clamp-3">
-            No dia 22/08/24 celebramos um marco histórico para a ciência, tecnologia e inovação em
-            Mato Grosso...
+            No dia 22/08/24 celebramos um marco histórico para a ciência,
+            tecnologia e inovação em Mato Grosso...
           </p>
-          <Button variant="link" className="text-[#0088cc] p-0 hover:text-[#0088cc]/80 group">
-            Leia mais <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          <Button
+            variant="link"
+            className="text-secondary p-0 hover:text-secondary/80 group"
+          >
+            Leia mais{' '}
+            <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
       </CardContent>

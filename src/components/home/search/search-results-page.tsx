@@ -65,15 +65,15 @@ function SearchResultCard({
   const getTypeColor = (type: SearchResult['type']) => {
     switch (type) {
       case 'news':
-        return 'bg-blue-100 text-blue-800 border-blue-200'
+        return 'bg-primary/10 text-primary border-primary/20'
       case 'professor':
-        return 'bg-green-100 text-green-800 border-green-200'
+        return 'bg-secondary/10 text-secondary border-secondary/20'
       case 'course':
-        return 'bg-purple-100 text-purple-800 border-purple-200'
+        return 'bg-accent/10 text-accent border-accent/20'
       case 'project':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
+        return 'bg-warning/10 text-warning border-warning/20'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
+        return 'bg-muted text-muted-foreground border-border'
     }
   }
 

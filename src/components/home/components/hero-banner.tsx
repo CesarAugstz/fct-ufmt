@@ -18,7 +18,7 @@ export function HeroBanner({
   bannerImage,
 }: HeroBannerProps) {
   return (
-    <div className="sm:min-h-[80vh] min-h-[60vh] relative bg-gradient-to-r from-[#001428] to-[#003366] text-white overflow-hidden">
+    <div className="sm:min-h-[80vh] min-h-[60vh] relative bg-gradient-to-r from-primary/95 to-primary text-white overflow-hidden">
       <div className="absolute inset-0 opacity-20">
         <motion.div
           initial={{ opacity: 0 }}

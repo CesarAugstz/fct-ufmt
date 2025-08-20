@@ -26,7 +26,9 @@ export default function Title({
   }
 
   const isValidSrcBackgroundImage = useMemo(() => {
-    return backgroundImage && z.string().url().safeParse(backgroundImage).success
+    return (
+      backgroundImage && z.string().url().safeParse(backgroundImage).success
+    )
   }, [backgroundImage])
 
   return (
@@ -58,7 +60,7 @@ export default function Title({
       <div className="relative z-10 flex flex-col items-center justify-center w-full h-full px-4 text-center">
         <h1
           className={cn(
-            'text-3xl md:text-4xl lg:text-5xl font-bold mb-2 transition-all text-[#003366]',
+            'text-3xl md:text-4xl lg:text-5xl font-bold mb-2 transition-all text-primary',
           )}
         >
           {title}
@@ -67,7 +69,7 @@ export default function Title({
         {subtitle && (
           <p
             className={cn(
-              'text-lg md:text-xl max-w-2xl mx-auto opacity-90 transition-all text-[#011e3b]',
+              'text-lg md:text-xl max-w-2xl mx-auto opacity-90 transition-all text-primary/80',
             )}
           >
             {subtitle}

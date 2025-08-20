@@ -113,7 +113,7 @@ export default function NewsDetail({ slug }: { slug: string }) {
             {/* Header */}
             <div>
               <Badge className="mb-4">{news.category.name}</Badge>
-              <h1 className="mb-4 text-4xl font-bold tracking-tight text-[#003366]">
+              <h1 className="mb-4 text-4xl font-bold tracking-tight text-primary">
                 {news.title}
               </h1>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">

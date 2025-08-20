@@ -31,7 +31,7 @@ export default function CourseHeader({ course }: CourseHeaderProps) {
 
   return (
     <div className="relative">
-      <div className="relative bg-gradient-to-r from-primary via-primary/90 to-primary/80 text-primary-foreground">
+      <div className="relative bg-gradient-to-r from-primary-light via-primary-light/90 to-primary-light/80 text-primary-foreground">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-wrap items-center gap-4 mb-6">
             <Button

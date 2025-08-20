@@ -15,7 +15,7 @@ export function StatsSection({
   bannerNumbersItems,
 }: StatsSectionProps) {
   return (
-    <div className="bg-[#003366] text-white py-16">
+    <div className="bg-primary text-white py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">

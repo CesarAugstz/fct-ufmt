@@ -23,7 +23,7 @@ interface HeaderProps {
 
 export function Header({ collegeData }: HeaderProps) {
   return (
-    <header className="bg-gradient-to-r from-[#002347] to-[#003366] text-white py-4 shadow-md">
+    <header className="bg-gradient-to-r from-primary to-primary/98 text-white py-4 shadow-md">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
         {(collegeData?.logo || collegeData?.name) && (
           <Link href="/home" className="flex items-center mb-4 md:mb-0">
@@ -67,7 +67,7 @@ export function Header({ collegeData }: HeaderProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
+                className="text-white hover:text-primary-foreground hover:bg-primary/20 transition-colors"
                 onClick={() => window.open(collegeData.instagram!, '_blank')}
               >
                 <Instagram className="h-5 w-5" />
@@ -78,7 +78,7 @@ export function Header({ collegeData }: HeaderProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => window.open(collegeData.youtube!, '_blank')}
-                className="text-white hover:text-blue-200 hover:bg-blue-900/20 transition-colors"
+                className="text-white hover:text-primary-foreground hover:bg-primary/20 transition-colors"
               >
                 <Youtube className="h-5 w-5" />
               </Button>

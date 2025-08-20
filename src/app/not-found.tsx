@@ -1,7 +1,14 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card'
 import { FileQuestion } from 'lucide-react'
 import Link from 'next/link'
 
@@ -11,8 +18,8 @@ export default function NotFound() {
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-4">
-            <div className="rounded-full bg-blue-100 p-3">
-              <FileQuestion className="h-8 w-8 text-blue-600" />
+            <div className="rounded-full bg-primary/10 p-3">
+              <FileQuestion className="h-8 w-8 text-primary" />
             </div>
           </div>
           <CardTitle className="text-2xl font-bold">Page Not Found</CardTitle>
@@ -26,11 +33,7 @@ export default function NotFound() {
           </p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <Button
-            className="w-full"
-            variant="default"
-            asChild
-          >
+          <Button className="w-full" variant="default" asChild>
             <Link href="/">Return Home</Link>
           </Button>
           <Button

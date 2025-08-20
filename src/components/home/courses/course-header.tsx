@@ -8,7 +8,7 @@ export function CourseHeader() {
           <div className="flex justify-center mb-4">
             <GraduationCap className="h-12 w-12 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold  mb-4">Nossos Cursos</h1>
+          <h1 className="text-4xl font-bold mb-4">Nossos Cursos</h1>
           <p className="text-xl max-w-3xl mx-auto">
             Conheça nossa grade de cursos superiores, desenvolvidos para formar
             profissionais de excelência em diversas áreas do conhecimento.

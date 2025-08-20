@@ -267,7 +267,7 @@ export default function PasswordRecoveryPage() {
         <div className="text-center mt-6">
           <Link
             href="/login"
-            className="text-sm text-blue-600 hover:text-blue-800 flex items-center justify-center gap-1"
+            className="text-sm text-primary hover:text-primary/80 flex items-center justify-center gap-1"
           >
             <ChevronLeft className="h-4 w-4" />
             Voltar ao login

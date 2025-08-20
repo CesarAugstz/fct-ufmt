@@ -61,7 +61,7 @@ export function SiteFooter({ collegeData }: SiteFooterProps) {
 
   if (visibleSections === 0) {
     return (
-      <footer className="bg-gradient-to-r from-[#001428] to-[#002347] text-white pt-12 pb-6">
+      <footer className="bg-gradient-to-r from-primary/97 to-primary text-white pt-12 pb-6">
         <div className="container mx-auto px-4">
           <Separator className="bg-white/20 my-6" />
           <div className="text-center text-sm text-white/70">
@@ -76,7 +76,7 @@ export function SiteFooter({ collegeData }: SiteFooterProps) {
   }
 
   return (
-    <footer className="bg-gradient-to-r from-[#001428] to-[#002347] text-white pt-12 pb-6">
+    <footer className="bg-gradient-to-r from-primary/97 to-primary text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
         <div
           className={`grid grid-cols-1 ${visibleSections === 1 ? 'md:grid-cols-1' : visibleSections === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-8 mb-12`}
@@ -159,7 +159,7 @@ function SocialButton({ icon, href }: { icon: React.ReactNode; href: string }) {
     <Button
       variant="ghost"
       size="icon"
-      className="text-white hover:text-blue-200 hover:bg-blue-900/20 h-9 w-9"
+      className="text-white hover:text-primary-foreground hover:bg-primary/20 h-9 w-9"
       onClick={() => window.open(href, '_blank')}
     >
       {icon}

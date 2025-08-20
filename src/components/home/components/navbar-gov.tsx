@@ -19,7 +19,7 @@ const navLinks = [
 
 export function NavbarGov() {
   return (
-    <nav className="bg-[#0a1f40] text-white" aria-label="Main navigation">
+    <nav className="bg-primary text-white" aria-label="Main navigation">
       <div className="container mx-auto flex h-8 items-center justify-between px-4 text-xs">
         <div>
           <Link

@@ -16,25 +16,25 @@ export function ContentTabs() {
             <TabsList className="bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
               <TabsTrigger
                 value="noticias"
-                className="data-[state=active]:bg-[#003366] data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
+                className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
               >
                 Notícias
               </TabsTrigger>
               <TabsTrigger
                 value="fotos"
-                className="data-[state=active]:bg-[#003366] data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
+                className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
               >
                 Fotos
               </TabsTrigger>
               <TabsTrigger
                 value="videos"
-                className="data-[state=active]:bg-[#003366] data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
+                className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
               >
                 Vídeos
               </TabsTrigger>
               <TabsTrigger
                 value="tour"
-                className="data-[state=active]:bg-[#003366] data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
+                className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
               >
                 Tour 360°
               </TabsTrigger>

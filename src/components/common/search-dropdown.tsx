@@ -44,13 +44,13 @@ function SearchResultItem({
   const getTypeColor = (type: SearchResult['type']) => {
     switch (type) {
       case 'news':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-primary/10 text-primary'
       case 'professor':
-        return 'bg-green-100 text-green-800'
+        return 'bg-secondary/10 text-secondary'
       case 'course':
-        return 'bg-purple-100 text-purple-800'
+        return 'bg-accent/10 text-accent'
       case 'project':
-        return 'bg-orange-100 text-orange-800'
+        return 'bg-warning/10 text-warning'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -195,7 +195,7 @@ export function SearchDropdown({
           onFocus={() =>
             debouncedSearchTerm.length > 0 && hasResults && setIsOpen(true)
           }
-          className="w-full py-2 px-4 pr-10 rounded-full border-accent focus:ring-2 focus:ring-blue-300 transition-all"
+          className="w-full py-2 px-4 pr-10 rounded-full border-accent focus:ring-2 focus:ring-primary/30 transition-all"
         />
         <Button
           variant="ghost"
