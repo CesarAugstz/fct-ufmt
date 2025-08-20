@@ -75,7 +75,7 @@ export default function SectionForm({
 
   const methods = useForm<SectionFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    values: {
       title: section?.title || '',
       slug: section?.slug || '',
       parentSectionId: section?.parentSectionId || null,
