@@ -7,12 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Trash2, Plus } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { IconPicker } from '@/components/ui/icon-picker'
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { mapColors, SelectColorItem } from './select-color-item'
 
 type QuickLink = {
   title: string
   subtitle?: string
   icon?: string
   url: string
+  color?: string
 }
 
 export function QuickLinksForm() {
@@ -22,6 +30,7 @@ export function QuickLinksForm() {
     subtitle: '',
     icon: '',
     url: '',
+    color: '',
   })
 
   const quickLinks: QuickLink[] = form.watch('quickLinks') || []
@@ -76,6 +85,19 @@ export function QuickLinksForm() {
                 onChange={value => updateQuickLink(index, 'icon', value)}
                 placeholder="Selecionar ícone"
               />
+              <Select
+                value={link.color}
+                onValueChange={value => updateQuickLink(index, 'color', value)}
+              >
+                <SelectTrigger className="w-full cursor-pointer">
+                  <SelectValue placeholder="Cor" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(mapColors).map(color => (
+                    <SelectColorItem key={color} color={color} />
+                  ))}
+                </SelectContent>
+              </Select>
               <div className="flex gap-2">
                 <Input
                   placeholder="Ex: /home/courses"
@@ -117,6 +139,22 @@ export function QuickLinksForm() {
                 onChange={value => setNewLink({ ...newLink, icon: value })}
                 placeholder="Selecionar ícone"
               />
+              <Select
+                value={newLink.color}
+                onValueChange={value =>
+                  setNewLink({ ...newLink, color: value })
+                }
+              >
+                <SelectTrigger className="w-full cursor-pointer">
+                  <SelectValue placeholder="Cor" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(mapColors).map(color => (
+                    <SelectColorItem key={color} color={color} />
+                  ))}
+                </SelectContent>
+              </Select>
+
               <div className="flex gap-2">
                 <Input
                   placeholder="Ex: /home/courses"

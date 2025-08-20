@@ -6,8 +6,7 @@ import { icons } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Icon } from '@/components/ui/icon'
 
-// Get the list of all icon names just once
-const allIconNames = Object.keys(icons)
+const allIconNames = Object.keys({ ...icons, SeiLogo: undefined })
 
 interface IconPickerGridProps {
   onSelect: (iconName: string) => void
@@ -25,12 +24,11 @@ export default function IconPickerGrid({ onSelect }: IconPickerGridProps) {
     [search],
   )
 
-  // The virtualizer hook
   const rowVirtualizer = useVirtualizer({
     count: filteredIcons.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 48, // The height of each row in px
-    overscan: 5, // Render 5 extra items above and below the visible area
+    estimateSize: () => 48,
+    overscan: 5,
   })
 
   return (
@@ -43,9 +41,7 @@ export default function IconPickerGrid({ onSelect }: IconPickerGridProps) {
         />
       </div>
 
-      {/* The scrollable container */}
       <div ref={parentRef} className="h-[250px] overflow-y-auto">
-        {/* A single large div to create the scrollbar, with height based on all items */}
         <div
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
@@ -53,7 +49,6 @@ export default function IconPickerGrid({ onSelect }: IconPickerGridProps) {
             position: 'relative',
           }}
         >
-          {/* Only render the virtual items */}
           {rowVirtualizer.getVirtualItems().map(virtualItem => {
             const iconName = filteredIcons[virtualItem.index]
             return (

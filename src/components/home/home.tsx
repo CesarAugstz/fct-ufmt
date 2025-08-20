@@ -14,11 +14,14 @@ export default async function Home() {
     getCollegeData(),
   ])
 
-  console.log({
-    latestNews,
-    featuredNews,
-    collegeData,
-  })
+  console.dir(
+    {
+      latestNews,
+      featuredNews,
+      collegeData,
+    },
+    { depth: null },
+  )
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -41,8 +44,6 @@ export default async function Home() {
         bannerNumbersSubtitle={collegeData?.bannerNumbersSubtitle || undefined}
         bannerNumbersItems={collegeData?.bannerNumbersItems as BannerNumber[]}
       />
-      {/*
-       */}
     </div>
   )
 }

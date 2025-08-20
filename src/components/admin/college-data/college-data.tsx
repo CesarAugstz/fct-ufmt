@@ -72,6 +72,7 @@ const collegeDataSchema = z.object({
         subtitle: z.string().optional(),
         icon: z.string().optional(),
         url: z.string(),
+        color: z.string().optional(),
       }),
     )
     .optional(),
@@ -145,6 +146,7 @@ export default function CollegeData({ className }: CollegeDataProps) {
           subtitle?: string
           icon?: string
           url: string
+          color?: string
         }>) || [],
       bannerNumbersTitle: collegeData?.bannerNumbersTitle || '',
       bannerNumbersSubtitle: collegeData?.bannerNumbersSubtitle || '',

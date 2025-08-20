@@ -3,6 +3,7 @@
 import { forwardRef } from 'react'
 import { icons, LucideProps } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import SeiLogo from '../logos/sei.logo'
 
 interface IconProps extends LucideProps {
   name: keyof typeof icons | string
@@ -11,6 +12,10 @@ interface IconProps extends LucideProps {
 
 const Icon = forwardRef<SVGSVGElement, IconProps>(
   ({ name, fallback: Fallback, className, ...props }, ref) => {
+    if (name === 'SeiLogo') {
+      return <SeiLogo className={cn('h-4 w-4', className)} />
+    }
+
     const LucideIcon = icons[name as keyof typeof icons] || Fallback
 
     if (!LucideIcon) {

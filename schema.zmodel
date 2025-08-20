@@ -345,6 +345,7 @@ type QuickLink {
   subtitle String?
   icon  String?
   url   String
+  color String?
 }
 
 type BannerNumber {

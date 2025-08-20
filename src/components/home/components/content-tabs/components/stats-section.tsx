@@ -29,7 +29,7 @@ export function StatsSection({
           {bannerNumbersItems?.map((item, index) => (
             <StatItem
               key={index}
-              count={item.suffix ?? '' + item.value}
+              count={`${item.value}${item.suffix || ''}`}
               label={item.title}
             />
           ))}
@@ -50,8 +50,10 @@ function StatItem({ count, label }: StatItemProps) {
   const controls = useAnimation()
   const [displayCount, setDisplayCount] = useState('0')
 
-  const hasPlus = count.endsWith('+')
-  const numericValue = parseInt(hasPlus ? count.slice(0, -1) : count)
+  const match = count.match(/^([^0-9]*)([0-9]+(?:\.[0-9]+)?)([^0-9]*)$/)
+  const prefix = match ? match[1] : ''
+  const suffix = match ? match[3] : ''
+  const numericValue = match ? parseFloat(match[2]) : 0
 
   useEffect(() => {
     if (isInView) {
@@ -74,12 +76,12 @@ function StatItem({ count, label }: StatItemProps) {
         }
 
         const formattedCount = Math.floor(startCount).toString()
-        setDisplayCount(hasPlus ? formattedCount + '+' : formattedCount)
+        setDisplayCount(`${prefix}${formattedCount}${suffix}`)
       }, interval)
 
       return () => clearInterval(timer)
     }
-  }, [isInView, numericValue, hasPlus, controls])
+  }, [isInView, numericValue, controls, prefix, suffix])
 
   return (
     <motion.div

@@ -12,8 +12,6 @@ import { Icon } from '@/components/ui/icon'
 import { ChevronDown, Search } from 'lucide-react'
 import { icons } from 'lucide-react'
 
-// Dynamically import the grid, which is the "heavy" part.
-// The `ssr: false` is important because a virtualized list relies on window size.
 const IconPickerGrid = dynamic(() => import('./icon-picker-grid'), {
   ssr: false,
   loading: () => (
@@ -69,7 +67,6 @@ export const IconPicker = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0">
-        {/* The grid is only rendered (and its code loaded) when the popover is open */}
         {isOpen && (
           <IconPickerGrid
             onSelect={iconName => {
