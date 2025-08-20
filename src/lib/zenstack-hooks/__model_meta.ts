@@ -1271,6 +1271,616 @@ const metadata = {
         },
       },
     },
+    personalization: {
+      name: 'Personalization',
+      fields: {
+        id: {
+          name: 'id',
+          type: 'String',
+          isId: true,
+          attributes: [{ name: '@default', args: [] }],
+        },
+        createdAt: {
+          name: 'createdAt',
+          type: 'DateTime',
+          attributes: [{ name: '@default', args: [] }],
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          type: 'DateTime',
+          attributes: [{ name: '@updatedAt', args: [] }],
+        },
+        lightPrimary: {
+          name: 'lightPrimary',
+          type: 'String',
+          attributes: [{ name: '@default', args: [{ value: '#0a1f40' }] }],
+        },
+        lightPrimaryForeground: {
+          name: 'lightPrimaryForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.97 0.014 254.604)' }],
+            },
+          ],
+        },
+        lightPrimaryLight: {
+          name: 'lightPrimaryLight',
+          type: 'String',
+          attributes: [{ name: '@default', args: [{ value: '#33658aff' }] }],
+        },
+        lightSecondary: {
+          name: 'lightSecondary',
+          type: 'String',
+          attributes: [{ name: '@default', args: [{ value: '#86bbd8ff' }] }],
+        },
+        lightSecondaryForeground: {
+          name: 'lightSecondaryForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.21 0.006 285.885)' }],
+            },
+          ],
+        },
+        lightBackground: {
+          name: 'lightBackground',
+          type: 'String',
+          attributes: [{ name: '@default', args: [{ value: 'oklch(1 0 0)' }] }],
+        },
+        lightBackgroundHover: {
+          name: 'lightBackgroundHover',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.89 0.05 261.52 / 0.34)' }],
+            },
+          ],
+        },
+        lightForeground: {
+          name: 'lightForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.141 0.005 285.823)' }],
+            },
+          ],
+        },
+        lightCard: {
+          name: 'lightCard',
+          type: 'String',
+          attributes: [{ name: '@default', args: [{ value: 'oklch(1 0 0)' }] }],
+        },
+        lightCardForeground: {
+          name: 'lightCardForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.141 0.005 285.823)' }],
+            },
+          ],
+        },
+        lightPopover: {
+          name: 'lightPopover',
+          type: 'String',
+          attributes: [{ name: '@default', args: [{ value: 'oklch(1 0 0)' }] }],
+        },
+        lightPopoverForeground: {
+          name: 'lightPopoverForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.141 0.005 285.823)' }],
+            },
+          ],
+        },
+        lightMuted: {
+          name: 'lightMuted',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.967 0.001 286.375)' }],
+            },
+          ],
+        },
+        lightMutedForeground: {
+          name: 'lightMutedForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.552 0.016 285.938)' }],
+            },
+          ],
+        },
+        lightAccent: {
+          name: 'lightAccent',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.23 0.1575 264.59)' }],
+            },
+          ],
+        },
+        lightAccentForeground: {
+          name: 'lightAccentForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.78 0.0197 285.94)' }],
+            },
+          ],
+        },
+        lightDestructive: {
+          name: 'lightDestructive',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.577 0.245 27.325)' }],
+            },
+          ],
+        },
+        lightDestructiveForeground: {
+          name: 'lightDestructiveForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.97 0.014 254.604)' }],
+            },
+          ],
+        },
+        lightWarning: {
+          name: 'lightWarning',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.89 0.1497 93.45)' }] },
+          ],
+        },
+        lightWarningForeground: {
+          name: 'lightWarningForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.21 0.006 285.885)' }],
+            },
+          ],
+        },
+        lightBorder: {
+          name: 'lightBorder',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.92 0.004 286.32)' }] },
+          ],
+        },
+        lightInput: {
+          name: 'lightInput',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.92 0.004 286.32)' }] },
+          ],
+        },
+        lightRing: {
+          name: 'lightRing',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.623 0.214 259.815)' }],
+            },
+          ],
+        },
+        darkPrimary: {
+          name: 'darkPrimary',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(37.763% 0.13704 262.925)' }],
+            },
+          ],
+        },
+        darkPrimaryForeground: {
+          name: 'darkPrimaryForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.78 0.0767 267.22)' }],
+            },
+          ],
+        },
+        darkPrimaryLight: {
+          name: 'darkPrimaryLight',
+          type: 'String',
+          attributes: [{ name: '@default', args: [{ value: '#33658aff' }] }],
+        },
+        darkSecondary: {
+          name: 'darkSecondary',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.274 0.006 286.033)' }],
+            },
+          ],
+        },
+        darkSecondaryForeground: {
+          name: 'darkSecondaryForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkBackground: {
+          name: 'darkBackground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.141 0.005 285.823)' }],
+            },
+          ],
+        },
+        darkBackgroundHover: {
+          name: 'darkBackgroundHover',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.25 0.0207 284.83)' }],
+            },
+          ],
+        },
+        darkForeground: {
+          name: 'darkForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkCard: {
+          name: 'darkCard',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.21 0.006 285.885)' }],
+            },
+          ],
+        },
+        darkCardForeground: {
+          name: 'darkCardForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkPopover: {
+          name: 'darkPopover',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.21 0.006 285.885)' }],
+            },
+          ],
+        },
+        darkPopoverForeground: {
+          name: 'darkPopoverForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkMuted: {
+          name: 'darkMuted',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.274 0.006 286.033)' }],
+            },
+          ],
+        },
+        darkMutedForeground: {
+          name: 'darkMutedForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.705 0.015 286.067)' }],
+            },
+          ],
+        },
+        darkAccent: {
+          name: 'darkAccent',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.274 0.006 286.033)' }],
+            },
+          ],
+        },
+        darkAccentForeground: {
+          name: 'darkAccentForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkDestructive: {
+          name: 'darkDestructive',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.704 0.191 22.216)' }],
+            },
+          ],
+        },
+        darkDestructiveForeground: {
+          name: 'darkDestructiveForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkWarning: {
+          name: 'darkWarning',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.89 0.1497 93.45)' }] },
+          ],
+        },
+        darkWarningForeground: {
+          name: 'darkWarningForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.21 0.006 285.885)' }],
+            },
+          ],
+        },
+        darkBorder: {
+          name: 'darkBorder',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(1 0 0 / 10%)' }] },
+          ],
+        },
+        darkInput: {
+          name: 'darkInput',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(1 0 0 / 15%)' }] },
+          ],
+        },
+        darkRing: {
+          name: 'darkRing',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.488 0.243 264.376)' }],
+            },
+          ],
+        },
+        lightSidebarBackground: {
+          name: 'lightSidebarBackground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        lightSidebarForeground: {
+          name: 'lightSidebarForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.141 0.005 285.823)' }],
+            },
+          ],
+        },
+        lightSidebarPrimary: {
+          name: 'lightSidebarPrimary',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.623 0.214 259.815)' }],
+            },
+          ],
+        },
+        lightSidebarPrimaryForeground: {
+          name: 'lightSidebarPrimaryForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.97 0.014 254.604)' }],
+            },
+          ],
+        },
+        lightSidebarAccent: {
+          name: 'lightSidebarAccent',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.967 0.001 286.375)' }],
+            },
+          ],
+        },
+        lightSidebarAccentForeground: {
+          name: 'lightSidebarAccentForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.21 0.006 285.885)' }],
+            },
+          ],
+        },
+        lightSidebarBorder: {
+          name: 'lightSidebarBorder',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.92 0.004 286.32)' }] },
+          ],
+        },
+        lightSidebarRing: {
+          name: 'lightSidebarRing',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.623 0.214 259.815)' }],
+            },
+          ],
+        },
+        darkSidebarBackground: {
+          name: 'darkSidebarBackground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.21 0.006 285.885)' }],
+            },
+          ],
+        },
+        darkSidebarForeground: {
+          name: 'darkSidebarForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkSidebarPrimary: {
+          name: 'darkSidebarPrimary',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.546 0.245 262.881)' }],
+            },
+          ],
+        },
+        darkSidebarPrimaryForeground: {
+          name: 'darkSidebarPrimaryForeground',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.379 0.146 265.522)' }],
+            },
+          ],
+        },
+        darkSidebarAccent: {
+          name: 'darkSidebarAccent',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.274 0.006 286.033)' }],
+            },
+          ],
+        },
+        darkSidebarAccentForeground: {
+          name: 'darkSidebarAccentForeground',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.985 0 0)' }] },
+          ],
+        },
+        darkSidebarBorder: {
+          name: 'darkSidebarBorder',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(1 0 0 / 10%)' }] },
+          ],
+        },
+        darkSidebarRing: {
+          name: 'darkSidebarRing',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.488 0.243 264.376)' }],
+            },
+          ],
+        },
+        chartColor1: {
+          name: 'chartColor1',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.646 0.222 41.116)' }],
+            },
+          ],
+        },
+        chartColor2: {
+          name: 'chartColor2',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.6 0.118 184.704)' }] },
+          ],
+        },
+        chartColor3: {
+          name: 'chartColor3',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.398 0.07 227.392)' }],
+            },
+          ],
+        },
+        chartColor4: {
+          name: 'chartColor4',
+          type: 'String',
+          attributes: [
+            {
+              name: '@default',
+              args: [{ value: 'oklch(0.828 0.189 84.429)' }],
+            },
+          ],
+        },
+        chartColor5: {
+          name: 'chartColor5',
+          type: 'String',
+          attributes: [
+            { name: '@default', args: [{ value: 'oklch(0.769 0.188 70.08)' }] },
+          ],
+        },
+        isActive: {
+          name: 'isActive',
+          type: 'Boolean',
+          attributes: [{ name: '@default', args: [{ value: false }] }],
+        },
+      },
+      uniqueConstraints: {
+        id: {
+          name: 'id',
+          fields: ['id'],
+        },
+      },
+    },
     logEntry: {
       name: 'LogEntry',
       fields: {

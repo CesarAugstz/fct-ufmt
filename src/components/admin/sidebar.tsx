@@ -13,6 +13,7 @@ import {
   ShieldUser,
   PanelsTopLeft,
   StickyNote,
+  Palette,
 } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useState } from 'react'
@@ -64,6 +65,11 @@ const routes: Route[] = [
     name: 'Páginas',
     path: '/admin/generic-pages',
     icon: <StickyNote className="mr-2 h-5 w-5" />,
+  },
+  {
+    name: 'Personalização',
+    path: '/admin/personalization',
+    icon: <Palette className="mr-2 h-5 w-5" />,
   },
   {
     name: 'Dados Gerais',

@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
+import { PersonalizationProvider } from '@/components/providers/personalization-provider'
 import { Provider as JotaiProvider } from 'jotai'
 import { MuiThemeProvider } from './mui-theme-provider'
 
@@ -25,7 +26,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <JotaiProvider>
         <MuiThemeProvider>
           <QueryProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <PersonalizationProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </PersonalizationProvider>
           </QueryProvider>
         </MuiThemeProvider>
       </JotaiProvider>
