@@ -16,6 +16,6 @@ export const getCollegeData = unstable_cache(
   ['college-data'],
   {
     tags: ['college-data'],
-    revalidate: 1,
+    revalidate: 60,
   },
 )
